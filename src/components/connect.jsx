@@ -1,6 +1,6 @@
 const React = require('react');
 const Actions = require('../actions');
-const FormItem = require('./form-item');
+const FormItemInput = require('./form-item-input');
 const FormItemSelect = require('./form-item-select');
 
 class Connect extends React.Component {
@@ -29,18 +29,18 @@ class Connect extends React.Component {
           </header>
           <form data-test-id="connect-form">
             <div id="host-port" className="form-group">
-              <FormItem
+              <FormItemInput
                 label="Hostname"
                 name="hostname"
                 placeholder="localhost"
                 changeHandler={this.onHostnameChanged.bind(this)} />
-              <FormItem
+              <FormItemInput
                 label="Port"
                 name="port"
                 placeholder="27017"
                 changeHandler={this.onPortChanged.bind(this)} />
                 <hr />
-              <FormItem
+              <FormItemInput
                 label="Replica Set Name"
                 name="replica_set_name"
                 placeholder=""
