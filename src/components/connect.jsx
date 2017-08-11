@@ -1,6 +1,7 @@
 const React = require('react');
 const Actions = require('../actions');
 const FormItem = require('./form-item');
+const FormItemSelect = require('./form-item-select');
 
 class Connect extends React.Component {
 
@@ -10,6 +11,10 @@ class Connect extends React.Component {
 
   onPortChanged(evt) {
     Actions.onPortChanged(evt.target.value);
+  }
+
+  onReadPreferrenceChanged(evt) {
+    Actions.onReadPreferrenceChanged(evt.target.value);
   }
 
   render() {
@@ -34,6 +39,23 @@ class Connect extends React.Component {
                 name="port"
                 placeholder="27017"
                 changeHandler={this.onPortChanged.bind(this)} />
+                <hr />
+              <FormItem
+                label="Replica Set Name"
+                name="replica_set_name"
+                placeholder=""
+                changeHandler={this.onPortChanged.bind(this)} />
+              <FormItemSelect
+                label="Read Preference"
+                name="read_preference"
+                options={[
+                  {'primary': 'Primary'},
+                  {'primaryPreferred': 'Primary Preferred'},
+                  {'secondary': 'Secondary'},
+                  {'secondaryPreferred': 'Secondary Preferred'},
+                  {'nearest': 'Nearest'}
+                ]}
+                changeHandler={this.onReadPreferrenceChanged.bind(this)} />
             </div>
           </form>
         </div>
