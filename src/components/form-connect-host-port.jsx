@@ -2,7 +2,7 @@ const React = require('react');
 const Actions = require('../actions');
 const FormItemInput = require('./form-item-input');
 
-class FormConnectPort extends React.Component {
+class FormConnectHostPort extends React.Component {
 
   onHostnameChanged(evt) {
     Actions.onHostnameChanged(evt.target.value);
@@ -31,6 +31,6 @@ class FormConnectPort extends React.Component {
 }
 
 
-FormItemInput.displayName = 'FormConnectPort';
+FormItemInput.displayName = 'FormConnectHostPort';
 
-module.exports = FormConnectPort;
+module.exports = FormConnectHostPort;
