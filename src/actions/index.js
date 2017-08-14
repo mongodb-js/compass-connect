@@ -3,7 +3,8 @@ const Reflux = require('reflux');
 const ConnectActions = Reflux.createActions([
   'onHostnameChanged',
   'onPortChanged',
-  'onReadPreferenceChanged'
+  'onReadPreferenceChanged',
+  'onReplicaSetNameChanged'
 ]);
 
 module.exports = ConnectActions;
