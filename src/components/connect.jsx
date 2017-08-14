@@ -1,6 +1,6 @@
 const React = require('react');
-const FormConnectHostPort = require('./form-connect-port');
-const FormReadPreference = require('./form-read-preference');
+const FormConnectHostPort = require('./form-connect-host-port');
+const FormReplicaSetNameReadPreference = require('./form-replica-set-name-read-preference');
 
 class Connect extends React.Component {
 
@@ -17,7 +17,7 @@ class Connect extends React.Component {
           <form data-test-id="connect-form">
             <FormConnectHostPort />
             <hr />
-            <FormReadPreference />
+            <FormReplicaSetNameReadPreference />
             <hr />
           </form>
         </div>

@@ -3,7 +3,7 @@ const Actions = require('../actions');
 const FormItemInput = require('./form-item-input');
 const FormItemSelect = require('./form-item-select');
 
-class FormReadPreference extends React.Component {
+class FormReplicaSetNameReadPreference extends React.Component {
 
   onReplicaSetNameChanged(evt) {
     Actions.onReplicaSetNameChanged(evt.target.value);
@@ -37,6 +37,6 @@ class FormReadPreference extends React.Component {
   }
 }
 
-FormItemInput.displayName = 'FormReadPreference';
+FormItemInput.displayName = 'FormReplicaSetNameReadPreference';
 
-module.exports = FormReadPreference;
+module.exports = FormReplicaSetNameReadPreference;
