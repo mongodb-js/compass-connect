@@ -3,14 +3,14 @@ const Actions = require('../actions');
 const FormItemInput = require('./form-item-input');
 const FormItemSelect = require('./form-item-select');
 
-class FormReadPreferrence extends React.Component {
+class FormReadPreference extends React.Component {
 
   onReplicaSetNameChanged(evt) {
     Actions.onReplicaSetNameChanged(evt.target.value);
   }
 
-  onReadPreferrenceChanged(evt) {
-    Actions.onReadPreferrenceChanged(evt.target.value);
+  onReadPreferenceChanged(evt) {
+    Actions.onReadPreferenceChanged(evt.target.value);
   }
 
   render() {
@@ -31,12 +31,12 @@ class FormReadPreferrence extends React.Component {
             {'secondaryPreferred': 'Secondary Preferred'},
             {'nearest': 'Nearest'}
           ]}
-          changeHandler={this.onReadPreferrenceChanged.bind(this)} />
+          changeHandler={this.onReadPreferenceChanged.bind(this)} />
       </div>
     );
   }
 }
 
-FormItemInput.displayName = 'FormReadPreferrence';
+FormItemInput.displayName = 'FormReadPreference';
 
-module.exports = FormReadPreferrence;
+module.exports = FormReadPreference;
