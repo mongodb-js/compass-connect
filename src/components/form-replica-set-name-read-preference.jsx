@@ -20,7 +20,7 @@ class FormReplicaSetNameReadPreference extends React.Component {
           label="Replica Set Name"
           name="replica_set_name"
           placeholder=""
-          changeHandler={this.onReplicaSetNameChanged.bind(this)} />
+          blurHandler={this.onReplicaSetNameChanged.bind(this)} />
         <FormItemSelect
           label="Read Preference"
           name="read_preference"

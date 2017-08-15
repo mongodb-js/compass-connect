@@ -49,12 +49,11 @@ describe('IndexStore', () => {
   describe('#onReadPreferenceChanged', () => {
     it('updates the read preference in the current connection model', (done) => {
       const unsubscribe = IndexStore.listen((state) => {
-        expect(state.currentConnection.read_preference).to.equal('primary');
+        expect(state.currentConnection.read_preference).to.equal('primaryPreferred');
         unsubscribe();
         done();
       });
-      // TODO this doesn't seem right
-      Actions.onReplicaSetNameChanged('Primary');
+      Actions.onReadPreferenceChanged('primaryPreferred');
     });
   });
 });

@@ -19,12 +19,12 @@ class FormConnectHostPort extends React.Component {
           label="Hostname"
           name="hostname"
           placeholder="localhost"
-          changeHandler={this.onHostnameChanged.bind(this)} />
+          blurHandler={this.onHostnameChanged.bind(this)} />
         <FormItemInput
           label="Port"
           name="port"
           placeholder="27017"
-          changeHandler={this.onPortChanged.bind(this)} />
+          blurHandler={this.onPortChanged.bind(this)} />
       </div>
     );
   }
