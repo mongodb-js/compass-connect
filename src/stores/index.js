@@ -18,13 +18,13 @@ const ConnectStore = Reflux.createStore({
     this.trigger(this.state);
   },
 
-  onReadPreferenceChanged(read_preference) {
-    this.state.currentConnection.read_preference = read_preference;
+  onReadPreferenceChanged(readPreference) {
+    this.state.currentConnection.read_preference = readPreference;
     this.trigger(this.state);
   },
 
-  onReplicaSetNameChanged(replica_set_name) {
-    this.state.currentConnection.replica_set_name = replica_set_name;
+  onReplicaSetNameChanged(replicaSetName) {
+    this.state.currentConnection.replica_set_name = replicaSetName;
     this.trigger(this.state);
   },
 
