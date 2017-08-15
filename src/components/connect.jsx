@@ -7,6 +7,7 @@ const FormReplicaSetNameReadPreference = require('./form-replica-set-name-read-p
 class Connect extends React.Component {
 
   render() {
+    console.log('render connect');
     return (
       <div className="page connect">
         <div>
