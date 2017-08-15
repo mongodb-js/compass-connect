@@ -4,7 +4,7 @@ const PropTypes = require('prop-types');
 const Actions = require('../actions');
 const FormItemSelect = require('./form-item-select');
 
-class FormAuthentication extends React.Component {
+class AuthenticationSection extends React.Component {
 
   constructor(props) {
     super(props);
@@ -48,10 +48,10 @@ class FormAuthentication extends React.Component {
   }
 }
 
-FormAuthentication.propTypes = {
+AuthenticationSection.propTypes = {
   currentConnection: PropTypes.object.isRequired
 };
 
-FormAuthentication.displayName = 'FormAuthentication';
+AuthenticationSection.displayName = 'AuthenticationSection';
 
-module.exports = FormAuthentication;
+module.exports = AuthenticationSection;
