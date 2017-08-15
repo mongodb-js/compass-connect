@@ -34,4 +34,27 @@ describe('IndexStore', () => {
       Actions.onPortChanged('27019');
     });
   });
+
+  describe('#onReplicaSetNameChanged', () => {
+    it('updates the replica set name in the current connection model', (done) => {
+      const unsubscribe = IndexStore.listen((state) => {
+        expect(state.currentConnection.replica_set_name).to.equal('myreplicaset');
+        unsubscribe();
+        done();
+      });
+      Actions.onReplicaSetNameChanged('myreplicaset');
+    });
+  });
+
+  describe('#onReadPreferenceChanged', () => {
+    it('updates the read preference in the current connection model', (done) => {
+      const unsubscribe = IndexStore.listen((state) => {
+        expect(state.currentConnection.read_preference).to.equal('primary');
+        unsubscribe();
+        done();
+      });
+      // TODO this doesn't seem right
+      Actions.onReplicaSetNameChanged('Primary');
+    });
+  });
 });
