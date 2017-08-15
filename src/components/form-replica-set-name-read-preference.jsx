@@ -1,4 +1,5 @@
 const React = require('react');
+const PropTypes = require('prop-types');
 const Actions = require('../actions');
 const FormItemInput = require('./form-item-input');
 const FormItemSelect = require('./form-item-select');
@@ -36,6 +37,10 @@ class FormReplicaSetNameReadPreference extends React.Component {
     );
   }
 }
+
+FormReplicaSetNameReadPreference.propTypes = {
+  currentConnection: PropTypes.object.isRequired
+};
 
 FormReplicaSetNameReadPreference.displayName = 'FormReplicaSetNameReadPreference';
 

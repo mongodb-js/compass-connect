@@ -1,4 +1,6 @@
 const React = require('react');
+const PropTypes = require('prop-types');
+const FormAuthentication = require('./form-authentication');
 const FormConnectHostPort = require('./form-connect-host-port');
 const FormReplicaSetNameReadPreference = require('./form-replica-set-name-read-preference');
 
@@ -15,9 +17,11 @@ class Connect extends React.Component {
             <h2 data-test-id="connect-header">Connect to Host</h2>
           </header>
           <form data-test-id="connect-form">
-            <FormConnectHostPort />
+            <FormConnectHostPort {...this.props} />
             <hr />
-            <FormReplicaSetNameReadPreference />
+            <FormAuthentication {...this.props} />
+            <hr />
+            <FormReplicaSetNameReadPreference {...this.props} />
             <hr />
           </form>
         </div>
@@ -25,6 +29,10 @@ class Connect extends React.Component {
     );
   }
 }
+
+Connect.propTypes = {
+  currentConnection: PropTypes.object
+};
 
 Connect.displayName = 'Connect';
 
