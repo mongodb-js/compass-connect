@@ -29,10 +29,19 @@ const MONGODB_AUTH_ROLE = {
 };
 
 /**
+ * No ssl role has no component.
+ */
+const NO_SSL_ROLE = {
+  name: 'NONE',
+  selectOption: { NONE: 'None' }
+};
+
+/**
  * Activate all the components in the  Mongodb Js Compass Connect package.
  */
 function activate(appRegistry) {
   appRegistry.registerRole('Application.Connect', ROLE);
+  appRegistry.registerRole('Connect.SSLMethod', NO_SSL_ROLE);
   appRegistry.registerRole('Connect.AuthenticationMethod', NO_AUTH_ROLE);
   appRegistry.registerRole('Connect.AuthenticationMethod', MONGODB_AUTH_ROLE);
   appRegistry.registerAction('Connect.Actions', ConnectActions);
@@ -44,6 +53,7 @@ function activate(appRegistry) {
  */
 function deactivate(appRegistry) {
   appRegistry.deregisterRole('Application.Connect', ROLE);
+  appRegistry.deregisterRole('Connect.SSLMethod', NO_SSL_ROLE);
   appRegistry.deregisterRole('Connect.AuthenticationMethod', NO_AUTH_ROLE);
   appRegistry.deregisterRole('Connect.AuthenticationMethod', MONGODB_AUTH_ROLE);
   appRegistry.deregisterAction('Connect.Actions');
