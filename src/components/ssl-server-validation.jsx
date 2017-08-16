@@ -1,21 +1,20 @@
 const React = require('react');
 const PropTypes = require('prop-types');
 const Actions = require('../actions');
-const FormItemInput = require('./form-item-input');
+const FormFileInput = require('./form-file-input');
 
 class SSLServerValidation extends React.Component {
 
-  onSSLCAChanged(evt) {
-    Actions.onSSLCAChanged(evt.target.value);
+  onSSLCAChanged(path) {
+    Actions.onSSLCAChanged(path);
   }
 
   render() {
     return (
       <div id="ssl-server-validation" className="form-group">
-        <FormItemInput
+        <FormFileInput
           label="Certificate Authority"
           name="ssl_ca"
-          type="file"
           changeHandler={this.onSSLCAChanged.bind(this)}
           value={this.props.currentConnection.ssl_ca} />
       </div>
