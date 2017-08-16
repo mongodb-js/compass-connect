@@ -37,6 +37,6 @@ class FormReplicaSetNameReadPreference extends React.Component {
   }
 }
 
-FormItemInput.displayName = 'FormReplicaSetNameReadPreference';
+FormReplicaSetNameReadPreference.displayName = 'FormReplicaSetNameReadPreference';
 
 module.exports = FormReplicaSetNameReadPreference;

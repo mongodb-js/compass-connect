@@ -31,6 +31,6 @@ class FormConnectHostPort extends React.Component {
 }
 
 
-FormItemInput.displayName = 'FormConnectHostPort';
+FormConnectHostPort.displayName = 'FormConnectHostPort';
 
 module.exports = FormConnectHostPort;
