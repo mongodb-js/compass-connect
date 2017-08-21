@@ -27,20 +27,23 @@ class SSLServerClientValidation extends React.Component {
       <div id="ssl-server-client-validation" className="form-group">
         <FormFileInput
           label="Certificate Authority"
+          id="ssl_ca"
           changeHandler={this.onCertificateAuthorityChanged.bind(this)}
           values={this.props.currentConnection.ssl_ca}
           multi />
         <FormFileInput
           label="Client Certificate"
+          id="ssl_certificate"
           changeHandler={this.onClientCertificateChanged.bind(this)}
           values={this.props.currentConnection.ssl_certificate} />
         <FormFileInput
           label="Client Private Key"
+          id="ssl_private_key"
           changeHandler={this.onClientPrivateKeyChanged.bind(this)}
           values={this.props.currentConnection.ssl_private_key} />
         <FormItemInput
           label="Client Key Password"
-          name="client_key_password"
+          name="ssl_private_key_password"
           changeHandler={this.onClientKeyPasswordChanged.bind(this)}
           value={this.props.currentConnection.ssl_private_key_password} />
       </div>
