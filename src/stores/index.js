@@ -77,6 +77,11 @@ const ConnectStore = Reflux.createStore({
     this.trigger(this.state);
   },
 
+  onFavoriteNameChanged(name) {
+    this.state.currentConnection.name = name;
+    this.trigger(this.state);
+  },
+
   getInitialState() {
     return {
       currentConnection: new Connection(),

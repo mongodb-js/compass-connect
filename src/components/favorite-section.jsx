@@ -3,10 +3,26 @@ const PropTypes = require('prop-types');
 const Actions = require('../actions');
 const FormItemInput = require('./form-item-input');
 
+const DEFAULT_NAME = 'Local';
+
 class FavoriteSection extends React.Component {
 
+  constructor(props) {
+    super(props);
+    this.isNameChanged = false;
+  }
+
   onNameChanged(evt) {
+    this.isNameChanged = true;
     Actions.onFavoriteNameChanged(evt.target.value);
+  }
+
+  getName() {
+    const connection = this.props.currentConnection;
+    if (!connection.last_used && !this.isNameChanged && connection.name === DEFAULT_NAME) {
+      return '';
+    }
+    return connection.name;
   }
 
   render() {
@@ -18,7 +34,7 @@ class FavoriteSection extends React.Component {
           placeholder="e.g. Shared Dev, QA Box, PRODUCTION"
           link="https://docs.mongodb.com/compass/current/connect/"
           changeHandler={this.onNameChanged.bind(this)}
-          value={this.props.currentConnection.name} />
+          value={this.getName()} />
       </div>
     );
   }
