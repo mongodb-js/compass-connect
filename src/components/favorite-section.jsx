@@ -12,6 +12,10 @@ class FavoriteSection extends React.Component {
     this.isNameChanged = false;
   }
 
+  onCreateFavorite() {
+    Actions.onCreateFavorite();
+  }
+
   onNameChanged(evt) {
     this.isNameChanged = true;
     Actions.onFavoriteNameChanged(evt.target.value);
@@ -28,7 +32,10 @@ class FavoriteSection extends React.Component {
   renderCreateFavorite() {
     if (this.getName() !== '') {
       return (
-        <button type="button" className="btn btn-sm btn-default">
+        <button
+          type="button"
+          className="btn btn-sm btn-default"
+          onClick={this.onCreateFavorite.bind(this)}>
           Create Favorite
         </button>
       );
