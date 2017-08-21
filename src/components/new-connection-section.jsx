@@ -9,15 +9,11 @@ class NewConnectionSection extends React.Component {
 
   render() {
     return (
-      <div className="widget-container">
-        <ul className="list-group root">
-          <li className="list-group-item-heading active">
-            <a onClick={this.onNewConnectionClicked.bind(this)}>
-              <i className="icon fa fa-fw fa-bolt" />
-              <span>New Connection</span>
-            </a>
-          </li>
-        </ul>
+      <div className="connect-sidebar-new-connection connect-sidebar-new-connection-is-active">
+        <div className="connect-sidebar-header" onClick={this.onNewConnectionClicked.bind(this)}>
+          <i className="fa fa-fw fa-bolt" />
+          <span>New Connection</span>
+        </div>
       </div>
     );
   }

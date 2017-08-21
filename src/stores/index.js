@@ -9,6 +9,14 @@ const ConnectStore = Reflux.createStore({
 
   listenables: Actions,
 
+  init() {
+    this.state.connections.fetch({
+      success: () => {
+        this.trigger(this.state);
+      }
+    });
+  },
+
   resetConnection() {
     this.setState({ currentConnection: new Connection() });
   },
