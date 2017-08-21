@@ -11,6 +11,9 @@ const ConnectActions = Reflux.createActions([
   'onAuthSourceChanged',
   'onSSLMethodChanged',
   'onSSLCAChanged',
+  'onSSLCertificateChanged',
+  'onSSLPrivateKeyChanged',
+  'onSSLPrivateKeyPasswordChanged',
   'onSSLTunnelChanged'
 ]);
 

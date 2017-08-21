@@ -1,18 +1,59 @@
 const path = require('path');
 const React = require('react');
+const { remote, shell } = require('electron');
+const dialog = remote.dialog;
+const BrowserWindow = remote.BrowserWindow;
 const PropTypes = require('prop-types');
+
+const OPEN = 'openFile';
+const HIDDEN = 'showHiddenFiles';
+const MULTI = 'multiSelections';
 
 class FormFileInput extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = { value: props.value };
+    this.state = { values: props.values };
   }
 
-  onFileChanged() {
-    const filePath = this.refs.file.files[0].path;
-    this.setState({ value: filePath });
-    this.props.changeHandler(filePath);
+  onClick(evt) {
+    evt.preventDefault();
+    evt.stopPropagation();
+    const properties = [ OPEN, HIDDEN ];
+    if (this.props.multi) {
+      properties.push(MULTI);
+    }
+    const options = { properties: properties };
+    dialog.showOpenDialog(BrowserWindow.getFocusedWindow(), options, (files) => {
+      this.props.changeHandler(files);
+      this.setState({ values: files });
+    });
+  }
+
+  openLink() {
+    shell.openExternal(this.props.link);
+  }
+
+  renderButtonText() {
+    if (this.state.values && this.state.values.length > 0) {
+      return this.renderFileNames();
+    }
+    return this.props.multi ? 'Select files...' : 'Select a file...';
+  }
+
+  renderFileNames() {
+    const baseFiles = this.state.values.map((file) => {
+      return path.basename(file);
+    });
+    return baseFiles.join(', ');
+  }
+
+  renderInfoSprinkle() {
+    if (this.props.link) {
+      return (
+        <i className="help" onClick={this.openLink.bind(this)} />
+      );
+    }
   }
 
   render() {
@@ -20,19 +61,15 @@ class FormFileInput extends React.Component {
       <div className="form-item">
         <label>
           <span className="form-item-label">{this.props.label}</span>
+          {this.renderInfoSprinkle()}
         </label>
-        <label className="form-item-file-label" htmlFor={this.props.name}>
+        <button
+          id={this.props.id}
+          className="form-item-file-button btn btn-default"
+          onClick={this.onClick.bind(this)}>
           <i className="fa fa-upload" aria-hidden />
-          {this.state.value ? path.basename(this.state.value) : 'Select a file...'}
-        </label>
-        <input
-          ref="file"
-          className="file-input"
-          name={this.props.name}
-          id={this.props.name}
-          onChange={this.onFileChanged.bind(this)}
-          value={this.props.value}
-          type="file" />
+          {this.renderButtonText()}
+        </button>
       </div>
     );
   }
@@ -40,9 +77,15 @@ class FormFileInput extends React.Component {
 
 FormFileInput.propTypes = {
   label: PropTypes.string.isRequired,
-  name: PropTypes.string.isRequired,
   changeHandler: PropTypes.func.isRequired,
-  value: PropTypes.string
+  id: PropTypes.string,
+  values: PropTypes.array,
+  multi: PropTypes.bool,
+  link: PropTypes.string
+};
+
+FormFileInput.defaultProps = {
+  values: []
 };
 
 FormFileInput.displayName = 'FormFileInput';

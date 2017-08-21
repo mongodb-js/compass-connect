@@ -14,9 +14,10 @@ class SSLServerValidation extends React.Component {
       <div id="ssl-server-validation" className="form-group">
         <FormFileInput
           label="Certificate Authority"
-          name="ssl_ca"
           changeHandler={this.onSSLCAChanged.bind(this)}
-          value={this.props.currentConnection.ssl_ca} />
+          values={this.props.currentConnection.ssl_ca}
+          link="https://docs.mongodb.com/manual/tutorial/configure-ssl/#certificate-authorities"
+          multi />
       </div>
     );
   }
