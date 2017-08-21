@@ -25,6 +25,16 @@ class FavoriteSection extends React.Component {
     return connection.name;
   }
 
+  renderCreateFavorite() {
+    if (this.getName() !== '') {
+      return (
+        <button type="button" className="btn btn-sm btn-default">
+          Create Favorite
+        </button>
+      );
+    }
+  }
+
   render() {
     return (
       <div id="favorite" className="form-group">
@@ -35,6 +45,9 @@ class FavoriteSection extends React.Component {
           link="https://docs.mongodb.com/compass/current/connect/"
           changeHandler={this.onNameChanged.bind(this)}
           value={this.getName()} />
+        <div className="buttons">
+          {this.renderCreateFavorite()}
+        </div>
       </div>
     );
   }
