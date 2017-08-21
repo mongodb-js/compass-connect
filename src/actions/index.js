@@ -13,7 +13,8 @@ const ConnectActions = Reflux.createActions([
   'onSSLCAChanged',
   'onSSLCertificateChanged',
   'onSSLPrivateKeyChanged',
-  'onSSLPrivateKeyPasswordChanged'
+  'onSSLPrivateKeyPasswordChanged',
+  'onSSLTunnelChanged'
 ]);
 
 module.exports = ConnectActions;

@@ -73,6 +73,11 @@ const ConnectStore = Reflux.createStore({
     this.trigger(this.state);
   },
 
+  onSSLTunnelChanged(tunnel) {
+    this.state.currentConnection.ssl_tunnel = tunnel;
+    this.trigger(this.state);
+  },
+
   getInitialState() {
     return {
       currentConnection: new Connection(),
