@@ -6,7 +6,7 @@ const ReplicaSetNameReadPreferenceSection = require('./replica-set-name-read-pre
 const SSLSection = require('./ssl-section');
 const FavoriteSection = require('./favorite-section');
 const Sidebar = require('./sidebar');
-const SSLTunnelSection = require('./ssl-tunnel-section');
+const SSHTunnelSection = require('./ssh-tunnel-section');
 
 class Connect extends React.Component {
 
@@ -27,7 +27,7 @@ class Connect extends React.Component {
             <hr />
             <SSLSection {...this.props} />
             <hr />
-            <SSLTunnelSection {...this.props} />
+            <SSHTunnelSection {...this.props} />
             <hr />
             <FavoriteSection {...this.props } />
           </form>

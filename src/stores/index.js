@@ -112,8 +112,8 @@ const ConnectStore = Reflux.createStore({
     });
   },
 
-  onSSLTunnelChanged(tunnel) {
-    this.state.currentConnection.ssl_tunnel = tunnel;
+  onSSHTunnelChanged(tunnel) {
+    this.state.currentConnection.ssh_tunnel = tunnel;
     this.trigger(this.state);
   },
 

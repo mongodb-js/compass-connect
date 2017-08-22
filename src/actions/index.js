@@ -18,7 +18,13 @@ const ConnectActions = Reflux.createActions([
   'onFavoriteNameChanged',
   'onCreateFavorite',
   'onFavoriteSelected',
-  'onSSLTunnelChanged'
+  'onSSHTunnelPasswordChanged',
+  'onSSHTunnelPassphraseChanged',
+  'onSSHTunnelHostnameChanged',
+  'onSSHTunnelUsernameChanged',
+  'onSSHTunnelPortChanged',
+  'onSSHTunnelIdentityFileChanged',
+  'onSSHTunnelChanged'
 ]);
 
 module.exports = ConnectActions;
