@@ -1,12 +1,25 @@
 const Reflux = require('reflux');
 const Actions = require('../actions');
 const Connection = require('../models/connection');
+const ConnectionCollection = require('../models/connection-collection');
 const StateMixin = require('reflux-state-mixin');
 
 const ConnectStore = Reflux.createStore({
   mixins: [StateMixin.store],
 
   listenables: Actions,
+
+  init() {
+    this.state.connections.fetch({
+      success: () => {
+        this.trigger(this.state);
+      }
+    });
+  },
+
+  resetConnection() {
+    this.setState({ currentConnection: new Connection() });
+  },
 
   onAuthenticationMethodChanged(method) {
     this.state.currentConnection.authentication = method;
@@ -73,6 +86,32 @@ const ConnectStore = Reflux.createStore({
     this.trigger(this.state);
   },
 
+  onFavoriteNameChanged(name) {
+    this.state.currentConnection.name = name;
+    this.trigger(this.state);
+  },
+
+  onCreateFavorite() {
+    const connection = this.state.currentConnection;
+    connection.is_favorite = true;
+    this.state.connections.add(connection);
+    connection.save();
+    this.trigger(this.state);
+  },
+
+  onFavoriteSelected(favorite) {
+    this.setState({ currentConnection: favorite });
+  },
+
+  onDeleteConnection(connection) {
+    connection.destroy({
+      success: () => {
+        this.state.connections.remove(connection._id);
+        this.trigger(this.state);
+      }
+    });
+  },
+
   onSSHTunnelChanged(tunnel) {
     this.state.currentConnection.ssh_tunnel = tunnel;
     this.trigger(this.state);
@@ -111,7 +150,7 @@ const ConnectStore = Reflux.createStore({
   getInitialState() {
     return {
       currentConnection: new Connection(),
-      connections: []
+      connections: new ConnectionCollection()
     };
   }
 });

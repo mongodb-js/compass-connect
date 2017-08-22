@@ -1,6 +1,7 @@
 const Reflux = require('reflux');
 
 const ConnectActions = Reflux.createActions([
+  'resetConnection',
   'onHostnameChanged',
   'onPortChanged',
   'onReadPreferenceChanged',
@@ -14,6 +15,9 @@ const ConnectActions = Reflux.createActions([
   'onSSLCertificateChanged',
   'onSSLPrivateKeyChanged',
   'onSSLPrivateKeyPasswordChanged',
+  'onFavoriteNameChanged',
+  'onCreateFavorite',
+  'onFavoriteSelected',
   'onSSHTunnelPasswordChanged',
   'onSSHTunnelPassphraseChanged',
   'onSSHTunnelHostnameChanged',
