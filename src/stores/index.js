@@ -117,6 +117,36 @@ const ConnectStore = Reflux.createStore({
     this.trigger(this.state);
   },
 
+  onSSHTunnelPasswordChanged(password) {
+    this.state.currentConnection.ssh_tunnel_password = password;
+    this.trigger(this.state);
+  },
+
+  onSSHTunnelPassphraseChanged(passphrase) {
+    this.state.currentConnection.ssh_tunnel_passphrase = passphrase;
+    this.trigger(this.state);
+  },
+
+  onSSHTunnelHostnameChanged(hostname) {
+    this.state.currentConnection.ssh_tunnel_hostname = hostname;
+    this.trigger(this.state);
+  },
+
+  onSSHTunnelUsernameChanged(username) {
+    this.state.currentConnection.ssh_tunnel_username = username;
+    this.trigger(this.state);
+  },
+
+  onSSHTunnelPortChanged(port) {
+    this.state.currentConnection.ssh_tunnel_port = port;
+    this.trigger(this.state);
+  },
+
+  onSSHTunnelIdentityFileChanged(file) {
+    this.state.currentConnection.ssh_identity_file = file;
+    this.trigger(this.state);
+  },
+
   getInitialState() {
     return {
       currentConnection: new Connection(),
