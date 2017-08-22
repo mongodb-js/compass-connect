@@ -201,4 +201,72 @@ describe('IndexStore', () => {
       Actions.onCreateFavorite();
     });
   });
+
+  // TODO can this port be changed? The UI doesn't seem that way
+  describe('#onSSHTunnelPortChanged', () => {
+    it('updates the SSH Tunnel port in the current connection model', (done) => {
+      const unsubscribe = IndexStore.listen((state) => {
+        expect(state.currentConnection.ssh_tunnel_port).to.equal(22);
+        unsubscribe();
+        done();
+      });
+      Actions.onSSHTunnelPortChanged(22);
+    });
+  });
+
+  describe('#onSSHTunnelUsernameChanged', () => {
+    it('updates the SSH Tunnel username in the current connection model', (done) => {
+      const unsubscribe = IndexStore.listen((state) => {
+        expect(state.currentConnection.ssh_tunnel_username).to.equal('mongodb');
+        unsubscribe();
+        done();
+      });
+      Actions.onSSHTunnelUsernameChanged('mongodb');
+    });
+  });
+
+  describe('#onSSHTunnelHostnameChanged', () => {
+    it('updates the SSH Tunnel hostname in the current connection model', (done) => {
+      const unsubscribe = IndexStore.listen((state) => {
+        expect(state.currentConnection.ssh_tunnel_hostname).to.equal('localhost');
+        unsubscribe();
+        done();
+      });
+      Actions.onSSHTunnelHostnameChanged('localhost');
+    });
+  });
+
+  describe('#onSSHTunnelPasswordChanged', () => {
+    it('updates the SSH Tunnel password in the current connection model', (done) => {
+      const unsubscribe = IndexStore.listen((state) => {
+        expect(state.currentConnection.ssh_tunnel_password).to.equal('mongodb');
+        unsubscribe();
+        done();
+      });
+      Actions.onSSHTunnelPasswordChanged('mongodb');
+    });
+  });
+
+  describe('#onSSHTunnelPassphraseChanged', () => {
+    it('updates the SSH Tunnel passphrase in the current connection model', (done) => {
+      const unsubscribe = IndexStore.listen((state) => {
+        expect(state.currentConnection.ssh_tunnel_passphrase).to.equal('mongodb');
+        unsubscribe();
+        done();
+      });
+      Actions.onSSHTunnelPassphraseChanged('mongodb');
+    });
+  });
+
+  // TODO the path is given to the action is returning undefined
+  describe('#onSSHTunnelIdentityFileChanged', () => {
+    it('updates the SSH Tunnel identity file in the current connection model', (done) => {
+      const unsubscribe = IndexStore.listen((state) => {
+        expect(state.currentConnection.ssh_tunnel_identity_file).to.equal(['file']);
+        unsubscribe();
+        done();
+      });
+      Actions.onSSHTunnelIdentityFileChanged(['file']);
+    });
+  });
 });
