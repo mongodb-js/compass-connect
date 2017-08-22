@@ -110,7 +110,7 @@ function activate(appRegistry) {
   appRegistry.registerRole('Connect.SSLMethod', SERVER_VALIDATION_SSL_ROLE);
   appRegistry.registerRole('Connect.SSLMethod', SERVER_CLIENT_VALIDATION_SSL_ROLE);
   appRegistry.registerRole('Connect.SSLMethod', UNVALIDATED_SLL_ROLE);
-  appRegistry.registerRole('Connect.SSHTunnelMethod', NO_SSH_ROLE);
+  appRegistry.registerRole('Connect.SSHTunnelMethod', NO_SSH_TUNNEL_ROLE);
   appRegistry.registerRole('Connect.SSHTunnelMethod', PASSWORD_SSH_TUNNEL_ROLE);
   appRegistry.registerRole('Connect.SSHTunnelMethod', IDENTITY_FILE_SSH_TUNNEL_ROLE);
   appRegistry.registerRole('Connect.AuthenticationMethod', NO_AUTH_ROLE);
@@ -129,7 +129,7 @@ function deactivate(appRegistry) {
   appRegistry.deregisterRole('Connect.SSLMethod', SERVER_VALIDATION_SSL_ROLE);
   appRegistry.deregisterRole('Connect.SSLMethod', SERVER_CLIENT_VALIDATION_SSL_ROLE);
   appRegistry.deregisterRole('Connect.SSLMethod', UNVALIDATED_SLL_ROLE);
-  appRegistry.deregisterRole('Connect.SSHTunnelMethod', NO_SSH_ROLE);
+  appRegistry.deregisterRole('Connect.SSHTunnelMethod', NO_SSH_TUNNEL_ROLE);
   appRegistry.deregisterRole('Connect.SSHTunnelMethod', PASSWORD_SSH_TUNNEL_ROLE);
   appRegistry.deregisterRole('Connect.SSHTunnelMethod', IDENTITY_FILE_SSH_TUNNEL_ROLE);
   appRegistry.deregisterRole('Connect.AuthenticationMethod', NO_AUTH_ROLE);
