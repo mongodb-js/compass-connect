@@ -33,18 +33,18 @@ class SSHTunnelIdentityFileValidation extends React.Component {
           label="SSH Hostname"
           name="ssh_tunnel_hostname"
           changeHandler={this.onSSHTunnelHostnameChanged.bind(this)}
-          value={this.props.currentConnection.ssh_tunnel_hostname}
+          value={this.props.currentConnection.ssh_tunnel_hostname || ''}
           link="https://docs.mongodb.com/compass/current/connect" />
         <FormItemInput
           label="SSH Tunnel Port"
           name="ssh_tunnel_port"
           changeHandler={this.onSSHTunnelPortChanged.bind(this)}
-          value={this.props.currentConnection.ssh_tunnel_port} />
+          value={this.props.currentConnection.ssh_tunnel_port || ''} />
         <FormItemInput
           label="SSH Username"
           name="ssh_tunnel_username"
           changeHandler={this.onSSHTunnelUsernameChanged.bind(this)}
-          value={this.props.currentConnection.ssh_tunnel_username} />
+          value={this.props.currentConnection.ssh_tunnel_username || ''} />
         <FormFileInput
           label="SSH Identity File"
           id="ssh_tunnel_identity_file"
@@ -54,7 +54,7 @@ class SSHTunnelIdentityFileValidation extends React.Component {
           label="SSH Passphrase"
           name="ssh_tunnel_passphrase"
           changeHandler={this.onSSHTunnelPassphraseChanged.bind(this)}
-          value={this.props.currentConnection.ssh_tunnel_passphrase} />
+          value={this.props.currentConnection.ssh_tunnel_passphrase || ''} />
       </div>
     );
   }
