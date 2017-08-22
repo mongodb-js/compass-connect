@@ -148,6 +148,14 @@ const ConnectStore = Reflux.createStore({
     this.trigger(this.state);
   },
 
+  onSaveConnection(connection) {
+    connection.save({
+      success: () => {
+        this.trigger(this.state);
+      }
+    });
+  },
+
   getInitialState() {
     return {
       currentConnection: new Connection(),

@@ -20,6 +20,10 @@ class FavoriteSection extends React.Component {
     Actions.onDeleteConnection(this.props.currentConnection);
   }
 
+  onSaveFavorite() {
+    Actions.onSaveConnection(this.props.currentConnection);
+  }
+
   onNameChanged(evt) {
     this.isNameChanged = true;
     Actions.onFavoriteNameChanged(evt.target.value);
@@ -59,6 +63,19 @@ class FavoriteSection extends React.Component {
     }
   }
 
+  renderSaveFavorite() {
+    if (this.props.currentConnection.is_favorite) {
+      return (
+        <button
+          type="button"
+          className="btn btn-sm btn-default"
+          onClick={this.onSaveFavorite.bind(this)}>
+          Save Favorite
+        </button>
+      );
+    }
+  }
+
   render() {
     return (
       <div id="favorite" className="form-group">
@@ -72,6 +89,7 @@ class FavoriteSection extends React.Component {
         <div className="buttons">
           {this.renderCreateFavorite()}
           {this.renderDeleteFavorite()}
+          {this.renderSaveFavorite()}
         </div>
       </div>
     );

@@ -24,6 +24,7 @@ const ConnectActions = Reflux.createActions([
   'onSSHTunnelPortChanged',
   'onSSHTunnelIdentityFileChanged',
   'onSSHTunnelChanged'
+  'onSaveConnection',
   'onDeleteConnection',
   'onFavoriteSelected'
 ]);
