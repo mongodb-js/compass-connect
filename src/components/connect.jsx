@@ -4,7 +4,7 @@ const AuthenticationSection = require('./authentication-section');
 const HostPortSection = require('./host-port-section');
 const ReplicaSetNameReadPreferenceSection = require('./replica-set-name-read-preference-section');
 const SSLSection = require('./ssl-section');
-const SSLTunnelSection = require('./ssl-tunnel-section');
+const SSHTunnelSection = require('./ssh-tunnel-section');
 
 class Connect extends React.Component {
 
@@ -27,7 +27,7 @@ class Connect extends React.Component {
             <hr />
             <SSLSection {...this.props} />
             <hr />
-            <SSLTunnelSection {...this.props} />
+            <SSHTunnelSection {...this.props} />
           </form>
         </div>
       </div>

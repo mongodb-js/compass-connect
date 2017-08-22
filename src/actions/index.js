@@ -14,7 +14,13 @@ const ConnectActions = Reflux.createActions([
   'onSSLCertificateChanged',
   'onSSLPrivateKeyChanged',
   'onSSLPrivateKeyPasswordChanged',
-  'onSSLTunnelChanged'
+  'onSSHTunnelPasswordChanged',
+  'onSSHTunnelPassphraseChanged',
+  'onSSHTunnelHostnameChanged',
+  'onSSHTunnelUsernameChanged',
+  'onSSHTunnelPortChanged',
+  'onSSHTunnelIdentityFileChanged',
+  'onSSHTunnelChanged'
 ]);
 
 module.exports = ConnectActions;
