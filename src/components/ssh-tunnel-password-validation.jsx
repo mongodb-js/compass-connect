@@ -28,23 +28,23 @@ class SSHTunnelPasswordValidation extends React.Component {
           label="SSH Hostname"
           name="ssh_tunnel_hostname"
           changeHandler={this.onSSHTunnelHostnameChanged.bind(this)}
-          value={this.props.currentConnection.ssh_tunnel_hostname}
+          value={this.props.currentConnection.ssh_tunnel_hostname || ''}
           link="https://docs.mongodb.com/compass/current/connect" />
         <FormItemInput
           label="SSH Tunnel Port"
           name="ssh_tunnel_port"
           changeHandler={this.onSSHTunnelPortChanged.bind(this)}
-          value={this.props.currentConnection.ssh_tunnel_port} />
+          value={this.props.currentConnection.ssh_tunnel_port || ''} />
         <FormItemInput
           label="SSH Username"
           name="ssh_tunnel_username"
           changeHandler={this.onSSHTunnelUsernameChanged.bind(this)}
-          value={this.props.currentConnection.ssh_tunnel_username} />
+          value={this.props.currentConnection.ssh_tunnel_username || ''} />
         <FormItemInput
           label="SSH Password"
           name="ssh_tunnel_password"
           changeHandler={this.onSSHTunnelPasswordChanged.bind(this)}
-          value={this.props.currentConnection.ssh_tunnel_password} />
+          value={this.props.currentConnection.ssh_tunnel_password || ''} />
       </div>
     );
   }
