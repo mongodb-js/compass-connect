@@ -99,6 +99,10 @@ const ConnectStore = Reflux.createStore({
     this.trigger(this.state);
   },
 
+  onFavoriteSelected(favorite) {
+    this.setState({ currentConnection: favorite });
+  },
+
   onDeleteConnection(connection) {
     connection.destroy({
       success: () => {
