@@ -107,6 +107,7 @@ const ConnectStore = Reflux.createStore({
     connection.destroy({
       success: () => {
         this.state.connections.remove(connection._id);
+        this.state.currentConnection = new Connection();
         this.trigger(this.state);
       }
     });
