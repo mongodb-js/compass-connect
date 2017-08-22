@@ -9,7 +9,7 @@ class Sidebar extends React.Component {
     return (
       <div>
         <div className="connect-sidebar">
-          <NewConnectionSection />
+          <NewConnectionSection {...this.props} />
           <ConnectionsSection {...this.props} />
         </div>
       </div>
