@@ -262,7 +262,7 @@ describe('IndexStore', () => {
   describe('#onSSHTunnelIdentityFileChanged', () => {
     it('updates the SSH Tunnel identity file in the current connection model', (done) => {
       const unsubscribe = IndexStore.listen((state) => {
-        expect(state.currentConnection.ssh_tunnel_identity_file).to.equal(['file']);
+        expect(state.currentConnection.ssh_tunnel_identity_file).to.deep.equal(['file']);
         unsubscribe();
         done();
       });

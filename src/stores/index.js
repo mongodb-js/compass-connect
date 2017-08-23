@@ -143,7 +143,7 @@ const ConnectStore = Reflux.createStore({
   },
 
   onSSHTunnelIdentityFileChanged(file) {
-    this.state.currentConnection.ssh_identity_file = file;
+    this.state.currentConnection.ssh_tunnel_identity_file = file;
     this.trigger(this.state);
   },
 
