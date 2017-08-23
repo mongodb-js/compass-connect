@@ -182,7 +182,7 @@ describe('IndexStore', () => {
     });
   });
 
-  describe('#onCreateFavorite', () => {
+  describe.skip('#onCreateFavorite', () => {
     before(() => {
       IndexStore.state.currentConnection.name = 'myconnection';
     });
