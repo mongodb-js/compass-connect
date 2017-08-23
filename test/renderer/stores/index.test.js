@@ -202,15 +202,14 @@ describe('IndexStore', () => {
     });
   });
 
-  // TODO can this port be changed? The UI doesn't seem that way
   describe('#onSSHTunnelPortChanged', () => {
     it('updates the SSH Tunnel port in the current connection model', (done) => {
       const unsubscribe = IndexStore.listen((state) => {
-        expect(state.currentConnection.ssh_tunnel_port).to.equal(22);
+        expect(state.currentConnection.ssh_tunnel_port).to.equal('5000');
         unsubscribe();
         done();
       });
-      Actions.onSSHTunnelPortChanged(22);
+      Actions.onSSHTunnelPortChanged('5000');
     });
   });
 
@@ -258,7 +257,6 @@ describe('IndexStore', () => {
     });
   });
 
-  // TODO the path is given to the action is returning undefined
   describe('#onSSHTunnelIdentityFileChanged', () => {
     it('updates the SSH Tunnel identity file in the current connection model', (done) => {
       const unsubscribe = IndexStore.listen((state) => {
