@@ -3,14 +3,17 @@ const PropTypes = require('prop-types');
 const Actions = require('../actions');
 const FormItemInput = require('./form-item-input');
 
+const DEFAULT_SSH_TUNNEL_PORT = 22;
+
 class SSHTunnelPasswordValidation extends React.Component {
+
+  constructor(props) {
+    super(props);
+    this.isSSHTunnelPortChanged = false;
+  }
 
   onSSHTunnelHostnameChanged(evt) {
     Actions.onSSHTunnelHostnameChanged(evt.target.value);
-  }
-
-  onSSHTunnelPortChanged(evt) {
-    Actions.onSSHTunnelPortChanged(evt.target.value);
   }
 
   onSSHTunnelUsernameChanged(evt) {
@@ -19,6 +22,24 @@ class SSHTunnelPasswordValidation extends React.Component {
 
   onSSHTunnelPasswordChanged(evt) {
     Actions.onSSHTunnelPasswordChanged(evt.target.value);
+  }
+
+  onSSHTunnelPortChanged(evt) {
+    const value = evt.target.value;
+    if (value === '') {
+      this.isSSHTunnelPortChanged = false;
+    } else {
+      this.isSSHTunnelPortChanged = true;
+    }
+    Actions.onSSHTunnelPortChanged(value);
+  }
+
+  getPort() {
+    const connection = this.props.currentConnection;
+    if (!connection.last_used && !this.isSSHTunnelPortChanged && connection.ssh_tunnel_port === DEFAULT_SSH_TUNNEL_PORT) {
+      return '';
+    }
+    return connection.ssh_tunnel_port;
   }
 
   render() {
@@ -34,7 +55,7 @@ class SSHTunnelPasswordValidation extends React.Component {
           label="SSH Tunnel Port"
           name="ssh_tunnel_port"
           changeHandler={this.onSSHTunnelPortChanged.bind(this)}
-          value={this.props.currentConnection.ssh_tunnel_port || ''} />
+          value={this.getPort()} />
         <FormItemInput
           label="SSH Username"
           name="ssh_tunnel_username"

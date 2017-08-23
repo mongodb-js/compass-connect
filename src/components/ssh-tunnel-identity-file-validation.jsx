@@ -4,14 +4,17 @@ const Actions = require('../actions');
 const FormFileInput = require('./form-file-input');
 const FormItemInput = require('./form-item-input');
 
+const DEFAULT_SSH_TUNNEL_PORT = 22;
+
 class SSHTunnelIdentityFileValidation extends React.Component {
+
+  constructor(props) {
+    super(props);
+    this.isSSHTunnelPortChanged = false;
+  }
 
   onSSHTunnelHostnameChanged(evt) {
     Actions.onSSHTunnelHostnameChanged(evt.target.value);
-  }
-
-  onSSHTunnelPortChanged(evt) {
-    Actions.onSSHTunnelPortChanged(evt.target.value);
   }
 
   onSSHTunnelUsernameChanged(evt) {
@@ -26,6 +29,24 @@ class SSHTunnelIdentityFileValidation extends React.Component {
     Actions.onSSHTunnelPassphraseChanged(evt.target.value);
   }
 
+  onSSHTunnelPortChanged(evt) {
+    const value = evt.target.value;
+    if (value === '') {
+      this.isSSHTunnelPortChanged = false;
+    } else {
+      this.isSSHTunnelPortChanged = true;
+    }
+    Actions.onSSHTunnelPortChanged(value);
+  }
+
+  getPort() {
+    const connection = this.props.currentConnection;
+    if (!connection.last_used && !this.isSSHTunnelPortChanged && connection.ssh_tunnel_port === DEFAULT_SSH_TUNNEL_PORT) {
+      return '';
+    }
+    return connection.ssh_tunnel_port;
+  }
+
   render() {
     return (
       <div id="ssh_tunnel-IDENTITY_FILE" className="form-group">
@@ -38,8 +59,9 @@ class SSHTunnelIdentityFileValidation extends React.Component {
         <FormItemInput
           label="SSH Tunnel Port"
           name="ssh_tunnel_port"
+          placeholder="22"
           changeHandler={this.onSSHTunnelPortChanged.bind(this)}
-          value={this.props.currentConnection.ssh_tunnel_port || ''} />
+          value={this.getPort()} />
         <FormItemInput
           label="SSH Username"
           name="ssh_tunnel_username"
