@@ -16,6 +16,7 @@ class ConnectionsSection extends React.Component {
 }
 
 ConnectionsSection.propTypes = {
+  currentConnection: PropTypes.object.isRequired,
   connections: PropTypes.object.isRequired
 };
 

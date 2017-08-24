@@ -182,12 +182,16 @@ describe('IndexStore', () => {
     });
   });
 
-  describe.skip('#onCreateFavorite', () => {
+  describe('#onCreateFavorite', () => {
     before(() => {
       IndexStore.state.currentConnection.name = 'myconnection';
     });
 
-    after(() => {
+    after((done) => {
+      const unsubscribe = IndexStore.listen(() => {
+        unsubscribe();
+        done();
+      });
       IndexStore.onDeleteConnection(IndexStore.state.currentConnection);
     });
 
