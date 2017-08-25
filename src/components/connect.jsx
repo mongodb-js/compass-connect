@@ -7,7 +7,6 @@ const SSLSection = require('./ssl-section');
 const FavoriteSection = require('./favorite-section');
 const Sidebar = require('./sidebar');
 const SSHTunnelSection = require('./ssh-tunnel-section');
-const FormItemButton = require('./form-item-button');
 
 class Connect extends React.Component {
 
@@ -31,12 +30,6 @@ class Connect extends React.Component {
             <SSHTunnelSection {...this.props} />
             <hr />
             <FavoriteSection {...this.props } />
-            <FormItemButton
-              type="submit"
-              name="connect"
-              data_hook="connect-button"
-              data_test_id="connect-button"
-              text="Connect" />
           </form>
         </div>
       </div>
