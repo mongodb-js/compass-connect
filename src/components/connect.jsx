@@ -38,21 +38,6 @@ class Connect extends React.Component {
     window.removeEventListener('onfocus', this.checkClipboard);
   }
 
-  autoFillFromClipboard() {
-    // @note: Durran: Create a connection model from the clipboard text and remove the
-    //   default name.
-    const connection = Connection.from(this.clipboardText);
-    connection.name = '';
-
-    // @note: Durran: Auto set the SSL options (see COMPASS-1745, this is a part of that).
-    if (this.clipboardText.match(/[?&]ssl=true/i)) {
-      connection.ssl = 'SYSTEMCA';
-    }
-    // @note: Durran: Set the current connection on the store, this will trigger a render
-    //   and the form will get filled in.
-    Actions.onConnectionSelected(connection);
-  }
-
   onCheckClipboard() {
     // @note: Durran: Get the current clipboard text.
     let clipboardText = Clipboard.readText();
@@ -81,7 +66,22 @@ class Connect extends React.Component {
         }
       });
     }
-  };
+  }
+
+  autoFillFromClipboard() {
+    // @note: Durran: Create a connection model from the clipboard text and remove the
+    //   default name.
+    const connection = Connection.from(this.clipboardText);
+    connection.name = '';
+
+    // @note: Durran: Auto set the SSL options (see COMPASS-1745, this is a part of that).
+    if (this.clipboardText.match(/[?&]ssl=true/i)) {
+      connection.ssl = 'SYSTEMCA';
+    }
+    // @note: Durran: Set the current connection on the store, this will trigger a render
+    //   and the form will get filled in.
+    Actions.onConnectionSelected(connection);
+  }
 
   render() {
     return (
