@@ -331,4 +331,17 @@ describe('IndexStore', () => {
       Actions.onSSHTunnelIdentityFileChanged(['file']);
     });
   });
+
+  describe('#onConnectionSelected', () => {
+    const connection = new Connection();
+
+    it('sets the current connection in the store', (done) => {
+      const unsubscribe = IndexStore.listen((state) => {
+        expect(state.currentConnection).to.equal(connection);
+        unsubscribe();
+        done();
+      });
+      Actions.onConnectionSelected(connection);
+    });
+  });
 });
