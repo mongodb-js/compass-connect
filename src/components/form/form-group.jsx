@@ -26,7 +26,7 @@ FormGroup.propTypes = {
   children: PropTypes.oneOfType([
     PropTypes.array,
     PropTypes.object
-  ]),
+  ])
 };
 
 FormGroup.displayName = 'FormGroup';
