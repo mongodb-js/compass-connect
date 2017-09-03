@@ -10,7 +10,7 @@ chai.use(chaiEnzyme());
 describe('<NewConnectionSection />', () => {
   describe('#render', () => {
     const component = mount(
-      <NewConnectionSection />
+      <NewConnectionSection currentConnection={{}} />
     );
 
     it('renders the wrapper div', () => {

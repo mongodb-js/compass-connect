@@ -23,7 +23,10 @@ class FormGroup extends React.Component {
 FormGroup.propTypes = {
   id: PropTypes.string,
   separator: PropTypes.bool,
-  children: PropTypes.object.isRequired
+  children: PropTypes.oneOfType([
+    PropTypes.array,
+    PropTypes.object
+  ]),
 };
 
 FormGroup.displayName = 'FormGroup';

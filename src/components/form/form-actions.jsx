@@ -6,7 +6,7 @@ const FormGroup = require('./form-group');
 
 const DEFAULT_NAME = 'Local';
 
-class FavoriteSection extends React.Component {
+class FormActions extends React.Component {
 
   constructor(props) {
     super(props);
@@ -109,10 +109,10 @@ class FavoriteSection extends React.Component {
   }
 }
 
-FavoriteSection.propTypes = {
+FormActions.propTypes = {
   currentConnection: PropTypes.object.isRequired
 };
 
-FavoriteSection.displayName = 'FavoriteSection';
+FormActions.displayName = 'FormActions';
 
-module.exports = FavoriteSection;
+module.exports = FormActions;
