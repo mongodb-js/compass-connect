@@ -1,6 +1,6 @@
 const React = require('react');
 const PropTypes = require('prop-types');
-const Actions = require('../actions');
+const Actions = require('../../actions');
 
 class NewConnectionSection extends React.Component {
 

@@ -4,7 +4,7 @@ const expect = chai.expect;
 const chaiEnzyme = require('chai-enzyme');
 const { mount } = require('enzyme');
 const ReplicaSetNameReadPreferenceSection =
-  require('../../src/components/replica-set-name-read-preference-section');
+  require('../../src/components/form/replica-set-name-read-preference-section');
 
 chai.use(chaiEnzyme());
 

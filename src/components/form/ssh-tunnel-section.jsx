@@ -1,7 +1,7 @@
 const find = require('lodash.find');
 const React = require('react');
 const PropTypes = require('prop-types');
-const Actions = require('../actions');
+const Actions = require('../../actions');
 const FormItemSelect = require('./form-item-select');
 
 class SSHTunnelSection extends React.Component {

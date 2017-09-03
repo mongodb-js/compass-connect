@@ -1,7 +1,7 @@
 const React = require('react');
 const PropTypes = require('prop-types');
 const map = require('lodash.map');
-const Actions = require('../actions');
+const Actions = require('../../actions');
 
 class RecentListSection extends React.Component {
 
