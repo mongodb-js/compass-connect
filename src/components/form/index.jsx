@@ -4,10 +4,11 @@ const FormGroup = require('./form-group');
 const HostInput = require('./host-input');
 const PortInput = require('./port-input');
 const Authentication = require('./authentication-section');
-const ReplicaSetNameReadPreferenceSection = require('./replica-set-name-read-preference-section');
-const SSLSection = require('./ssl-section');
-const SSHTunnelSection = require('./ssh-tunnel-section');
-const FavoriteSection = require('./favorite-section');
+const ReplicaSetNameInput = require('./replica-set-name-input');
+const ReadPreferenceSelect = require('./read-preference-select');
+const SSL = require('./ssl-section');
+const SSHTunnel = require('./ssh-tunnel-section');
+const FormActions = require('./favorite-section');
 
 class ConnectForm extends React.Component {
 
@@ -19,13 +20,13 @@ class ConnectForm extends React.Component {
           <PortInput {...this.props} />
         </FormGroup>
         <Authentication {...this.props} />
-        <ReplicaSetNameReadPreferenceSection {...this.props} />
-        <hr />
-        <SSLSection {...this.props} />
-        <hr />
-        <SSHTunnelSection {...this.props} />
-        <hr />
-        <FavoriteSection {...this.props } />
+        <FormGroup id="read-preference" separator>
+          <ReplicaSetNameInput {...this.props} />
+          <ReadPreferenceSelect {...this.props} />
+        </FormGroup>
+        <SSL {...this.props} />
+        <SSHTunnel {...this.props} />
+        <FormActions {...this.props } />
       </form>
     );
   }

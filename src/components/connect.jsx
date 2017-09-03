@@ -7,7 +7,7 @@ const BrowserWindow = remote.BrowserWindow;
 const shellToURL = require('mongodb-shell-to-url');
 const Connection = require('mongodb-connection-model');
 const Sidebar = require('./sidebar');
-const Form = require('./form');
+const ConnectForm = require('./form');
 const Actions = require('../actions');
 
 class Connect extends React.Component {
@@ -68,7 +68,7 @@ class Connect extends React.Component {
           <header>
             <h2 data-test-id="connect-header">Connect to Host</h2>
           </header>
-          <Form {...this.props} />
+          <ConnectForm {...this.props} />
         </div>
       </div>
     );
