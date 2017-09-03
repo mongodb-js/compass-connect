@@ -1,7 +1,8 @@
 const React = require('react');
 const PropTypes = require('prop-types');
-const NewConnectionSection = require('./new-connection-section');
-const ConnectionsSection = require('./connections-section');
+const NewConnection = require('./new-connection');
+const Favorites = require('./favorites');
+const Recents = require('./recents');
 
 class Sidebar extends React.Component {
 
@@ -9,8 +10,11 @@ class Sidebar extends React.Component {
     return (
       <div>
         <div className="connect-sidebar">
-          <NewConnectionSection {...this.props} />
-          <ConnectionsSection {...this.props} />
+          <NewConnection {...this.props} />
+          <div className="connect-sidebar-connections">
+            <Favorites {...this.props} />
+            <Recents {...this.props} />
+          </div>
         </div>
       </div>
     );
@@ -18,6 +22,7 @@ class Sidebar extends React.Component {
 }
 
 Sidebar.propTypes = {
+  currentConnection: PropTypes.object.isRequired,
   connections: PropTypes.object.isRequired
 };
 
