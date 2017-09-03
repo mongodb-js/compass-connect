@@ -3,12 +3,12 @@ const PropTypes = require('prop-types');
 const FormGroup = require('./form-group');
 const HostInput = require('./host-input');
 const PortInput = require('./port-input');
-const Authentication = require('./authentication-section');
+const Authentication = require('./authentication');
 const ReplicaSetNameInput = require('./replica-set-name-input');
 const ReadPreferenceSelect = require('./read-preference-select');
-const SSL = require('./ssl-section');
-const SSHTunnel = require('./ssh-tunnel-section');
-const FormActions = require('./favorite-section');
+const SSL = require('./ssl');
+const SSHTunnel = require('./ssh-tunnel');
+const FormActions = require('./form-actions');
 
 class ConnectForm extends React.Component {
 
