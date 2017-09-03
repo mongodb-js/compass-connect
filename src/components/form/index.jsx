@@ -1,21 +1,24 @@
 const React = require('react');
 const PropTypes = require('prop-types');
-const HostPortSection = require('./host-port-section');
-const AuthenticationSection = require('./authentication-section');
+const FormGroup = require('./form-group');
+const HostInput = require('./host-input');
+const PortInput = require('./port-input');
+const Authentication = require('./authentication-section');
 const ReplicaSetNameReadPreferenceSection = require('./replica-set-name-read-preference-section');
 const SSLSection = require('./ssl-section');
 const SSHTunnelSection = require('./ssh-tunnel-section');
 const FavoriteSection = require('./favorite-section');
 
-class Form extends React.Component {
+class ConnectForm extends React.Component {
 
   render() {
     return (
       <form data-test-id="connect-form">
-        <HostPortSection {...this.props} />
-        <hr />
-        <AuthenticationSection {...this.props} />
-        <hr />
+        <FormGroup id="host-port" separator>
+          <HostInput {...this.props} />
+          <PortInput {...this.props} />
+        </FormGroup>
+        <Authentication {...this.props} />
         <ReplicaSetNameReadPreferenceSection {...this.props} />
         <hr />
         <SSLSection {...this.props} />
@@ -28,10 +31,10 @@ class Form extends React.Component {
   }
 }
 
-Form.propTypes = {
+ConnectForm.propTypes = {
   currentConnection: PropTypes.object.isRequired
 };
 
-Form.displayName = 'Form';
+ConnectForm.displayName = 'ConnectForm';
 
-module.exports = Form;
+module.exports = ConnectForm;
