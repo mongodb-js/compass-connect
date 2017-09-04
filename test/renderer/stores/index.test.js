@@ -5,7 +5,9 @@ const Connection = require('../../../lib/models/connection');
 const Actions = require('../../../lib/actions');
 const IndexStore = require('../../../lib/stores');
 
-describe('IndexStore', () => {
+describe('IndexStore', function() {
+  this.timeout(60000);
+
   afterEach(() => {
     IndexStore.state = IndexStore.getInitialState();
   });
@@ -75,10 +77,10 @@ describe('IndexStore', () => {
     it('updates the port in the current connection model', (done) => {
       const unsubscribe = IndexStore.listen((state) => {
         unsubscribe();
-        expect(state.currentConnection.port).to.equal('27019');
+        expect(state.currentConnection.port).to.equal('27018');
         done();
       });
-      Actions.onPortChanged('27019');
+      Actions.onPortChanged('27018');
     });
   });
 
@@ -387,12 +389,11 @@ describe('IndexStore', () => {
         }
       };
 
-      before(() => {
+      beforeEach(() => {
         global.hadronApp.appRegistry = new AppRegistry();
         global.hadronApp.appRegistry.registerStore('test', store);
-        const connection = IndexStore.state.currentConnection;
-        connection.hostname = '127.0.0.1';
-        connection.port = 27018;
+        const connection = new Connection({ port: 27018 });
+        IndexStore.state.currentConnection = connection;
       });
 
       after(() => {
@@ -404,6 +405,25 @@ describe('IndexStore', () => {
           unsubscribe();
           expect(state.isValid).to.equal(true);
           expect(spy.calledOnce).to.equal(true);
+          done();
+        });
+        Actions.onConnect();
+      });
+    });
+
+    context('when the connection fails', () => {
+      before(() => {
+        global.hadronApp.appRegistry = new AppRegistry();
+        const connection = IndexStore.state.currentConnection;
+        connection.hostname = '127.0.0.1';
+        connection.port = 27020;
+      });
+
+      it('sets an invalid state with an error', (done) => {
+        const unsubscribe = IndexStore.listen((state) => {
+          unsubscribe();
+          expect(state.isValid).to.equal(false);
+          expect(state.errorMessage).to.equal('MongoDB not running on the provided host and port');
           done();
         });
         Actions.onConnect();

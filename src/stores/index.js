@@ -175,11 +175,10 @@ const ConnectStore = Reflux.createStore({
       const dataService = new DataService(this.state.currentConnection);
       dataService.connect((err, ds) => {
         if (err) {
-          return this.setState({ isValid: false });
+          return this.setState({ isValid: false, errorMessage: err.message });
         }
         global.hadronApp.appRegistry.onConnected(err, ds);
-        this.state.isValid = true;
-        this.trigger(this.state);
+        this.setState({ isValid: true, isConnected: true, errorMessage: null });
       });
     }
   },
@@ -188,7 +187,9 @@ const ConnectStore = Reflux.createStore({
     return {
       currentConnection: new Connection(),
       connections: new ConnectionCollection(),
-      isValid: true
+      isValid: true,
+      isConnected: false,
+      errorMessage: null
     };
   },
 
