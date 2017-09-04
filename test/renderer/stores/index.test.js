@@ -1,4 +1,6 @@
 const { expect } = require('chai');
+const sinon = require('sinon');
+const AppRegistry = require('hadron-app-registry');
 const Connection = require('../../../lib/models/connection');
 const Actions = require('../../../lib/actions');
 const IndexStore = require('../../../lib/stores');
@@ -370,6 +372,60 @@ describe('IndexStore', () => {
           done();
         });
         Actions.onCreateRecent();
+      });
+    });
+  });
+
+  describe('#onConnect', () => {
+    context('when the connection is valid', () => {
+      const spy = sinon.spy();
+      const store = {
+        onConnected: (err, ds) => {
+          if (!err) {
+            spy(ds);
+          }
+        }
+      };
+
+      before(() => {
+        global.hadronApp.appRegistry = new AppRegistry();
+        global.hadronApp.appRegistry.registerStore('test', store);
+        const connection = IndexStore.state.currentConnection;
+        connection.hostname = '127.0.0.1';
+        connection.port = 27018;
+      });
+
+      after(() => {
+        global.hadronApp.appRegistry = new AppRegistry();
+      });
+
+      it('connects and sets a valid state', (done) => {
+        const unsubscribe = IndexStore.listen((state) => {
+          unsubscribe();
+          expect(state.isValid).to.equal(true);
+          expect(spy.calledOnce).to.equal(true);
+          done();
+        });
+        Actions.onConnect();
+      });
+    });
+
+    context('when the connection is not valid', () => {
+      before(() => {
+        IndexStore.state.currentConnection.authentication = 'MONGODB';
+      });
+
+      after(() => {
+        IndexStore.state.currentConnection.authentication = 'NONE';
+      });
+
+      it('sets an invalid state', (done) => {
+        const unsubscribe = IndexStore.listen((state) => {
+          unsubscribe();
+          expect(state.isValid).to.equal(false);
+          done();
+        });
+        Actions.onConnect();
       });
     });
   });
