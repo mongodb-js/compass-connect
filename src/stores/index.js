@@ -178,7 +178,12 @@ const ConnectStore = Reflux.createStore({
           return this.setState({ isValid: false, errorMessage: err.message });
         }
         global.hadronApp.appRegistry.onConnected(err, ds);
-        this.setState({ isValid: true, isConnected: true, errorMessage: null });
+        // @note: onCreateRecent will handle the store triggering, no need to do
+        //   it twice.
+        this.state.isValid = true;
+        this.state.isConnected = true;
+        this.state.errorMessage = null;
+        this.onCreateRecent();
       });
     }
   },

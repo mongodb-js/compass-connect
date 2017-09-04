@@ -80,6 +80,7 @@
     "lodash.isempty": "^4.4.0",
     "lodash.map": "^4.6.0",
     "lodash.sortby": "^4.7.0",
+    "moment": "^2.18.1",
     "mongodb-connection-model": "^10.0.0",
     "mongodb-data-service": "^8.0.0",
     "mongodb-shell-to-url": "^0.1.0",

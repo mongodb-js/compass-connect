@@ -396,7 +396,7 @@ describe('IndexStore', function() {
         IndexStore.state.currentConnection = connection;
       });
 
-      after(() => {
+      afterEach(() => {
         global.hadronApp.appRegistry = new AppRegistry();
       });
 
@@ -405,6 +405,15 @@ describe('IndexStore', function() {
           unsubscribe();
           expect(state.isValid).to.equal(true);
           expect(spy.calledOnce).to.equal(true);
+          done();
+        });
+        Actions.onConnect();
+      });
+
+      it('adds a recent connection', (done) => {
+        const unsubscribe = IndexStore.listen((state) => {
+          unsubscribe();
+          expect(state.connections.last().last_used).to.not.equal(null);
           done();
         });
         Actions.onConnect();
