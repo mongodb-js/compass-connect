@@ -81,7 +81,6 @@
     "ampersand-rest-collection": "^5.0.0",
     "hadron-react-buttons": "^3.0.0",
     "hadron-react-components": "^3.0.0",
-    "keytar": "^4.3.0",
     "lodash.filter": "^4.6.0",
     "lodash.find": "^4.6.0",
     "lodash.foreach": "^4.5.0",
