@@ -33,4 +33,4 @@ script:
 cache:
   directories:
     - $HOME/.electron
-    - node_modules
+    - '$HOME/.npm'
