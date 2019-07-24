@@ -4,7 +4,7 @@ import { remote } from 'electron';
 import shellToURL from 'mongodb-shell-to-url';
 import Connection from 'mongodb-connection-model';
 import Sidebar from './sidebar';
-import ConnectForm from './form/connec-form';
+import ConnectForm from './form/connect-form';
 import Help from './form/help';
 import Actions from 'actions';
 import classnames from 'classnames';
