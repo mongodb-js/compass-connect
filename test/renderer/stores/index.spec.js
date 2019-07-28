@@ -593,7 +593,7 @@ describe('Store', () => {
         beforeEach(() => {
           Store.state.currentConnection.authStrategy = 'MONGODB';
           Store.state.currentConnection.mongodbDatabaseName = '';
-          Store.updateDefaults();
+          Store._updateDefaults();
         });
 
         afterEach(() => {
@@ -610,7 +610,7 @@ describe('Store', () => {
       context('when the service name is empty', () => {
         before(() => {
           Store.state.currentConnection.authStrategy = 'KERBEROS';
-          Store.updateDefaults();
+          Store._updateDefaults();
         });
 
         after(() => {
