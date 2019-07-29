@@ -221,8 +221,7 @@ const Store = Reflux.createStore({
       isValid: true,
       isConnected: false,
       errorMessage: null,
-      syntaxErrorMessage: null,
-      viewType: 'connectionString'
+      syntaxErrorMessage: null
     });
   },
 
@@ -374,6 +373,22 @@ const Store = Reflux.createStore({
   onFavoriteNameChanged(name) {
     this.state.currentConnection.name = name;
     this.trigger(this.state);
+  },
+
+  /**
+    * Selects a favorite connection.
+    *
+    * @param {Connection} connection - The connection to select.
+    */
+  onFavoriteSelected(connection) {
+    this.setState({
+      currentConnection: connection,
+      isValid: true,
+      isConnected: false,
+      errorMessage: null,
+      syntaxErrorMessage: null,
+      viewType: 'connectionForm'
+    });
   },
 
   /**
