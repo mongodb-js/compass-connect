@@ -118,17 +118,11 @@ const Store = Reflux.createStore({
     if (customUrl === '') {
       this.resetConnection();
     } else if (!Connection.isURI(customUrl)) {
-      this.resetConnection();
-      this.state.isValid = false;
-      this.state.syntaxErrorMessage = 'Invalid schema, expected `mongodb` or `mongodb+srv`';
-      this.trigger(this.state);
+      this._setSyntaxErrorMessage('Invalid schema, expected `mongodb` or `mongodb+srv`');
     } else {
       Connection.from(customUrl, (error, connection) => {
         if (error) {
-          this.resetConnection();
-          this.state.isValid = false;
-          this.state.syntaxErrorMessage = error.message;
-          this.trigger(this.state);
+          this._setSyntaxErrorMessage(error.message);
         } else {
           connection.name = '';
 
@@ -154,15 +148,6 @@ const Store = Reflux.createStore({
       syntaxErrorMessage: null,
       viewType: 'connectionString'
     });
-  },
-
-  /**
-   * Sets a syntax error message to the store.
-   *
-   * @param {Object} error - Error.
-   */
-  setSyntaxErrorMessage(error) {
-    this.setState({ syntaxErrorMessage: error.message });
   },
 
   /**
@@ -678,7 +663,21 @@ const Store = Reflux.createStore({
     }
 
     done();
-  }
+  },
+
+  /**
+   * Sets a syntax error message to the store.
+   *
+   * @param {Object} error - Error.
+   */
+  _setSyntaxErrorMessage(error) {
+    this.setState({
+      currentConnection: new Connection(),
+      isValid: false,
+      errorMessage: null,
+      syntaxErrorMessage: error
+    });
+  },
 });
 
 module.exports = Store;

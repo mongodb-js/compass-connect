@@ -3,7 +3,6 @@ const Reflux = require('reflux');
 const Actions = Reflux.createActions({
   parseConnectionString: { sync: true },
   resetConnection: { sync: true },
-  setSyntaxErrorMessage: { sync: true },
   onAuthSourceChanged: { sync: true },
   onAuthStrategyChanged: { sync: true },
   onChangeViewClicked: { sync: true },
