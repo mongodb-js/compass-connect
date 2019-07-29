@@ -11,6 +11,9 @@ import ReadPreferenceSelect from './read-preference-select';
 import SSLMethod from './ssl-method';
 import SSHTunnel from './ssh-tunnel';
 import FormActions from './form-actions';
+import classnames from 'classnames';
+
+import styles from '../connect.less';
 
 class ConnectionForm extends React.Component {
   static displayName = 'ConnectionForm';
@@ -41,7 +44,9 @@ class ConnectionForm extends React.Component {
 
   render() {
     return (
-      <form onChange={this.onConnectionFormChanged.bind(this)}>
+      <form
+        onChange={this.onConnectionFormChanged.bind(this)}
+        className={classnames(styles['connect-form'])} >
         <FormGroup separator>
           <HostInput
             lastUsed={this.props.currentConnection.lastUsed}

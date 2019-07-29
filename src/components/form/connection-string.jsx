@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import FormGroup from './form-group';
-import DriverUrlInput from './driver-url-input';
+import ConnectionStringInput from './connection-string-input';
 import FormActions from './form-actions';
 
 import classnames from 'classnames';
@@ -18,17 +18,15 @@ class ConnectionString extends React.Component {
 
   render() {
     return (
-      <div className={classnames(styles['connection-string'])}>
-        <form>
-          <FormGroup separator>
-            <DriverUrlInput
-              lastUsed={this.props.currentConnection.lastUsed}
-              driverUrl={this.props.currentConnection.driverUrl}
-              customUrl={this.props.customUrl} />
-          </FormGroup>
-          <FormActions {...this.props } />
-        </form>
-      </div>
+      <form className={classnames(styles['connect-string'])}>
+        <FormGroup separator>
+          <ConnectionStringInput
+            lastUsed={this.props.currentConnection.lastUsed}
+            driverUrl={this.props.currentConnection.driverUrl}
+            customUrl={this.props.customUrl} />
+        </FormGroup>
+        <FormActions {...this.props } />
+      </form>
     );
   }
 }

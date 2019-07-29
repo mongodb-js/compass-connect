@@ -134,6 +134,8 @@ class FormActions extends React.Component {
       return (
         <button
           type="button"
+          name="createFavorite"
+          key="createFavorite"
           className="btn btn-sm btn-default"
           onClick={this.onCreateFavorite.bind(this)}>
           Create Favorite
@@ -152,6 +154,8 @@ class FormActions extends React.Component {
       return (
         <button
           type="button"
+          name="deleteFavorite"
+          key="deleteFavorite"
           className="btn btn-sm btn-default"
           onClick={this.onDeleteFavorite.bind(this)}>
           Delete Favorite
@@ -170,6 +174,8 @@ class FormActions extends React.Component {
       return (
         <button
           type="button"
+          name="saveFavorite"
+          key="saveFavorite"
           className="btn btn-sm btn-default"
           onClick={this.onSaveFavorite.bind(this)}>
           Save Favorite

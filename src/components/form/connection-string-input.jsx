@@ -80,14 +80,14 @@ class DriverUrlInput extends React.PureComponent {
 
   render() {
     return (
-      <div className={classnames(styles['connection-string-item'])}>
+      <div className={classnames(styles['connect-string-item'])}>
         <label>
           <span>Paste your connection string (SRV or Standard <InfoSprinkle
             helpLink={CONNECTION_STRING_LINK}
             onClickHandler={this.onExternalLinkClicked.bind(this)} />)</span>
         </label>
         <input
-          name="customUrl"
+          name="connectionString"
           placeholder={PLACEHOLDER}
           className={classnames(styles['form-control'])}
           value={this.getCustomUrl()}
