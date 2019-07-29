@@ -479,10 +479,30 @@ describe('Store', () => {
         expect(state.isValid).to.equal(true);
         expect(state.isConnected).to.equal(false);
         expect(state.errorMessage).to.equal(null);
+        expect(state.syntaxErrorMessage).to.equal(null);
         done();
       });
 
       Actions.onConnectionSelected(connection);
+    });
+  });
+
+  describe('#onFavoriteSelected', () => {
+    const connection = new Connection();
+
+    it('sets the current connection in the store', (done) => {
+      const unsubscribe = Store.listen((state) => {
+        unsubscribe();
+        expect(state.currentConnection).to.equal(connection);
+        expect(state.isValid).to.equal(true);
+        expect(state.isConnected).to.equal(false);
+        expect(state.errorMessage).to.equal(null);
+        expect(state.syntaxErrorMessage).to.equal(null);
+        expect(state.viewType).to.equal('connectionForm');
+        done();
+      });
+
+      Actions.onFavoriteSelected(connection);
     });
   });
 
