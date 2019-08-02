@@ -30,22 +30,22 @@ class FormActions extends React.Component {
   /**
    * Creates a favorite.
    */
-  onCreateFavorite() {
-    Actions.onCreateFavorite();
+  onCreateFavoriteClicked() {
+    Actions.onCreateFavoriteClicked();
   }
 
   /**
    * Deletes a favorite.
    */
-  onDeleteFavorite() {
-    Actions.onDeleteConnection(this.props.currentConnection);
+  onDeleteFavoriteClicked() {
+    Actions.onDeleteConnectionClicked(this.props.currentConnection);
   }
 
   /**
    * Saves a favorite.
    */
-  onSaveFavorite() {
-    Actions.onSaveConnection(this.props.currentConnection);
+  onSaveFavoriteClicked() {
+    Actions.onSaveConnectionClicked(this.props.currentConnection);
   }
 
   /**
@@ -56,7 +56,7 @@ class FormActions extends React.Component {
   onConnectClicked(evt) {
     evt.preventDefault();
     evt.stopPropagation();
-    Actions.onConnect();
+    Actions.onConnectClicked();
   }
 
   /**
@@ -67,7 +67,7 @@ class FormActions extends React.Component {
   onDisconnectClicked(evt) {
     evt.preventDefault();
     evt.stopPropagation();
-    Actions.onDisconnect();
+    Actions.onDisconnectClicked();
   }
 
   /**
@@ -137,7 +137,7 @@ class FormActions extends React.Component {
           name="createFavorite"
           key="createFavorite"
           className="btn btn-sm btn-default"
-          onClick={this.onCreateFavorite.bind(this)}>
+          onClick={this.onCreateFavoriteClicked.bind(this)}>
           Create Favorite
         </button>
       );
@@ -157,7 +157,7 @@ class FormActions extends React.Component {
           name="deleteFavorite"
           key="deleteFavorite"
           className="btn btn-sm btn-default"
-          onClick={this.onDeleteFavorite.bind(this)}>
+          onClick={this.onDeleteFavoriteClicked.bind(this)}>
           Delete Favorite
         </button>
       );
@@ -177,7 +177,7 @@ class FormActions extends React.Component {
           name="saveFavorite"
           key="saveFavorite"
           className="btn btn-sm btn-default"
-          onClick={this.onSaveFavorite.bind(this)}>
+          onClick={this.onSaveFavoriteClicked.bind(this)}>
           Save Favorite
         </button>
       );
