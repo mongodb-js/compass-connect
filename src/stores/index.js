@@ -115,21 +115,7 @@ const Store = Reflux.createStore({
    * Validates a connection string.
    */
   validateConnectionString() {
-    const customUrl = this.state.customUrl;
-
-    if (customUrl === '') {
-      this._cleanConnection();
-    } else if (!Connection.isURI(customUrl)) {
-      this._setSyntaxErrorMessage('Invalid schema, expected `mongodb` or `mongodb+srv`');
-    } else {
-      Connection.from(customUrl, (error) => {
-        if (error) {
-          this._setSyntaxErrorMessage(error.message);
-        } else {
-          this._resetSyntaxErrorMessage();
-        }
-      });
-    }
+    this._parseConnectionString(null, null, this._resetSyntaxErrorMessage);
   },
 
   /**
@@ -167,31 +153,11 @@ const Store = Reflux.createStore({
 
     if (viewType === 'connectionForm') {
       this.StatusActions.showIndeterminateProgressBar();
-
-      if (customUrl === '') {
-        this.StatusActions.done();
-        this._cleanConnection();
-      } else if (!Connection.isURI(customUrl)) {
-        this.StatusActions.done();
-        this._setSyntaxErrorMessage('Invalid schema, expected `mongodb` or `mongodb+srv`');
-      } else {
-        Connection.from(customUrl, (error, connection) => {
-          if (error) {
-            this.StatusActions.done();
-            this._setSyntaxErrorMessage(error.message);
-          } else {
-            connection.name = '';
-
-            if (customUrl.match(/[?&]ssl=true/i)) {
-              connection.sslMethod = 'SYSTEMCA';
-            }
-
-            this.StatusActions.done();
-            this.state.currentConnection = connection;
-            this.trigger(this.state);
-          }
-        });
-      }
+      this._parseConnectionString(
+        this.StatusActions.done,
+        this.StatusActions.done,
+        this._updateConnectionForm
+      );
     } else {
       this.state.viewType = viewType;
       this.state.customUrl = isValid ? driverUrl : customUrl;
@@ -226,29 +192,16 @@ const Store = Reflux.createStore({
   },
 
   /**
-   * To connect through `DataService` we need to pass to its
-   * constuctor a proper connection object. In case of connecting via URI
-   * we need to parse URI first to get this object.
-   *
-   * If we already have a connection object, we skip a parsing stage.
-   * The method Will validate the connection first,
-   * then will attempt to connect.
+   * To connect through `DataService` we need a proper connection object.
+   * In case of connecting via URI we need to parse URI first to get this object.
+   * In case of connecting via the form we can skip a parsing stage and
+   * validate instead the existing connection object.
    */
   onConnectClicked() {
     this.StatusActions.showIndeterminateProgressBar();
 
     if (this.state.viewType === 'connectionString') {
-      const customUrl = this.state.customUrl;
-
-      Connection.from(customUrl, (error, connection) => {
-        if (error) {
-          this._setSyntaxErrorMessage(error.message);
-        } else {
-          this.state.currentConnection = connection;
-          this.trigger(this.state);
-          this._connect(connection);
-        }
-      });
+      this._parseConnectionString(null, null, this._handleConnection);
     } else {
       const currentConnection = this.state.currentConnection;
 
@@ -777,6 +730,73 @@ const Store = Reflux.createStore({
     this.state.syntaxErrorMessage = null;
     this.trigger(this.state);
   },
+
+  /**
+   * The factory for handling the parsing process.
+   *
+   * @param {Function} handleEmptyString - The action in case of empty string.
+   * @param {Function} handleError - The action in case of error.
+   * @param {Function} handleSuccess - The action in case of siccess.
+   */
+  _parseConnectionString(handleEmptyString, handleError, handleSuccess) {
+    const customUrl = this.state.customUrl;
+
+    if (customUrl === '') {
+      this._cleanConnection();
+
+      if (handleEmptyString) {
+        handleEmptyString();
+      }
+    } else if (!Connection.isURI(customUrl)) {
+      this._setSyntaxErrorMessage('Invalid schema, expected `mongodb` or `mongodb+srv`');
+
+      if (handleError) {
+        handleError();
+      }
+    } else {
+      Connection.from(customUrl, (error, connection) => {
+        if (error) {
+          this._setSyntaxErrorMessage(error.message);
+
+          if (handleError) {
+            handleError();
+          }
+        } else {
+          handleSuccess(connection);
+        }
+      });
+    }
+  },
+
+  /**
+   * Updates the current connection with new parsed info.
+   *
+   * @param {Object} connection - A parsed connection.
+   */
+  _updateConnectionForm(connection) {
+    const customUrl = this.state.customUrl;
+
+    connection.name = '';
+
+    if (customUrl.match(/[?&]ssl=true/i)) {
+      connection.sslMethod = 'SYSTEMCA';
+    }
+
+    this.StatusActions.done();
+    this.state.currentConnection = connection;
+    this.trigger(this.state);
+  },
+
+  /**
+   * Handles connection process.
+   *
+   * @param {Object} connection - A parsed connection.
+   */
+  _handleConnection(connection) {
+    this.state.currentConnection = connection;
+    this.trigger(this.state);
+    this._connect(connection);
+  }
 });
 
 module.exports = Store;
