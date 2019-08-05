@@ -201,7 +201,11 @@ const Store = Reflux.createStore({
     this.StatusActions.showIndeterminateProgressBar();
 
     if (this.state.viewType === 'connectionString') {
-      this._parseConnectionString(null, null, this._handleConnection);
+      this._parseConnectionString(
+        this._handleEmptyConnect,
+        null,
+        this._handleConnection
+      );
     } else {
       const currentConnection = this.state.currentConnection;
 
@@ -283,14 +287,12 @@ const Store = Reflux.createStore({
     if (this.dataService) {
       this.dataService.disconnect(() => {
         this.appRegistry.emit('data-service-disconnected');
-        this.setState({
-          isValid: true,
-          isConnecting: false,
-          isConnected: false,
-          errorMessage: null,
-          syntaxErrorMessage: null,
-          viewType: 'connectionString'
-        });
+        this.state.isValid = true;
+        this.state.isConnected = false;
+        this.state.errorMessage = null;
+        this.state.syntaxErrorMessage = null;
+        this.state.viewType = 'connectionString';
+        this.trigger(this.state);
         this.dataService = undefined;
       });
     }
@@ -417,6 +419,7 @@ const Store = Reflux.createStore({
   onResetConnectionClicked() {
     this.state.viewType = 'connectionString';
     this._cleanConnection();
+    this.trigger(this.state);
   },
 
   /**
@@ -727,7 +730,6 @@ const Store = Reflux.createStore({
     this.state.isConnected = false;
     this.state.errorMessage = null;
     this.state.syntaxErrorMessage = null;
-    this.trigger(this.state);
   },
 
   /**
@@ -795,6 +797,14 @@ const Store = Reflux.createStore({
     this.state.currentConnection = connection;
     this.trigger(this.state);
     this._connect(connection);
+  },
+
+  /**
+   * Handles connecting with an empry string
+   */
+  _handleEmptyConnect() {
+    this.StatusActions.done();
+    this._setSyntaxErrorMessage('The connection string can not be empty');
   }
 });
 
