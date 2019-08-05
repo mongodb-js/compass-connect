@@ -91,7 +91,7 @@ describe('Store', () => {
           Store.state.syntaxErrorMessage = null;
         });
 
-        it.only('does not change validation properties', (done) => {
+        it('does not change validation properties', (done) => {
           const unsubscribe = Store.listen((state) => {
             unsubscribe();
             expect(state.isValid).to.equal(true);
