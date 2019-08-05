@@ -258,13 +258,15 @@ class FormActions extends React.Component {
   renderFavoriteInput() {
     if (this.props.viewType === 'connectionForm') {
       return (
-        <FormInput
-          label="Favorite Name"
-          name="favoriteName"
-          placeholder="e.g. Shared Dev, QA Box, PRODUCTION"
-          linkHandler={this.onNameHelp.bind(this)}
-          changeHandler={this.onNameChanged.bind(this)}
-          value={this.getName()} />
+        <div className={classnames(styles['connect-form-item-container'])}>
+          <FormInput
+            label="Favorite Name"
+            name="favoriteName"
+            placeholder="e.g. Shared Dev, QA Box, PRODUCTION"
+            linkHandler={this.onNameHelp.bind(this)}
+            changeHandler={this.onNameChanged.bind(this)}
+            value={this.getName()} />
+        </div>
       );
     }
   }
