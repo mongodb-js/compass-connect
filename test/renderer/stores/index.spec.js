@@ -89,6 +89,11 @@ describe('Store', () => {
           Store.state.isValid = true;
           Store.state.errorMessage = null;
           Store.state.syntaxErrorMessage = null;
+          Store.state.viewType = 'connectionString';
+          Store.StatusActions = {
+            showIndeterminateProgressBar: () => {},
+            done: () => {}
+          };
         });
 
         it('does not change validation properties', (done) => {
@@ -110,6 +115,11 @@ describe('Store', () => {
           Store.state.isValid = true;
           Store.state.errorMessage = null;
           Store.state.syntaxErrorMessage = null;
+          Store.state.viewType = 'connectionString';
+          Store.StatusActions = {
+            showIndeterminateProgressBar: () => {},
+            done: () => {}
+          };
         });
 
         it('sets a syntax error message', (done) => {
@@ -132,6 +142,11 @@ describe('Store', () => {
           Store.state.isValid = true;
           Store.state.errorMessage = null;
           Store.state.syntaxErrorMessage = null;
+          Store.state.viewType = 'connectionString';
+          Store.StatusActions = {
+            showIndeterminateProgressBar: () => {},
+            done: () => {}
+          };
         });
 
         it('sets a syntax error message', (done) => {
@@ -156,6 +171,11 @@ describe('Store', () => {
           Store.state.isValid = false;
           Store.state.errorMessage = null;
           Store.state.syntaxErrorMessage = 'Some syntax error';
+          Store.state.viewType = 'connectionString';
+          Store.StatusActions = {
+            showIndeterminateProgressBar: () => {},
+            done: () => {}
+          };
         });
 
         it('clears a syntax error message', (done) => {
@@ -177,6 +197,11 @@ describe('Store', () => {
           Store.state.isValid = false;
           Store.state.errorMessage = null;
           Store.state.syntaxErrorMessage = 'Some syntax error';
+          Store.state.viewType = 'connectionString';
+          Store.StatusActions = {
+            showIndeterminateProgressBar: () => {},
+            done: () => {}
+          };
         });
 
         it('clears a syntax error message', (done) => {
@@ -199,6 +224,11 @@ describe('Store', () => {
           Store.state.isValid = false;
           Store.state.errorMessage = null;
           Store.state.syntaxErrorMessage = 'Some syntax error';
+          Store.state.viewType = 'connectionString';
+          Store.StatusActions = {
+            showIndeterminateProgressBar: () => {},
+            done: () => {}
+          };
         });
 
         it('clears a syntax error message', (done) => {
