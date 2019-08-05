@@ -738,19 +738,7 @@ const Store = Reflux.createStore({
    * @param {Function} handleSuccess - The action in case of siccess.
    */
   _parseConnectionString(handleEmptyString, handleError, handleSuccess) {
-    console.log('handleEmptyString----------------------');
-    console.log(handleEmptyString);
-    console.log('----------------------');
-    console.log('handleError----------------------');
-    console.log(handleError);
-    console.log('----------------------');
-    console.log('handleSuccess----------------------');
-    console.log(handleSuccess);
-    console.log('----------------------');
     const customUrl = this.state.customUrl;
-    console.log('customUrl----------------------');
-    console.log(customUrl);
-    console.log('----------------------');
 
     if (customUrl === '') {
       this._cleanConnection();
@@ -767,32 +755,13 @@ const Store = Reflux.createStore({
     } else {
       Connection.from(customUrl, (error, connection) => {
         if (error) {
-          console.log('error----------------------');
-          console.log(error);
-          console.log('----------------------');
           this._setSyntaxErrorMessage(error.message);
 
-          console.log('----------------------');
-          console.log(111);
-          console.log('----------------------');
-
           if (handleError) {
-            console.log('----------------------');
-            console.log(222);
-            console.log('----------------------');
             handleError();
-            console.log('----------------------');
-            console.log(333);
-            console.log('----------------------');
           }
         } else {
-          console.log('----------------------');
-          console.log(444);
-          console.log('----------------------');
           handleSuccess(connection);
-          console.log('connection----------------------');
-          console.log(connection);
-          console.log('----------------------');
         }
       });
     }
