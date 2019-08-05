@@ -154,7 +154,7 @@ const Store = Reflux.createStore({
     if (viewType === 'connectionForm') {
       this.StatusActions.showIndeterminateProgressBar();
       this._parseConnectionString(
-        this.StatusActions.done,
+        this._handleViewChange,
         this.StatusActions.done,
         this._updateConnectionForm
       );
@@ -805,6 +805,14 @@ const Store = Reflux.createStore({
   _handleEmptyConnect() {
     this.StatusActions.done();
     this._setSyntaxErrorMessage('The connection string can not be empty');
+  },
+
+  /**
+   * Handles view change.
+   */
+  _handleViewChange() {
+    this.StatusActions.done();
+    this.trigger(this.state);
   }
 });
 
