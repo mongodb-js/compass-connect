@@ -154,7 +154,7 @@ const Store = Reflux.createStore({
     if (viewType === 'connectionForm') {
       this.StatusActions.showIndeterminateProgressBar();
       this._parseConnectionString(
-        this._handleViewChange,
+        this.StatusActions.done,
         this.StatusActions.done,
         this._updateConnectionForm
       );
@@ -204,7 +204,7 @@ const Store = Reflux.createStore({
       this._parseConnectionString(
         this._handleEmptyConnect,
         null,
-        this._handleConnection
+        this._connect
       );
     } else {
       const currentConnection = this.state.currentConnection;
@@ -674,7 +674,6 @@ const Store = Reflux.createStore({
     this.state.isValid = false;
     this.state.errorMessage = null;
     this.state.syntaxErrorMessage = error;
-    this.trigger(this.state);
   },
 
   /**
@@ -684,7 +683,6 @@ const Store = Reflux.createStore({
     this.state.isValid = true;
     this.state.errorMessage = null;
     this.state.syntaxErrorMessage = null;
-    this.trigger(this.state);
   },
 
   /**
@@ -748,12 +746,16 @@ const Store = Reflux.createStore({
       if (handleEmptyString) {
         handleEmptyString();
       }
+
+      this.trigger(this.state);
     } else if (!Connection.isURI(customUrl)) {
       this._setSyntaxErrorMessage('Invalid schema, expected `mongodb` or `mongodb+srv`');
 
       if (handleError) {
         handleError();
       }
+
+      this.trigger(this.state);
     } else {
       Connection.from(customUrl, (error, connection) => {
         if (error) {
@@ -762,8 +764,11 @@ const Store = Reflux.createStore({
           if (handleError) {
             handleError();
           }
+
+          this.trigger(this.state);
         } else {
           handleSuccess(connection);
+          this.trigger(this.state);
         }
       });
     }
@@ -785,18 +790,6 @@ const Store = Reflux.createStore({
 
     this.StatusActions.done();
     this.state.currentConnection = connection;
-    this.trigger(this.state);
-  },
-
-  /**
-   * Handles connection process.
-   *
-   * @param {Object} connection - A parsed connection.
-   */
-  _handleConnection(connection) {
-    this.state.currentConnection = connection;
-    this.trigger(this.state);
-    this._connect(connection);
   },
 
   /**
@@ -805,14 +798,6 @@ const Store = Reflux.createStore({
   _handleEmptyConnect() {
     this.StatusActions.done();
     this._setSyntaxErrorMessage('The connection string can not be empty');
-  },
-
-  /**
-   * Handles view change.
-   */
-  _handleViewChange() {
-    this.StatusActions.done();
-    this.trigger(this.state);
   }
 });
 
