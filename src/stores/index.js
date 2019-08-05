@@ -780,15 +780,14 @@ const Store = Reflux.createStore({
    * @param {Object} connection - A parsed connection.
    */
   _updateConnectionForm(connection) {
-    const customUrl = this.state.customUrl;
+    this.StatusActions.done();
 
-    connection.name = '';
-
-    if (customUrl.match(/[?&]ssl=true/i)) {
+    if (this.state.customUrl.match(/[?&]ssl=true/i)) {
       connection.sslMethod = 'SYSTEMCA';
     }
 
-    this.StatusActions.done();
+    connection.name = '';
+
     this.state.currentConnection = connection;
   },
 
