@@ -115,7 +115,25 @@ const Store = Reflux.createStore({
    * Validates a connection string.
    */
   validateConnectionString() {
-    this._parseConnectionString(null, null, this._resetSyntaxErrorMessage);
+    const customUrl = this.state.customUrl;
+
+    if (customUrl === '') {
+      this._cleanConnection();
+      this.trigger(this.state);
+    } else if (!Connection.isURI(customUrl)) {
+      this._setSyntaxErrorMessage('Invalid schema, expected `mongodb` or `mongodb+srv`');
+      this.trigger(this.state);
+    } else {
+      Connection.from(customUrl, (error) => {
+        if (error) {
+          this._setSyntaxErrorMessage(error.message);
+          this.trigger(this.state);
+        } else {
+          this._resetSyntaxErrorMessage();
+          this.trigger(this.state);
+        }
+      });
+    }
   },
 
   /**
@@ -151,13 +169,31 @@ const Store = Reflux.createStore({
 
     this.state.viewType = viewType;
 
-    if (viewType === 'connectionForm') {
-      this.StatusActions.showIndeterminateProgressBar();
-      this._parseConnectionString(
-        this.StatusActions.done,
-        this.StatusActions.done,
-        this._updateConnectionForm
-      );
+    if (customUrl === '') {
+      this._cleanConnection();
+      this.trigger(this.state);
+    } else if (viewType === 'connectionForm') { // Terget view
+      if (!Connection.isURI(customUrl)) {
+        this.state.currentConnection = new Connection();
+        this.trigger(this.state);
+      } else {
+        this.StatusActions.showIndeterminateProgressBar();
+        Connection.from(customUrl, (error, connection) => {
+          if (!error) {
+            this._resetSyntaxErrorMessage();
+            this.StatusActions.done();
+
+            if (this.state.customUrl.match(/[?&]ssl=true/i)) {
+              connection.sslMethod = 'SYSTEMCA';
+            }
+
+            connection.name = '';
+
+            this.state.currentConnection = connection;
+            this.trigger(this.state);
+          }
+        });
+      }
     } else {
       this.state.viewType = viewType;
       this.state.customUrl = isValid ? driverUrl : customUrl;
@@ -198,20 +234,36 @@ const Store = Reflux.createStore({
    * validate instead the existing connection object.
    */
   onConnectClicked() {
-    this.StatusActions.showIndeterminateProgressBar();
-
     if (this.state.viewType === 'connectionString') {
-      this._parseConnectionString(
-        this._handleEmptyConnect,
-        null,
-        this._connect
-      );
+      const customUrl = this.state.customUrl;
+
+      if (customUrl === '') {
+        this._cleanConnection();
+        this._setSyntaxErrorMessage('The connection string can not be empty');
+        this.trigger(this.state);
+      } else {
+        this.StatusActions.showIndeterminateProgressBar();
+        if (!Connection.isURI(customUrl)) {
+          this._setSyntaxErrorMessage('Invalid schema, expected `mongodb` or `mongodb+srv`');
+          this.trigger(this.state);
+        } else {
+          Connection.from(customUrl, (error, connection) => {
+            if (error) {
+              this._setSyntaxErrorMessage(error.message);
+              this.trigger(this.state);
+            } else {
+              this._connect(connection);
+            }
+          });
+        }
+      }
     } else {
       const currentConnection = this.state.currentConnection;
 
       if (!currentConnection.isValid()) {
         this.setState({ isValid: false });
       } else {
+        this.StatusActions.showIndeterminateProgressBar();
         this._connect(currentConnection);
       }
     }
@@ -728,75 +780,6 @@ const Store = Reflux.createStore({
     this.state.isConnected = false;
     this.state.errorMessage = null;
     this.state.syntaxErrorMessage = null;
-  },
-
-  /**
-   * The factory for handling the parsing process.
-   *
-   * @param {Function} handleEmptyString - The action in case of empty string.
-   * @param {Function} handleError - The action in case of error.
-   * @param {Function} handleSuccess - The action in case of siccess.
-   */
-  _parseConnectionString(handleEmptyString, handleError, handleSuccess) {
-    const customUrl = this.state.customUrl;
-
-    if (customUrl === '') {
-      this._cleanConnection();
-
-      if (handleEmptyString) {
-        handleEmptyString();
-      }
-
-      this.trigger(this.state);
-    } else if (!Connection.isURI(customUrl)) {
-      this._setSyntaxErrorMessage('Invalid schema, expected `mongodb` or `mongodb+srv`');
-
-      if (handleError) {
-        handleError();
-      }
-
-      this.trigger(this.state);
-    } else {
-      Connection.from(customUrl, (error, connection) => {
-        if (error) {
-          this._setSyntaxErrorMessage(error.message);
-
-          if (handleError) {
-            handleError();
-          }
-
-          this.trigger(this.state);
-        } else {
-          handleSuccess(connection);
-          this.trigger(this.state);
-        }
-      });
-    }
-  },
-
-  /**
-   * Updates the current connection with new parsed info.
-   *
-   * @param {Object} connection - A parsed connection.
-   */
-  _updateConnectionForm(connection) {
-    this.StatusActions.done();
-
-    if (this.state.customUrl.match(/[?&]ssl=true/i)) {
-      connection.sslMethod = 'SYSTEMCA';
-    }
-
-    connection.name = '';
-
-    this.state.currentConnection = connection;
-  },
-
-  /**
-   * Handles connecting with an empry string
-   */
-  _handleEmptyConnect() {
-    this.StatusActions.done();
-    this._setSyntaxErrorMessage('The connection string can not be empty');
   }
 });
 

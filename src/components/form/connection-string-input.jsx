@@ -30,7 +30,7 @@ class DriverUrlInput extends React.PureComponent {
   constructor(props) {
     super(props);
     this.isChanged = false;
-    this.validateConnectionString = debounce(this.debouncedValidation, 550);
+    this.validateConnectionString = debounce(Actions.validateConnectionString, 550);
   }
 
   /**
@@ -69,13 +69,6 @@ class DriverUrlInput extends React.PureComponent {
     }
 
     return this.props.customUrl;
-  }
-
-  /**
-   * Validates a connection string.
-   */
-  debouncedValidation() {
-    Actions.validateConnectionString();
   }
 
   render() {

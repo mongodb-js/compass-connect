@@ -745,7 +745,7 @@ describe('Store', () => {
 
         context('when a current connection string is invalid', () => {
           beforeEach(() => {
-            Store.state.isValid = true;
+            Store.state.isValid = false;
             Store.state.viewType = 'connectionString';
             Store.state.customUrl = 'fake';
             Store.StatusActions = {
@@ -766,13 +766,11 @@ describe('Store', () => {
 
           it('cleans the driverUrl', (done) => {
             const driverUrl = 'mongodb://localhost:27017/?readPreference=primary&ssl=false';
-            const syntaxErrorMessage = 'Invalid schema, expected `mongodb` or `mongodb+srv`';
             const unsubscribe = Store.listen((state) => {
               unsubscribe();
               expect(state.currentConnection.driverUrl).to.equal(driverUrl);
               expect(state.isValid).to.equal(false);
               expect(state.errorMessage).to.equal(null);
-              expect(state.syntaxErrorMessage).to.equal(syntaxErrorMessage);
               done();
             });
 
@@ -889,10 +887,13 @@ describe('Store', () => {
           });
 
           context('when a form was not changed', () => {
+            const syntaxErrorMessage = 'Invalid schema, expected `mongodb` or `mongodb+srv`';
+
             beforeEach(() => {
               Store.state.isValid = false;
               Store.state.viewType = 'connectionString';
               Store.state.customUrl = 'fake';
+              Store.state.syntaxErrorMessage = syntaxErrorMessage;
               Store.StatusActions = {
                 showIndeterminateProgressBar: () => {},
                 done: () => {}
@@ -910,7 +911,6 @@ describe('Store', () => {
             });
 
             it('does not change validation properties', (done) => {
-              const syntaxErrorMessage = 'Invalid schema, expected `mongodb` or `mongodb+srv`';
               const unsubscribe = Store.listen((state) => {
                 unsubscribe();
                 expect(state.isValid).to.equal(false);
