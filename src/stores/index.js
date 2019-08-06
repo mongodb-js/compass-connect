@@ -195,7 +195,6 @@ const Store = Reflux.createStore({
         });
       }
     } else {
-      this.state.viewType = viewType;
       this.state.customUrl = isValid ? driverUrl : customUrl;
       this.trigger(this.state);
     }
