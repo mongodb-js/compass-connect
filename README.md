@@ -41,25 +41,6 @@ Users can switch to the form view by clicking `"Fill in connection fields indivi
 
 ![form-view](./form-view.png)
 
-## Testing
-
-[Testing Authentication](https://wiki.corp.mongodb.com/display/DI/Testing+Authentication)
-
-### Scripts
-
-`link-plugin`: Links the Compass plugin and Compass for development along with React to ensure the
-  plugin and Compass are using the same React instance.
-
-```shell
-COMPASS_HOME=/path/to/my/compass npm run link-plugin
-```
-
-`unlink-plugin`: Restores Compass and the plugin to their original unlinked state.
-
-```shell
-COMPASS_HOME=/path/to/my/compass npm run unlink-plugin
-```
-
 ## License
 
 Apache 2.0
