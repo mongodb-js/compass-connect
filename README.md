@@ -27,10 +27,9 @@ And includes the following components:
 `?<options>` - The optional query string that specifies [connection string options](https://medium.com/r/?url=https%3A%2F%2Fdocs.mongodb.com%2Fmanual%2Freference%2Fconnection-string%2F%23connections-connection-options) as `<name>=<value>` pairs.
 
 Here is some example of MongoDB URI:
-mongodb://
 
 ```
-myDBReader:P%40ssw0rd@mongodb0.example.com:27017/admin?replicaSet=myRepl
+mongodb://myDBReader:P%40ssw0rd@mongodb0.example.com:27017/admin?replicaSet=myRepl
 ```
 
 ![uri-view](./uri-view.png)
