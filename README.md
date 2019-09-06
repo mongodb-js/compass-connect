@@ -36,7 +36,7 @@ mongodb://myDBReader:P%40ssw0rd@mongodb0.example.com:27017/admin?replicaSet=myRe
 
 ### Connecting via the form
 
-Users can switch to the form view by clicking `"Fill in connection fields individually"` on the top right corner of the screen. The connection form attributes were split into `"Hostname"` and `"More options"` view. On the first view users can enter a hostname, port, indicate whether it is SRV record or regular one and specify the authentication mechanism. On the second view, a request can be decorated with additional connection options such as read preference, SSL method or SSH tunnel.
+Users can switch to the form view by clicking `"Fill in connection fields individually"` on the top right corner of the screen. The connection form attributes are split into `"Hostname"` and `"More options"` views. On the first view users can enter hostname, port, indicate whether it is SRV record or regular one and specify the authentication mechanism. On the second view, a request can be decorated with additional connection options such as read preference, SSL method or SSH tunnel.
 
 ![form-view](./form-view.png)
 
