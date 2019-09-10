@@ -1,8 +1,10 @@
 # Compass Connect [![][travis_img]][travis_url]
 
-When you open the MongoDB Compass application, an initial dialog that appears is a connection screen. There are two ways in which you can connect to your desirable database: fill in connection fields manually or connect via a connection string (URI).
+This plugin is the initial connection screen dialog that appears when you open MongoDB Compass.
 
 ## Usage
+
+There are two ways in which you can connect to your desirable database: fill in connection fields manually or connect via a connection string (URI).
 
 ### Connecting via URI
 
