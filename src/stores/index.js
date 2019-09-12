@@ -175,11 +175,11 @@ const Store = Reflux.createStore({
 
     this.state.viewType = viewType;
 
-    if (customUrl === '') {
-      this._cleanConnection();
-      this.trigger(this.state);
-    } else if (viewType === 'connectionForm') { // Target view
-      if (!Connection.isURI(customUrl)) {
+    if (viewType === 'connectionForm') { // Target view
+      if (customUrl === '') {
+        this._cleanConnection();
+        this.trigger(this.state);
+      } else if (!Connection.isURI(customUrl)) {
         this.state.currentConnection = new Connection();
         this.trigger(this.state);
       } else {
