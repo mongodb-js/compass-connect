@@ -747,6 +747,8 @@ const Store = Reflux.createStore({
    * @param {Object} connection - The current connection.
    */
   _connect(connection) {
+    // We replace custom appname with proper appname
+    // to avoid sending malicious value to the server
     connection.appname = electron.remote.app.getName();
 
     this._updateDefaults();
