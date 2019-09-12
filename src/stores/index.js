@@ -14,7 +14,7 @@ const electron = require('electron');
 /**
  * A default driverUrl.
  */
-const DEFAULT_DRIVER_URL = 'mongodb://localhost:27017/?readPreference=primary&ssl=false';
+const DEFAULT_DRIVER_URL = 'mongodb://localhost:27017/?readPreference=primary&appname=Electron&ssl=false';
 
 /**
  * All the authentication strategy related fields on the connection model, with
@@ -176,7 +176,7 @@ const Store = Reflux.createStore({
     this.state.viewType = viewType;
 
     if (viewType === 'connectionForm') { // Target view
-      if (customUrl === '') {
+      if (customUrl === '' || customUrl === DEFAULT_DRIVER_URL) {
         this._cleanConnection();
         this.trigger(this.state);
       } else if (!Connection.isURI(customUrl)) {
