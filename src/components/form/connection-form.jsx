@@ -57,9 +57,7 @@ class ConnectionForm extends React.Component {
   renderPort() {
     if (!this.props.currentConnection.isSrvRecord) {
       return (
-        <PortInput
-          lastUsed={this.props.currentConnection.lastUsed}
-          port={this.props.currentConnection.port} />
+        <PortInput port={this.props.currentConnection.port} />
       );
     }
   }
@@ -111,9 +109,7 @@ class ConnectionForm extends React.Component {
           <div className={classnames(styles['tabs-view-content'])}>
             <div className={classnames(styles['tabs-view-content-form'])}>
               <FormGroup separator>
-                <HostInput
-                  lastUsed={this.props.currentConnection.lastUsed}
-                  hostname={this.props.currentConnection.attributes.hostname} />
+                <HostInput hostname={this.props.currentConnection.attributes.hostname} />
                 {this.renderPort()}
                 <SRVInput isSrvRecord={this.props.currentConnection.isSrvRecord} />
               </FormGroup>

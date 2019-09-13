@@ -8,12 +8,7 @@ const DEFAULT_PORT = 27017;
 class PortInput extends React.PureComponent {
   static displayName = 'PortInput';
 
-  static propTypes = { lastUsed: PropTypes.any, port: PropTypes.any };
-
-  constructor(props) {
-    super(props);
-    this.isChanged = false;
-  }
+  static propTypes = { port: PropTypes.any };
 
   /**
    * Changes port.
@@ -21,15 +16,7 @@ class PortInput extends React.PureComponent {
    * @param {Object} evt - evt.
    */
   onPortChanged(evt) {
-    const value = evt.target.value;
-
-    if (value === '') {
-      this.isChanged = false;
-    } else {
-      this.isChanged = true;
-    }
-
-    Actions.onPortChanged(value);
+    Actions.onPortChanged(evt.target.value);
   }
 
   /**
@@ -38,10 +25,6 @@ class PortInput extends React.PureComponent {
    * @returns {Number} port.
    */
   getPort() {
-    if (!this.props.lastUsed && !this.isChanged && this.props.port === DEFAULT_PORT) {
-      return '';
-    }
-
     return this.props.port;
   }
 
@@ -50,7 +33,7 @@ class PortInput extends React.PureComponent {
       <FormInput
         label="Port"
         name="port"
-        placeholder="27017"
+        placeholder={DEFAULT_PORT}
         changeHandler={this.onPortChanged.bind(this)}
         value={this.getPort()} />
     );

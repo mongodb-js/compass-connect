@@ -17,11 +17,6 @@ class SSHTunnelIdentityFileValidation extends React.Component {
     isValid: PropTypes.bool
   };
 
-  constructor(props) {
-    super(props);
-    this.isSSHTunnelPortChanged = false;
-  }
-
   /**
    * Handles sshTunnelHostname change.
    *
@@ -64,15 +59,7 @@ class SSHTunnelIdentityFileValidation extends React.Component {
    * @param {Object} evt - evt.
    */
   onSSHTunnelPortChanged(evt) {
-    const value = evt.target.value;
-
-    if (value === '') {
-      this.isSSHTunnelPortChanged = false;
-    } else {
-      this.isSSHTunnelPortChanged = true;
-    }
-
-    Actions.onSSHTunnelPortChanged(value);
+    Actions.onSSHTunnelPortChanged(evt.target.value);
   }
 
   /**
@@ -88,17 +75,7 @@ class SSHTunnelIdentityFileValidation extends React.Component {
    * @returns {Number} sshTunnelPort.
    */
   getPort() {
-    const connection = this.props.currentConnection;
-
-    if (
-      !connection.lastUsed &&
-      !this.isSSHTunnelPortChanged &&
-      (connection.sshTunnelPort === DEFAULT_SSH_TUNNEL_PORT)
-    ) {
-      return '';
-    }
-
-    return connection.sshTunnelPort;
+    return this.props.currentConnection.sshTunnelPort;
   }
 
   /**
@@ -169,7 +146,7 @@ class SSHTunnelIdentityFileValidation extends React.Component {
         <FormInput
           label="SSH Tunnel Port"
           name="sshTunnelPort"
-          placeholder="22"
+          placeholder={DEFAULT_SSH_TUNNEL_PORT}
           error={this.getPortError()}
           changeHandler={this.onSSHTunnelPortChanged.bind(this)}
           value={this.getPort()} />

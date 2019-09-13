@@ -8,12 +8,7 @@ const DEFAULT_HOST = 'localhost';
 class HostInput extends React.PureComponent {
   static displayName = 'HostInput';
 
-  static propTypes = { lastUsed: PropTypes.any, hostname: PropTypes.string };
-
-  constructor(props) {
-    super(props);
-    this.isChanged = false;
-  }
+  static propTypes = { hostname: PropTypes.string };
 
   /**
    * Changes a host name.
@@ -21,7 +16,6 @@ class HostInput extends React.PureComponent {
    * @param {Object} evt - evt.
    */
   onHostnameChanged(evt) {
-    this.isChanged = true;
     Actions.onHostnameChanged(evt.target.value);
   }
 
@@ -31,10 +25,6 @@ class HostInput extends React.PureComponent {
    * @returns {String} hostname.
    */
   getHostname() {
-    if (!this.props.lastUsed && !this.isChanged && this.props.hostname === DEFAULT_HOST) {
-      return '';
-    }
-
     return this.props.hostname;
   }
 

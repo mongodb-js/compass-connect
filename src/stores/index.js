@@ -178,7 +178,7 @@ const Store = Reflux.createStore({
     if (viewType === 'connectionForm') { // Target view
       if (customUrl === driverUrl) {
         this.trigger(this.state);
-      } else if (customUrl === '' || customUrl === DEFAULT_DRIVER_URL) {
+      } else if (customUrl === '') {
         this._cleanConnection();
         this.trigger(this.state);
       } else if (!Connection.isURI(customUrl)) {

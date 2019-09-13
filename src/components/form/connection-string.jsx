@@ -22,7 +22,6 @@ class ConnectionString extends React.Component {
         className={classnames(styles['connect-string'])}>
         <FormGroup separator>
           <ConnectionStringInput
-            lastUsed={this.props.currentConnection.lastUsed}
             driverUrl={this.props.currentConnection.driverUrl}
             customUrl={this.props.customUrl} />
         </FormGroup>
