@@ -116,7 +116,7 @@ class ConnectionForm extends React.Component {
             <div className={classnames(styles['tabs-view-content-form'])}>
               <FormGroup separator>
                 <HostInput
-                  hostname={this.props.currentConnection.attributes.hostname}
+                  hostname={this.props.currentConnection.hostname}
                   isHostChanged={this.props.isHostChanged} />
                 {this.renderPort()}
                 <SRVInput isSrvRecord={this.props.currentConnection.isSrvRecord} />
