@@ -18,7 +18,11 @@ import styles from '../connect.less';
 class ConnectionForm extends React.Component {
   static displayName = 'ConnectionForm';
 
-  static propTypes = { currentConnection: PropTypes.object.isRequired };
+  static propTypes = {
+    currentConnection: PropTypes.object.isRequired,
+    isHostChanged: PropTypes.bool,
+    isPortChanged: PropTypes.bool
+  };
 
   constructor(props) {
     super(props);
@@ -57,7 +61,9 @@ class ConnectionForm extends React.Component {
   renderPort() {
     if (!this.props.currentConnection.isSrvRecord) {
       return (
-        <PortInput port={this.props.currentConnection.port} />
+        <PortInput
+          port={this.props.currentConnection.port}
+          isPortChanged={this.props.isPortChanged} />
       );
     }
   }
@@ -109,7 +115,9 @@ class ConnectionForm extends React.Component {
           <div className={classnames(styles['tabs-view-content'])}>
             <div className={classnames(styles['tabs-view-content-form'])}>
               <FormGroup separator>
-                <HostInput hostname={this.props.currentConnection.attributes.hostname} />
+                <HostInput
+                  hostname={this.props.currentConnection.attributes.hostname}
+                  isHostChanged={this.props.isHostChanged} />
                 {this.renderPort()}
                 <SRVInput isSrvRecord={this.props.currentConnection.isSrvRecord} />
               </FormGroup>

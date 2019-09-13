@@ -3,12 +3,10 @@ import PropTypes from 'prop-types';
 import Actions from 'actions';
 import FormInput from './form-input';
 
-const DEFAULT_HOST = 'localhost';
-
 class HostInput extends React.PureComponent {
   static displayName = 'HostInput';
 
-  static propTypes = { hostname: PropTypes.string };
+  static propTypes = { hostname: PropTypes.string, isHostChanged: PropTypes.bool };
 
   /**
    * Changes a host name.
@@ -25,6 +23,10 @@ class HostInput extends React.PureComponent {
    * @returns {String} hostname.
    */
   getHostname() {
+    if (this.props.isHostChanged === false) {
+      return '';
+    }
+
     return this.props.hostname;
   }
 
@@ -33,7 +35,7 @@ class HostInput extends React.PureComponent {
       <FormInput
         label="Hostname"
         name="hostname"
-        placeholder={DEFAULT_HOST}
+        placeholder="localhost"
         changeHandler={this.onHostnameChanged.bind(this)}
         value={this.getHostname()} />
     );

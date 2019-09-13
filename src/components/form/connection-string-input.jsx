@@ -17,7 +17,7 @@ const PLACEHOLDER = 'e.g. mongodb+srv://username:password@cluster0-jtpxd.mongodb
  */
 const CONNECTION_STRING_LINK = 'https://docs.mongodb.com/manual/reference/connection-string/';
 
-class DriverUrlInput extends React.PureComponent {
+class ConnectionStringInput extends React.PureComponent {
   static displayName = 'DriverUrlInput';
 
   static propTypes = { customUrl: PropTypes.string };
@@ -75,4 +75,4 @@ class DriverUrlInput extends React.PureComponent {
   }
 }
 
-export default DriverUrlInput;
+export default ConnectionStringInput;

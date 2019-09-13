@@ -7,8 +7,6 @@ import { shell } from 'electron';
 import FormFileInput from './form-file-input';
 import FormGroup from './form-group';
 
-const DEFAULT_SSH_TUNNEL_PORT = 22;
-
 class SSHTunnelIdentityFileValidation extends React.Component {
   static displayName = 'SSHTunnelIdentityFileValidation';
 
@@ -146,7 +144,7 @@ class SSHTunnelIdentityFileValidation extends React.Component {
         <FormInput
           label="SSH Tunnel Port"
           name="sshTunnelPort"
-          placeholder={DEFAULT_SSH_TUNNEL_PORT}
+          placeholder="22"
           error={this.getPortError()}
           changeHandler={this.onSSHTunnelPortChanged.bind(this)}
           value={this.getPort()} />

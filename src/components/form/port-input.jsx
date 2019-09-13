@@ -3,12 +3,10 @@ import PropTypes from 'prop-types';
 import Actions from 'actions';
 import FormInput from './form-input';
 
-const DEFAULT_PORT = 27017;
-
 class PortInput extends React.PureComponent {
   static displayName = 'PortInput';
 
-  static propTypes = { port: PropTypes.any };
+  static propTypes = { port: PropTypes.any, isPortChanged: PropTypes.bool };
 
   /**
    * Changes port.
@@ -25,6 +23,10 @@ class PortInput extends React.PureComponent {
    * @returns {Number} port.
    */
   getPort() {
+    if (this.props.isPortChanged === false) {
+      return '';
+    }
+
     return this.props.port;
   }
 
@@ -33,7 +35,7 @@ class PortInput extends React.PureComponent {
       <FormInput
         label="Port"
         name="port"
-        placeholder={DEFAULT_PORT}
+        placeholder="27017"
         changeHandler={this.onPortChanged.bind(this)}
         value={this.getPort()} />
     );
