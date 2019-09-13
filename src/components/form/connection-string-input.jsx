@@ -10,7 +10,7 @@ import styles from '../connect.less';
 /**
  * A default driverUrl.
  */
-const DEFAULT_DRIVER_URL = 'mongodb://localhost:27017/?readPreference=primary&appname=Electron&ssl=false';
+const DEFAULT_DRIVER_URL = 'mongodb://localhost:27017/?readPreference=primary&ssl=false';
 
 /**
  * A connection string placeholder.
