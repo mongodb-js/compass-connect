@@ -6,8 +6,6 @@ import FormInput from './form-input';
 import { shell } from 'electron';
 import FormGroup from './form-group';
 
-const DEFAULT_SSH_TUNNEL_PORT = 22;
-
 class SSHTunnelPasswordValidation extends React.Component {
   static displayName = 'SSHTunnelPasswordValidation';
 

@@ -18,6 +18,6 @@ describe('PortInput [Component]', () => {
   });
 
   it('renders the port placeholder', () => {
-    expect(component.find('input[name="port"]').prop('placeholder')).to.equal('27017');
+    expect(component.find('input[name="port"]').prop('placeholder')).to.equal(27017);
   });
 });
