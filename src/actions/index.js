@@ -27,7 +27,6 @@ const Actions = Reflux.createActions({
   onReadPreferenceChanged: { sync: true },
   onReplicaSetChanged: { sync: true },
   onResetConnectionClicked: { sync: true },
-  onSaveConnectionClicked: { sync: true },
   onSSLCAChanged: { sync: true },
   onSSLCertificateChanged: { sync: true },
   onSSLMethodChanged: { sync: true },

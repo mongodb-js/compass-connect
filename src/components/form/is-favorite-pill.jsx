@@ -16,7 +16,8 @@ class IsFavoritePill extends PureComponent {
   static propTypes = {
     currentConnection: PropTypes.object,
     isModalVisible: PropTypes.bool,
-    isMessageVisible: PropTypes.bool
+    isMessageVisible: PropTypes.bool,
+    savedMessage: PropTypes.string
   }
 
   /**
@@ -52,8 +53,8 @@ class IsFavoritePill extends PureComponent {
         <a className={pillClassName} onClick={this.clickFavoritePill.bind(this)}>
           <FontAwesome name={fontAwesomeName}/>
           &nbsp;FAVORITE
+          <div className={pillMessClassName}>{this.props.savedMessage}</div>
         </a>
-        <div className={pillMessClassName}>Saved to favotites</div>
         <FavoriteModal
           currentConnection={this.props.currentConnection}
           isModalVisible={this.props.isModalVisible} />

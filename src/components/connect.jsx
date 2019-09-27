@@ -19,7 +19,8 @@ class Connect extends React.Component {
     connections: PropTypes.object,
     viewType: PropTypes.string,
     isModalVisible: PropTypes.bool,
-    isMessageVisible: PropTypes.bool
+    isMessageVisible: PropTypes.bool,
+    savedMessage: PropTypes.string
   };
 
   componentDidMount() {
@@ -85,7 +86,13 @@ class Connect extends React.Component {
    */
   renderHeader() {
     const connection = this.props.currentConnection;
-    const name = connection.isFavorite ? connection.name : 'New Connection';
+    let name = 'New Connection';
+
+    if (connection.isFavorite) {
+      name = (connection.name.length > 40)
+        ? `${connection.name.substring(0, 40)}...`
+        : connection.name;
+    }
 
     return (
       <header>
@@ -93,8 +100,8 @@ class Connect extends React.Component {
         <IsFavoritePill
           currentConnection={connection}
           isModalVisible={this.props.isModalVisible}
-          isMessageVisible={this.props.isMessageVisible} />
-        {this.renderChangeViewLink()}
+          isMessageVisible={this.props.isMessageVisible}
+          savedMessage={this.props.savedMessage} />
       </header>
     );
   }
@@ -111,6 +118,7 @@ class Connect extends React.Component {
           <div className={classnames(styles['form-container'])}>
             <div className={classnames(styles['connect-container'])}>
               {this.renderHeader()}
+              {this.renderChangeViewLink()}
               {this.renderConnectScreen()}
             </div>
             <Help {...this.props} />

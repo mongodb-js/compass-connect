@@ -255,32 +255,33 @@ label {
 
     header {
       height: 72px;
-      margin-bottom: 15px;
       align-items: center;
       display: flex;
-      justify-content: space-between;
+      flex-wrap: nowrap;
 
       h2 {
         display: inline-block;
-        margin-top: 30px;
+        margin: 30px 0 0 10px;
         font-size: 24px;
         line-height: 30px;
       }
+    }
 
-      .change-view-link {
-        align-self: flex-end;
-        margin-right: 10px;
+    .change-view-link {
+      font-weight: bold;
+      text-align: right;
+      padding-right: 10px;
+      margin-top: -3px;
 
-        a {
-          cursor: pointer;
-          font-weight: bold;
-        }
+      a {
+        cursor: pointer;
+        font-weight: bold;
       }
     }
   }
 
   .connect-form {
-    margin: 0 10px;
+    margin: 10px;
 
     .tabs {
       display: block;
@@ -520,20 +521,23 @@ label {
   }
 
   .is-favorite-pill {
-    display: flex;
-    flex-direction: row;
     font-size: 11px;
     padding: 0px 0px 12px 20px;
     align-items: center;
     justify-content: left;
-    margin-top: 30px;
+    margin-top: 45px;
+    position: relative;
     flex-grow: 1;
+    white-space: nowrap;
+    pointer-events: none;
 
     .favorite-saved {
       border-radius: 3px;
-      font-size: 13px;
+      font-size: 9px;
       padding: 8px 21px;
-      position: relative;
+      position: absolute;
+      top: -7px;
+      left: 115px;
       pointer-events: none;
       transition: opacity 0.3s ease-out;
       color: #fff;
@@ -541,6 +545,7 @@ label {
       margin-left: 10px;
       opacity: 0.9;
       visibility: hidden;
+      width: 135px;
     }
 
     .favorite-saved-visible {
@@ -568,6 +573,7 @@ label {
       margin: 5px 5px 0 0;
       font-weight: bold;
       cursor: pointer;
+      pointer-events: auto;
     }
 
     &-text:hover {
