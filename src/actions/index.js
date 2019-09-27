@@ -1,6 +1,9 @@
 const Reflux = require('reflux');
 
 const Actions = Reflux.createActions({
+  hideFavoriteMessage: { sync: true },
+  hideFavoriteModal: { sync: true },
+  showFavoriteModal: { sync: true },
   validateConnectionString: { sync: true },
   onAuthSourceChanged: { sync: true },
   onAuthStrategyChanged: { sync: true },

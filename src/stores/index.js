@@ -113,11 +113,37 @@ const Store = Reflux.createStore({
       syntaxErrorMessage: null,
       viewType: 'connectionString',
       isHostChanged: false,
-      isPortChanged: false
+      isPortChanged: false,
+      isModalVisible: false,
+      isMessageVisible: false
     };
   },
 
   /** --- Reflux actions ---  */
+
+  /**
+  * Hides the favorite message.
+  */
+  hideFavoriteMessage() {
+    this.state.isMessageVisible = false;
+    this.trigger(this.state);
+  },
+
+  /**
+   * Hides the favorite modal.
+   */
+  hideFavoriteModal() {
+    this.state.isModalVisible = false;
+    this.trigger(this.state);
+  },
+
+  /**
+   * Shows the favorite modal.
+   */
+  showFavoriteModal() {
+    this.state.isModalVisible = true;
+    this.trigger(this.state);
+  },
 
   /**
    * Validates a connection string.
@@ -292,13 +318,19 @@ const Store = Reflux.createStore({
 
   /**
    * Creates a favorite from the current connection.
+   *
+   * @param {String} name - The favorite name.
    */
-  onCreateFavoriteClicked() {
+  onCreateFavoriteClicked(name) {
     const connection = this.state.currentConnection;
 
     connection.isFavorite = true;
+    connection.name = name;
 
     this._addConnection(connection);
+
+    this.state.isMessageVisible = true;
+    this.trigger(this.state);
   },
 
   /**
