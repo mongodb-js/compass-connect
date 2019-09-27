@@ -135,16 +135,18 @@ class FavoriteModal extends PureComponent {
         </Modal.Body>
         <Modal.Footer className={classnames(styles['modal-footer'])}>
           {this.renderDeleteFavorite()}
-          <TextButton
-            className="btn btn-default btn-sm"
-            dataTestId="cancel-favorite-button"
-            text="Cancel"
-            clickHandler={this.handleClose.bind(this)} />
-          <TextButton
-            className="btn btn-primary btn-sm"
-            dataTestId="create-favorite-button"
-            text="Save"
-            clickHandler={this.handleSave.bind(this)} />
+          <div className={classnames(styles['cancel-dave-favorite'])}>
+            <TextButton
+              className="btn btn-default btn-sm"
+              dataTestId="cancel-favorite-button"
+              text="Cancel"
+              clickHandler={this.handleClose.bind(this)} />
+            <TextButton
+              className="btn btn-primary btn-sm"
+              dataTestId="create-favorite-button"
+              text="Save"
+              clickHandler={this.handleSave.bind(this)} />
+          </div>
         </Modal.Footer>
       </Modal>
     );
