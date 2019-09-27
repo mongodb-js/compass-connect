@@ -51,7 +51,8 @@ class FavoriteModal extends PureComponent {
   handleSave() {
     Actions.onCreateFavoriteClicked(this.state.name);
     Actions.hideFavoriteModal();
-    setTimeout(() => Actions.hideFavoriteMessage(), 1000);
+    setTimeout(() => Actions.showFavoriteMessage(), 800);
+    setTimeout(() => Actions.hideFavoriteMessage(), 2800);
   }
 
   /**

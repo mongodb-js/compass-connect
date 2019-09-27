@@ -138,6 +138,14 @@ const Store = Reflux.createStore({
   },
 
   /**
+   * Shows the favorite message.
+   */
+  showFavoriteMessage() {
+    this.state.isMessageVisible = true;
+    this.trigger(this.state);
+  },
+
+  /**
    * Shows the favorite modal.
    */
   showFavoriteModal() {
@@ -328,9 +336,6 @@ const Store = Reflux.createStore({
     connection.name = name;
 
     this._addConnection(connection);
-
-    this.state.isMessageVisible = true;
-    this.trigger(this.state);
   },
 
   /**
