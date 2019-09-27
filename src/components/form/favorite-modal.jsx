@@ -76,7 +76,7 @@ class FavoriteModal extends PureComponent {
   }
 
   /**
-   * Renders "Delete Favorite" button.
+   * Renders "Remove" button.
    *
    * @returns {React.Component}
    */
