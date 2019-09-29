@@ -5,6 +5,7 @@ import { Modal } from 'react-bootstrap';
 import { ModalInput } from 'hadron-react-components';
 import { TextButton } from 'hadron-react-buttons';
 import Actions from 'actions';
+import { CirclePicker } from 'react-color';
 
 import styles from '../connect.less';
 
@@ -21,13 +22,17 @@ class FavoriteModal extends PureComponent {
 
   constructor(props) {
     super(props);
-    this.state = { name: props.currentConnection.name };
+    this.state = {
+      name: props.currentConnection.name,
+      color: props.currentConnection.color
+    };
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.currentConnection.name !== this.state.name) {
-      this.setState({ name: nextProps.currentConnection.name });
-    }
+    this.setState({
+      name: nextProps.currentConnection.name,
+      color: nextProps.currentConnection.color
+    });
   }
 
   /**
@@ -36,6 +41,15 @@ class FavoriteModal extends PureComponent {
   onDeleteFavoriteClicked() {
     Actions.onDeleteConnectionClicked(this.props.currentConnection);
     Actions.hideFavoriteModal();
+  }
+
+  /**
+   * Changes the favorite color.
+   *
+   * @param {Object} color - The color.
+   */
+  handleChangeColor(color) {
+    this.setState({ color });
   }
 
   /**
@@ -49,7 +63,7 @@ class FavoriteModal extends PureComponent {
    * Saves the favorite.
    */
   handleSave() {
-    Actions.onCreateFavoriteClicked(this.state.name);
+    Actions.onCreateFavoriteClicked(this.state.name, this.state.color);
     Actions.hideFavoriteModal();
     setTimeout(() => Actions.showFavoriteMessage(), 800);
     setTimeout(() => Actions.hideFavoriteMessage(), 2800);
@@ -131,6 +145,10 @@ class FavoriteModal extends PureComponent {
               name="Name"
               value={this.state.name}
               onChangeHandler={this.handleChangeName.bind(this)} />
+            <p>Color</p>
+            <CirclePicker
+              color={this.state.color.hex}
+              onChange={this.handleChangeColor.bind(this)} />
           </form>
         </Modal.Body>
         <Modal.Footer className={classnames(styles['modal-footer'])}>

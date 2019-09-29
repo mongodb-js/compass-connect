@@ -564,11 +564,11 @@ label {
     }
 
     &-text {
-      background-color: #dee0e3;
       text-transform: uppercase;
-      color: #88989A;
       border-radius: 14px;
-      border: 1px solid #dee0e3;
+      border-style: solid;
+      border-width: 1px;
+      border-color: transparent;
       padding: 3px 10px;
       margin: 5px 5px 0 0;
       font-weight: bold;
@@ -577,13 +577,9 @@ label {
     }
 
     &-text:hover {
-      background-color: #d7d9da;
+      filter: brightness(90%);
       text-decoration: none;
       cursor: pointer;
-    }
-
-    .is-favorite-pill-filled-no-color {
-      color: #243642;
     }
   }
 }

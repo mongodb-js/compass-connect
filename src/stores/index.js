@@ -340,8 +340,9 @@ const Store = Reflux.createStore({
    * Creates a favorite from the current connection.
    *
    * @param {String} name - The favorite name.
+   * @param {Object} color - The favorite color.
    */
-  onCreateFavoriteClicked(name) {
+  onCreateFavoriteClicked(name, color) {
     if (
       this.state.viewType === 'connectionString' &&
       !this.state.currentConnection.isFavorite
@@ -350,7 +351,7 @@ const Store = Reflux.createStore({
         if (!error) {
           connection = Object.assign(
             connection,
-            { name, isFavorite: true }
+            { name, color, isFavorite: true }
           );
 
           if (this.state.customUrl.match(/[?&]ssl=true/i)) {
@@ -366,6 +367,7 @@ const Store = Reflux.createStore({
 
       connection.isFavorite = true;
       connection.name = name;
+      connection.color = color;
 
       if (this.state.currentConnection.isFavorite) {
         this.state.savedMessage = 'Favorite is updated';
