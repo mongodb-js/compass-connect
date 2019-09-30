@@ -5,7 +5,7 @@ import { Modal } from 'react-bootstrap';
 import { ModalInput } from 'hadron-react-components';
 import { TextButton } from 'hadron-react-buttons';
 import Actions from 'actions';
-import { CirclePicker } from 'react-color';
+import FavoriteColorPicker from './favorite-color-picker';
 
 import styles from '../connect.less';
 
@@ -46,11 +46,9 @@ class FavoriteModal extends PureComponent {
   /**
    * Changes the favorite color.
    *
-   * @param {Object} evt - evt.
+   * @param {String} color - The favorite color.
    */
-  handleChangeColor(evt) {
-    const color = (this.state.color !== evt.hex) ? evt.hex : undefined;
-
+  handleChangeColor(color) {
     this.setState({ color });
   }
 
@@ -67,8 +65,7 @@ class FavoriteModal extends PureComponent {
   handleSave() {
     Actions.onCreateFavoriteClicked(this.state.name, this.state.color);
     Actions.hideFavoriteModal();
-    setTimeout(() => Actions.showFavoriteMessage(), 800);
-    setTimeout(() => Actions.hideFavoriteMessage(), 2800);
+    Actions.showFavoriteMessage();
   }
 
   /**
@@ -148,8 +145,8 @@ class FavoriteModal extends PureComponent {
               value={this.state.name}
               onChangeHandler={this.handleChangeName.bind(this)} />
             <p>Color</p>
-            <CirclePicker
-              color={this.state.color}
+            <FavoriteColorPicker
+              hex={this.state.color}
               onChange={this.handleChangeColor.bind(this)} />
           </form>
         </Modal.Body>

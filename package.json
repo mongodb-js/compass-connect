@@ -141,7 +141,6 @@
     "lodash.foreach": "^4.5.0",
     "lodash.isempty": "^4.4.0",
     "lodash.map": "^4.6.0",
-    "lodash.sortby": "^4.7.0",
-    "react-color": "^2.17.3"
+    "lodash.sortby": "^4.7.0"
   }
 }

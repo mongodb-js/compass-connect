@@ -144,6 +144,7 @@ const Store = Reflux.createStore({
   showFavoriteMessage() {
     this.state.isMessageVisible = true;
     this.trigger(this.state);
+    setTimeout(() => this.hideFavoriteMessage(), 500);
   },
 
   /**
