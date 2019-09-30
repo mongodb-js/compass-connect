@@ -34,11 +34,6 @@ appRegistry.on('data-service-connected', (err) => {
   }
 });
 
-appRegistry.on('show-favorite-modal', () => {
-  alert('show-favorite-modal');
-  appRegistry.getAction('Connect.Actions').showFavoriteModal();
-});
-
 // Since we are using HtmlWebpackPlugin WITHOUT a template,
 // we should create our own root node in the body element before rendering into it.
 const root = document.createElement('div');
