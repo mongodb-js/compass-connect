@@ -49,6 +49,10 @@ class FavoriteModal extends PureComponent {
    * @param {Object} color - The color.
    */
   handleChangeColor(color) {
+    if (this.state.color.hex === color.hex) {
+      color = {};
+    }
+
     this.setState({ color });
   }
 
