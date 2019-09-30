@@ -43,11 +43,11 @@ class IsFavoritePill extends PureComponent {
       [styles['favorite-saved']]: true,
       [styles['favorite-saved-visible']]: this.props.isMessageVisible
     });
-    const hex = this.props.currentConnection.color.hex;
+    const color = this.props.currentConnection.color;
     const style = {
-      backgroundColor: hex || '#dee0e3',
+      backgroundColor: color || '#dee0e3',
       /* eslint no-nested-ternary: 0 */
-      color: hex ? '#ffffff' : (isFavorite ? '#243642' : '#88989a')
+      color: color ? '#ffffff' : (isFavorite ? '#243642' : '#88989a')
     };
 
     return (

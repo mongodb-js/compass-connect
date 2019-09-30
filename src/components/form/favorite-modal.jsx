@@ -46,12 +46,10 @@ class FavoriteModal extends PureComponent {
   /**
    * Changes the favorite color.
    *
-   * @param {Object} color - The color.
+   * @param {Object} evt - evt.
    */
-  handleChangeColor(color) {
-    if (this.state.color.hex === color.hex) {
-      color = {};
-    }
+  handleChangeColor(evt) {
+    const color = (this.state.color !== evt.hex) ? evt.hex : undefined;
 
     this.setState({ color });
   }
@@ -151,7 +149,7 @@ class FavoriteModal extends PureComponent {
               onChangeHandler={this.handleChangeName.bind(this)} />
             <p>Color</p>
             <CirclePicker
-              color={this.state.color.hex}
+              color={this.state.color}
               onChange={this.handleChangeColor.bind(this)} />
           </form>
         </Modal.Body>

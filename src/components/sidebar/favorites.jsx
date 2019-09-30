@@ -76,8 +76,8 @@ class Favorites extends React.Component {
 
     return map(favorites, (favorite, i) => {
       const title = `${favorite.hostname}:${favorite.port}`;
-      const style = favorite.color.hex
-        ? { borderRight: `5px solid ${favorite.color.hex}` }
+      const style = favorite.color
+        ? { borderRight: `5px solid ${favorite.color}` }
         : {};
 
       return (
