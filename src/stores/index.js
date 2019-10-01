@@ -2,6 +2,7 @@ const Reflux = require('reflux');
 const sortBy = require('lodash.sortby');
 const isEmpty = require('lodash.isempty');
 const forEach = require('lodash.foreach');
+const merge = require('lodash.merge');
 const DataService = require('mongodb-data-service');
 const Actions = require('actions');
 const Connection = require('mongodb-connection-model');
@@ -118,6 +119,7 @@ const Store = Reflux.createStore({
     connection.name = name;
     connection.color = color;
     connection.save();
+    global.hadronApp.appRegistry.emit('change-favorite-attributes', name, color, true);
   },
 
   /**
@@ -127,6 +129,7 @@ const Store = Reflux.createStore({
    */
   deleteFavorite(connection) {
     connection.destroy();
+    global.hadronApp.appRegistry.emit('change-favorite-attributes', '', undefined, false);
   },
 
   /**
@@ -336,6 +339,8 @@ const Store = Reflux.createStore({
    * validate instead the existing connection object.
    */
   onConnectClicked() {
+    const currentConnection = this.state.currentConnection;
+
     if (this.state.viewType === 'connectionString') {
       const customUrl = this.state.customUrl || DEFAULT_DRIVER_URL;
 
@@ -345,27 +350,32 @@ const Store = Reflux.createStore({
         this._setSyntaxErrorMessage('Invalid schema, expected `mongodb` or `mongodb+srv`');
         this.trigger(this.state);
       } else {
-        Connection.from(customUrl, (error, connection) => {
+        Connection.from(customUrl, (error, parsedConnection) => {
           if (error) {
             this._setSyntaxErrorMessage(error.message);
             this.trigger(this.state);
           } else {
+            const name = currentConnection.name;
+            const color = currentConnection.color;
+            const isFavorite = currentConnection.isFavorite;
+            const connection = merge(
+              currentConnection,
+              parsedConnection,
+              { name, color, isFavorite }
+            );
+
             this._connect(connection);
           }
         });
       }
+    } else if (!currentConnection.isValid()) {
+      this.setState({
+        isValid: false,
+        errorMessage: 'The required fields can not be empty'
+      });
     } else {
-      const currentConnection = this.state.currentConnection;
-
-      if (!currentConnection.isValid()) {
-        this.setState({
-          isValid: false,
-          errorMessage: 'The required fields can not be empty'
-        });
-      } else {
-        this.StatusActions.showIndeterminateProgressBar();
-        this._connect(currentConnection);
-      }
+      this.StatusActions.showIndeterminateProgressBar();
+      this._connect(currentConnection);
     }
   },
 
@@ -376,14 +386,17 @@ const Store = Reflux.createStore({
    * @param {Object} color - The favorite color.
    */
   onCreateFavoriteClicked(name, color) {
+    const currentConnection = this.state.currentConnection;
+
     if (
       this.state.viewType === 'connectionString' &&
       !this.state.currentConnection.isFavorite
     ) {
-      Connection.from(this.state.customUrl, (error, connection) => {
+      Connection.from(this.state.customUrl, (error, parsedConnection) => {
         if (!error) {
-          connection = Object.assign(
-            connection,
+          const connection = merge(
+            currentConnection,
+            parsedConnection,
             { name, color, isFavorite: true }
           );
 
@@ -396,17 +409,15 @@ const Store = Reflux.createStore({
         }
       });
     } else {
-      const connection = this.state.currentConnection;
-
-      connection.isFavorite = true;
-      connection.name = name;
-      connection.color = color;
+      currentConnection.isFavorite = true;
+      currentConnection.name = name;
+      currentConnection.color = color;
 
       if (this.state.currentConnection.isFavorite) {
         this.state.savedMessage = 'Favorite is updated';
       }
 
-      this._addConnection(connection);
+      this._addConnection(currentConnection);
     }
   },
 
