@@ -214,18 +214,22 @@ const Store = Reflux.createStore({
    * @param {String} viewType - A view type.
    */
   onChangeViewClicked(viewType) {
-    const driverUrl = this.state.currentConnection.driverUrl;
+    const currentConnection = this.state.currentConnection;
+    const connections = this.state.connections;
+    const isFavorite = currentConnection;
+    const driverUrl = currentConnection.driverUrl;
     const customUrl = this.state.customUrl;
     const isValid = this.state.isValid;
 
     this.state.viewType = viewType;
 
-    if (viewType === 'connectionForm') { // Target view
-      if (this.state.currentConnection.isFavorite) {
-        const currentFavorite = this.state.connections
-          .filter((connection) => connection.isFavorite)
-          .find((favorite) => (favorite === this.state.currentConnection));
+    const currentFavorite = connections.find((recent) => (
+      recent === currentConnection &&
+      recent.isFavorite === true
+    ));
 
+    if (viewType === 'connectionForm') { // Target view
+      if (currentFavorite) {
         this.onFavoriteSelected(currentFavorite);
         this.trigger(this.state);
       } else if (customUrl === driverUrl) {
@@ -248,7 +252,7 @@ const Store = Reflux.createStore({
           if (!error) {
             this._resetSyntaxErrorMessage();
 
-            if (this.state.customUrl.match(/[?&]ssl=true/i)) {
+            if (customUrl.match(/[?&]ssl=true/i)) {
               connection.sslMethod = 'SYSTEMCA';
             }
 
@@ -327,13 +331,15 @@ const Store = Reflux.createStore({
             this._setSyntaxErrorMessage(error.message);
             this.trigger(this.state);
           } else {
+            const lastUsed = currentConnection.lastUsed;
             const name = currentConnection.name;
             const color = currentConnection.color;
             const isFavorite = currentConnection.isFavorite;
+
             const connection = merge(
               currentConnection,
               parsedConnection,
-              { name, color, isFavorite }
+              { name, color, isFavorite, lastUsed }
             );
 
             this._connect(connection);
@@ -359,25 +365,40 @@ const Store = Reflux.createStore({
    */
   onCreateFavoriteClicked(name, color) {
     const currentConnection = this.state.currentConnection;
+    const connections = this.state.connections;
+    const isFavorite = currentConnection;
 
-    if (
-      this.state.viewType === 'connectionString' &&
-      !this.state.currentConnection.isFavorite
-    ) {
+    const currentRecent = connections.find((recent) => (
+      recent === currentConnection &&
+      recent.isFavorite === false
+    ));
+
+    if (this.state.viewType === 'connectionString' && !isFavorite) {
       Connection.from(this.state.customUrl, (error, parsedConnection) => {
         if (!error) {
-          const connection = merge(
-            currentConnection,
-            parsedConnection,
-            { name, color, isFavorite: true }
-          );
-
-          if (this.state.customUrl.match(/[?&]ssl=true/i)) {
-            connection.sslMethod = 'SYSTEMCA';
+          if (isFavorite) {
+            this.state.savedMessage = 'Favorite is updated';
           }
 
-          this.state.currentConnection = connection;
-          this._addConnection(connection);
+          if (currentRecent) {
+            currentConnection.isFavorite = true;
+            currentConnection.name = name;
+            currentConnection.color = color;
+            currentConnection.save();
+          } else {
+            const connection = merge(
+              currentConnection,
+              parsedConnection,
+              { name, color, isFavorite: true }
+            );
+
+            if (this.state.customUrl.match(/[?&]ssl=true/i)) {
+              connection.sslMethod = 'SYSTEMCA';
+            }
+
+            this.state.currentConnection = connection;
+            this._addConnection(connection);
+          }
         }
       });
     } else {
@@ -385,11 +406,15 @@ const Store = Reflux.createStore({
       currentConnection.name = name;
       currentConnection.color = color;
 
-      if (this.state.currentConnection.isFavorite) {
-        this.state.savedMessage = 'Favorite is updated';
-      }
+      if (currentRecent) {
+        currentConnection.save();
+      } else {
+        if (isFavorite) {
+          this.state.savedMessage = 'Favorite is updated';
+        }
 
-      this._addConnection(currentConnection);
+        this._addConnection(currentConnection);
+      }
     }
   },
 
@@ -397,13 +422,22 @@ const Store = Reflux.createStore({
    * Creates a recent connection from the current connection.
    */
   onCreateRecentClicked() {
-    const connection = this.state.currentConnection;
+    const currentConnection = this.state.currentConnection;
+    const connections = this.state.connections;
+    const currentFavorite = connections.find((recent) => (
+      recent === currentConnection &&
+      recent.isFavorite === true
+    ));
 
-    connection.lastUsed = new Date();
+    currentConnection.lastUsed = new Date();
 
-    this._pruneRecents(() => {
-      this._addConnection(connection);
-    });
+    if (currentFavorite) {
+      currentConnection.save();
+    } else {
+      this._pruneRecents(() => {
+        this._addConnection(currentConnection);
+      });
+    }
   },
 
   /**
