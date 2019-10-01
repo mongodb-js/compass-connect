@@ -11,7 +11,6 @@ const StateMixin = require('reflux-state-mixin');
 const ipc = require('hadron-ipc');
 const userAgent = navigator.userAgent.toLowerCase();
 const electron = require('electron');
-// const FavoriteModal = require('../components/form/favorite-modal');
 
 /**
  * A default driverUrl.
@@ -98,38 +97,11 @@ const Store = Reflux.createStore({
     this.StatusActions = appRegistry.getAction('Status.Actions');
     this.appRegistry = appRegistry;
 
-    appRegistry.on('save-favorite', (name, color, connection) => {
-      appRegistry.getAction('Connect.Actions').saveFavorite(name, color, connection);
+    appRegistry.on('clear-current-favorite', () => {
+      const ConnectStore = appRegistry.getStore('Connect.Store');
+
+      ConnectStore.state.currentConnection = new Connection();
     });
-
-    appRegistry.on('delete-favorite', (connection) => {
-      appRegistry.getAction('Connect.Actions').deleteFavorite(connection);
-    });
-  },
-
-  /**
-   * Saves the favorite after connecting.
-   *
-   * @param {String} name - The favorite name.
-   * @param {String} color - The favorite color.
-   * @param {Object} connection - The connection.
-   */
-  saveFavorite(name, color, connection) {
-    connection.isFavorite = true;
-    connection.name = name;
-    connection.color = color;
-    connection.save();
-    global.hadronApp.appRegistry.emit('change-favorite-attributes', name, color, true);
-  },
-
-  /**
-   * Deletes the favorite after connecting.
-   *
-   * @param {Object} connection - The connection.
-   */
-  deleteFavorite(connection) {
-    connection.destroy();
-    global.hadronApp.appRegistry.emit('change-favorite-attributes', '', undefined, false);
   },
 
   /**
