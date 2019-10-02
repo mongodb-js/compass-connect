@@ -335,12 +335,18 @@ const Store = Reflux.createStore({
             const name = currentConnection.name;
             const color = currentConnection.color;
             const isFavorite = currentConnection.isFavorite;
+            const driverUrl = currentConnection.driverUrl;
+            let connection;
 
-            const connection = merge(
-              currentConnection,
-              parsedConnection,
-              { name, color, isFavorite, lastUsed }
-            );
+            if (isFavorite && driverUrl !== parsedConnection.driverUrl) {
+              connection = parsedConnection;
+            } else {
+              connection = merge(
+                currentConnection,
+                parsedConnection,
+                { name, color, isFavorite, lastUsed }
+              );
+            }
 
             this._connect(connection);
           }
@@ -366,8 +372,7 @@ const Store = Reflux.createStore({
   onCreateFavoriteClicked(name, color) {
     const currentConnection = this.state.currentConnection;
     const connections = this.state.connections;
-    const isFavorite = currentConnection;
-
+    const isFavorite = currentConnection.isFavorite;
     const currentRecent = connections.find((recent) => (
       recent === currentConnection &&
       recent.isFavorite === false
