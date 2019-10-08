@@ -11,6 +11,7 @@ const Actions = Reflux.createActions({
   onConnectionFormChanged: { sync: true },
   onConnectionSelected: { sync: true },
   onConnectClicked: { sync: true },
+  onCopyConnectionClicked: { sync: true },
   onCreateFavoriteClicked: { sync: true },
   onCreateRecentClicked: { sync: true },
   onCustomUrlChanged: { sync: true },

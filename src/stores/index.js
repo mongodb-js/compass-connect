@@ -212,7 +212,6 @@ const Store = Reflux.createStore({
   onChangeViewClicked(viewType) {
     const currentConnection = this.state.currentConnection;
     const connections = this.state.connections;
-    const isFavorite = currentConnection;
     const driverUrl = currentConnection.driverUrl;
     const customUrl = this.state.customUrl;
     const isValid = this.state.isValid;
@@ -298,7 +297,6 @@ const Store = Reflux.createStore({
       isConnected: false,
       errorMessage: null,
       syntaxErrorMessage: null,
-      viewType: 'connectionForm',
       isHostChanged: true,
       isPortChanged: true
     });
@@ -356,6 +354,24 @@ const Store = Reflux.createStore({
       this.StatusActions.showIndeterminateProgressBar();
       this._connect(currentConnection);
     }
+  },
+
+  /**
+   * Copies a favorite connection.
+   *
+   * @param {Connection} connection - The connection to select.
+   */
+  onCopyConnectionClicked(connection) {
+    const newConnection = Object.assign(
+      new Connection(),
+      omit(
+        connection.getAttributes({ props: true }),
+        ['_id', 'color']
+      ),
+      { name: `${connection.name} (copy)` }
+    );
+
+    this._addConnection(newConnection);
   },
 
   /**

@@ -35,8 +35,15 @@ class Recents extends React.Component {
    *
    * @param {Object} recent - A recent connection.
    */
-  onClearConnectionClicked(recent) {
+  onRemoveConnectionClicked(recent) {
     Actions.onDeleteConnectionClicked(recent);
+  }
+
+  /**
+   * Opens a modal for editing a recent connection.
+   */
+  onEditConnectionClicked() {
+    Actions.showFavoriteModal();
   }
 
   /**
@@ -116,7 +123,8 @@ class Recents extends React.Component {
             noCaret
             pullRight
             id="recent-actions">
-            <MenuItem eventKey="1" onClick={this.onClearConnectionClicked.bind(this, recent)}>Remove</MenuItem>
+            <MenuItem eventKey="1" onClick={this.onEditConnectionClicked.bind(this, recent)}>Edit</MenuItem>
+            <MenuItem eventKey="2" onClick={this.onRemoveConnectionClicked.bind(this, recent)}>Remove</MenuItem>
           </DropdownButton>
         </li>
       );

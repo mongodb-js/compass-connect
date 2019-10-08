@@ -31,12 +31,30 @@ class Favorites extends React.Component {
   }
 
   /**
+   * Copies a favorite connection.
+   *
+   * @param {Object} favorite - A favorite connection.
+   * @param {Object} evt - evt.
+   */
+  onCopyConnectionClicked(favorite, evt) {
+    evt.stopPropagation();
+    Actions.onCopyConnectionClicked(favorite);
+  }
+
+  /**
    * Deletes a favorite connection.
    *
    * @param {Object} favorite - A favorite connection.
    */
-  onClearConnectionClicked(favorite) {
+  onRemoveConnectionClicked(favorite) {
     Actions.onDeleteConnectionClicked(favorite);
+  }
+
+  /**
+   * Opens a modal for editing a favorite connection.
+   */
+  onEditConnectionClicked() {
+    Actions.showFavoriteModal();
   }
 
   /**
@@ -114,7 +132,9 @@ class Favorites extends React.Component {
             noCaret
             pullRight
             id="favorite-actions">
-            <MenuItem eventKey="1" onClick={this.onClearConnectionClicked.bind(this, favorite)}>Remove</MenuItem>
+            <MenuItem eventKey="1" onClick={this.onCopyConnectionClicked.bind(this, favorite)}>Copy</MenuItem>
+            <MenuItem eventKey="2" onClick={this.onEditConnectionClicked.bind(this, favorite)}>Edit</MenuItem>
+            <MenuItem eventKey="3" onClick={this.onRemoveConnectionClicked.bind(this, favorite)}>Remove</MenuItem>
           </DropdownButton>
         </li>
       );
