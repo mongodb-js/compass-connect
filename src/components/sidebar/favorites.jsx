@@ -106,7 +106,7 @@ class Favorites extends React.Component {
       const title = `${favorite.hostname}:${favorite.port}`;
       const style = favorite.color
         ? { borderRight: `5px solid ${favorite.color}` }
-        : {};
+        : { borderRight: '5px solid transparent' };
 
       return (
         <li
