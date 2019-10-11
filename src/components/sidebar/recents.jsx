@@ -34,16 +34,11 @@ class Recents extends React.Component {
    * Deletes a recent connection.
    *
    * @param {Object} recent - A recent connection.
+   * @param {Object} evt - evt.
    */
-  onRemoveConnectionClicked(recent) {
+  onRemoveConnectionClicked(recent, evt) {
+    evt.stopPropagation();
     Actions.onDeleteConnectionClicked(recent);
-  }
-
-  /**
-   * Opens a modal for editing a recent connection.
-   */
-  onEditConnectionClicked() {
-    Actions.showFavoriteModal();
   }
 
   /**
@@ -51,6 +46,17 @@ class Recents extends React.Component {
    */
   onClearConnectionsClicked() {
     Actions.onDeleteConnectionsClicked();
+  }
+
+  /**
+   * Saves a recent connection to favorites.
+   *
+   * @param {Object} recent - A recent connection.
+   * @param {Object} evt - evt.
+   */
+  onSaveAsFavoriteClicked(recent, evt) {
+    evt.stopPropagation();
+    Actions.onSaveAsFavoriteClicked(recent);
   }
 
   /**
@@ -123,7 +129,7 @@ class Recents extends React.Component {
             noCaret
             pullRight
             id="recent-actions">
-            <MenuItem eventKey="1" onClick={this.onEditConnectionClicked.bind(this, recent)}>Edit</MenuItem>
+            <MenuItem eventKey="1" onClick={this.onSaveAsFavoriteClicked.bind(this, recent)}>Add to favorites</MenuItem>
             <MenuItem eventKey="2" onClick={this.onRemoveConnectionClicked.bind(this, recent)}>Remove</MenuItem>
           </DropdownButton>
         </li>

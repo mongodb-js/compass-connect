@@ -1,6 +1,6 @@
 import Reflux from 'reflux';
 import AppRegistry from 'hadron-app-registry';
-import Connection from 'mongodb-connection-model';
+import Connection, { ConnectionCollection } from 'mongodb-connection-model';
 import Actions from 'actions';
 import Store from 'stores';
 
@@ -624,6 +624,11 @@ describe('Store', () => {
 
   describe('#onFavoriteSelected', () => {
     const connection = new Connection();
+
+    beforeEach(() => {
+      Store.state.connections = new ConnectionCollection();
+      Store.state.connections.add(connection);
+    });
 
     it('sets the current connection in the store', (done) => {
       const unsubscribe = Store.listen((state) => {
