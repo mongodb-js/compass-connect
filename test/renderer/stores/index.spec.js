@@ -628,6 +628,8 @@ describe('Store', () => {
     beforeEach(() => {
       Store.state.connections = new ConnectionCollection();
       Store.state.connections.add(connection);
+      Store.state.savedConnections = new ConnectionCollection();
+      Store.state.savedConnections.add(connection);
     });
 
     it('sets the current connection in the store', (done) => {
@@ -969,6 +971,9 @@ describe('Store', () => {
         Store.state.connections.add(new Connection({ lastUsed: new Date('2017-01-05') }));
         Store.state.connections.add(new Connection({ lastUsed: new Date('2017-01-06') }));
         Store.state.connections.add(new Connection({ lastUsed: new Date('2017-01-07') }));
+
+        Store.state.savedConnections.add(new Connection({ isFavorite: true }));
+        Store.state.savedConnections.add(new Connection({ lastUsed: new Date('2017-01-01') }));
       });
 
       after((done) => {
