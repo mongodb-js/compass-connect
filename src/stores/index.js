@@ -77,7 +77,14 @@ const Store = Reflux.createStore({
    * Fetch all the connections on init.
    */
   init() {
-    this.state.connections.fetch({ success: () => this.trigger(this.state) });
+    this.state.connections.fetch({
+      success: () => {
+        this.state.connections.forEach((item) => this.state.savedConnections.add(
+          item.getAttributes({ props: true })
+        ));
+        this.trigger(this.state);
+      }
+    });
     ipc.on('app:disconnect', this.onDisconnectClicked.bind(this));
   },
 
@@ -113,6 +120,7 @@ const Store = Reflux.createStore({
     return {
       currentConnection: new Connection(),
       connections: new ConnectionCollection(),
+      savedConnections: new ConnectionCollection(),
       customUrl: '',
       isValid: true,
       isConnected: false,
@@ -236,7 +244,7 @@ const Store = Reflux.createStore({
 
     if (viewType === 'connectionForm') { // Target view
       if (currentFavorite) {
-        this.onFavoriteSelected(currentFavorite);
+        this.state.currentConnection = currentFavorite;
         this.trigger(this.state);
       } else if (customUrl === driverUrl) {
         this.state.isHostChanged = true;
@@ -399,23 +407,16 @@ const Store = Reflux.createStore({
    * Discards favorite changes.
    */
   onFavoriteChangeDiscarded() {
-    this.state.connections.fetch({ success: () => this.trigger(this.state) });
-
-    const connection = this.state.connections.find((item) => (
+    const connection = this.state.savedConnections.find((item) => (
       item._id === this.state.currentConnection._id
     ));
-    const currentConnection = this.state.currentConnection;
-
-    currentConnection.set(omit(
+    this.state.currentConnection.set(omit(
       connection.getAttributes({ props: true }),
       ['_id', 'isFavorite', 'color', 'name']
     ));
-
-    this.setState({
-      currentConnection,
-      customUrl: currentConnection.driverUrl,
-      hasUnsavedChanges: false
-    });
+    this.state.customUrl = connection.driverUrl;
+    this.state.hasUnsavedChanges = false;
+    this.trigger(this.state);
   },
 
   /**
@@ -456,7 +457,7 @@ const Store = Reflux.createStore({
     ));
 
     if (currentSaved) {
-      currentConnection.save();
+      this._saveConnection(currentSaved);
     } else {
       this._pruneRecents(() => {
         currentConnection.name =
@@ -519,9 +520,9 @@ const Store = Reflux.createStore({
         this.state.errorMessage = null;
         this.state.syntaxErrorMessage = null;
         this.state.viewType = 'connectionString';
+        this.state.hasUnsavedChanges = false;
         this.trigger(this.state);
         this.dataService = undefined;
-        this.hasUnsavedChanges = false;
       });
     }
   },
@@ -562,9 +563,7 @@ const Store = Reflux.createStore({
     * @param {Connection} favorite - The favorite to select.
     */
   onFavoriteSelected(favorite) {
-    this.state.connections.fetch({ success: () => this.trigger(this.state) });
-
-    const connection = this.state.connections.find((item) => (
+    const connection = this.state.savedConnections.find((item) => (
       item._id === favorite._id
     ));
 
@@ -584,6 +583,8 @@ const Store = Reflux.createStore({
       customUrl: favorite.driverUrl,
       hasUnsavedChanges: false
     });
+
+    this.trigger(this.state);
   },
 
   /**
@@ -665,7 +666,7 @@ const Store = Reflux.createStore({
     this.state.isMessageVisible = true;
     this.state.currentConnection.isFavorite = true;
     this.state.currentConnection.name = `${connection.hostname}:${connection.port}`;
-    this.state.currentConnection.save();
+    this._saveConnection(this.state.currentConnection);
     this.trigger(this.state);
   },
 
@@ -839,7 +840,17 @@ const Store = Reflux.createStore({
   },
 
   /**
-   * Adds a connection to connections list.
+   * Saves a connection in the connections list.
+   *
+   * @param {Object} connection - A connection.
+   */
+  _saveConnection(connection) {
+    connection.save();
+    this.state.savedConnections.add(connection.getAttributes({ props: true }));
+  },
+
+  /**
+   * Adds a connection to the connections list.
    *
    * @param {Object} connection - A connection.
    */
@@ -847,7 +858,7 @@ const Store = Reflux.createStore({
     this.state.currentConnection = connection;
     this.state.connections.add(connection);
     this.trigger(this.state);
-    this.state.currentConnection.save();
+    this._saveConnection(this.state.currentConnection);
   },
 
   /**
@@ -1018,7 +1029,7 @@ const Store = Reflux.createStore({
           }
 
           if (currentSaved) {
-            connection.save();
+            this._saveConnection(connection);
           } else {
             this._addConnection(connection);
           }
