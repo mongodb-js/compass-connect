@@ -334,6 +334,10 @@ const Store = Reflux.createStore({
   onConnectClicked() {
     const currentConnection = this.state.currentConnection;
 
+    // We replace custom appname with proper appname
+    // to avoid sending malicious value to the server
+    currentConnection.appname = electron.remote.app.getName();
+
     if (this.state.viewType === 'connectionString') {
       const customUrl = this.state.customUrl || DEFAULT_DRIVER_URL;
 
@@ -351,14 +355,15 @@ const Store = Reflux.createStore({
             const isFavorite = currentConnection.isFavorite;
             const driverUrl = currentConnection.driverUrl;
 
+            parsedConnection.appname = currentConnection.appname;
+
             if (isFavorite && driverUrl !== parsedConnection.driverUrl) {
               this._connect(parsedConnection);
             } else {
               currentConnection.set(omit(
-                parsedConnection,
+                parsedConnection.getAttributes({ props: true }),
                 ['_id', 'isFavorite', 'color', 'name']
               ));
-
               this._connect(currentConnection);
             }
           }
@@ -450,12 +455,11 @@ const Store = Reflux.createStore({
       item._id === currentConnection._id
     ));
 
-    currentConnection.lastUsed = new Date();
-
     if (currentSaved) {
       currentConnection.save();
     } else {
       this._pruneRecents(() => {
+        currentConnection.name =
         this._addConnection(currentConnection);
       });
     }
@@ -659,9 +663,9 @@ const Store = Reflux.createStore({
   onSaveAsFavoriteClicked(connection) {
     this.state.currentConnection = connection;
     this.state.isMessageVisible = true;
-    this.state.currentConnection .isFavorite = true;
-    this.state.currentConnection .name = `${connection.hostname}:${connection.port}`;
-    this.state.currentConnection .save();
+    this.state.currentConnection.isFavorite = true;
+    this.state.currentConnection.name = `${connection.hostname}:${connection.port}`;
+    this.state.currentConnection.save();
     this.trigger(this.state);
   },
 
@@ -946,14 +950,9 @@ const Store = Reflux.createStore({
    * @param {Object} connection - The current connection.
    */
   _connect(connection) {
-    // We replace custom appname with proper appname
-    // to avoid sending malicious value to the server
-    connection.appname = electron.remote.app.getName();
-
     this._updateDefaults();
     this.dataService = new DataService(connection);
     this.appRegistry.emit('data-service-initialized', this.dataService);
-
     this.dataService.connect((error, ds) => {
       if (error) {
         this.StatusActions.done();
@@ -963,16 +962,14 @@ const Store = Reflux.createStore({
           syntaxErrorMessage: null
         });
       } else {
-        // @note: onCreateRecentClicked will handle the store triggering,
-        // no need to do it twice.
-        this.setState({
-          isValid: true,
-          isConnected: true,
-          errorMessage: null,
-          syntaxErrorMessage: null,
-          currentConnection: connection,
-          hasUnsavedChanges: false
-        });
+        this.state.isValid = true;
+        this.state.isConnected = true;
+        this.state.errorMessage = null;
+        this.state.syntaxErrorMessage = null;
+        this.state.hasUnsavedChanges = false;
+        this.state.currentConnection = connection;
+        this.state.currentConnection.lastUsed = new Date();
+        this.trigger(this.state);
         this.appRegistry.emit('data-service-connected', error, ds);
         this.onCreateRecentClicked();
       }
