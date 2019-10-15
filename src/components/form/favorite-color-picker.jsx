@@ -28,9 +28,14 @@ class FavoriteColorPicker extends React.Component {
    * @returns {React.Component}
    */
   renderColor(hex) {
+    const colorBoxClass = {
+      [styles['color-box']]: true,
+      [styles['color-box-active']]: (this.props.hex === hex)
+    };
+
     return (
       <div
-        className={classnames(styles['color-box'])}
+        className={classnames(colorBoxClass)}
         onClick={this.props.onChange.bind(this, hex)}
         title={hex}
         key={hex}>
@@ -45,8 +50,8 @@ class FavoriteColorPicker extends React.Component {
             <g
               fill="white"
               transform="translate(1 1)"
-              fillOpacity={(this.props.hex === hex) ? '1' : '0'}
-              strokeOpacity={(this.props.hex === hex) ? '1' : '0'}
+              fillOpacity={(this.props.hex === hex) ? 1 : 0}
+              strokeOpacity={(this.props.hex === hex) ? 1 : 0}
             >
               <path stroke="#ffffff" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"/>
             </g>
