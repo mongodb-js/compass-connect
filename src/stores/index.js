@@ -317,7 +317,8 @@ const Store = Reflux.createStore({
       syntaxErrorMessage: null,
       isHostChanged: true,
       isPortChanged: true,
-      hasUnsavedChanges: false
+      hasUnsavedChanges: false,
+      viewType: 'connectionForm'
     });
   },
 
@@ -522,7 +523,8 @@ const Store = Reflux.createStore({
       isHostChanged: true,
       isPortChanged: true,
       customUrl: favorite.driverUrl,
-      hasUnsavedChanges: false
+      hasUnsavedChanges: false,
+      viewType: 'connectionForm'
     });
   },
 
