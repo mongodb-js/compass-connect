@@ -28,9 +28,7 @@ class NewConnection extends React.Component {
    * @returns {String} - A class name
    */
   getClassName() {
-    const currentSaved = this.props.connections.find((item) => (
-      item._id === this.props.currentConnection._id
-    ));
+    const currentSaved = this.props.connections[this.props.currentConnection._id];
     const classnamesProps = [styles['connect-sidebar-new-connection']];
 
     if (!currentSaved) {

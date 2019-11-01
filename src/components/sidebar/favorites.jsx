@@ -27,7 +27,7 @@ class Favorites extends React.Component {
    * @param {Object} favorite - A favorite connection.
    */
   onFavoriteClicked(favorite) {
-    Actions.onFavoriteSelected(favorite);
+    Actions.onConnectionSelected(favorite);
   }
 
   /**
@@ -78,7 +78,7 @@ class Favorites extends React.Component {
   getClassName(favorite) {
     const classnamesProps = [styles['connect-sidebar-list-item']];
 
-    if (this.props.currentConnection === favorite) {
+    if (this.props.currentConnection._id === favorite._id) {
       classnamesProps.push(styles['connect-sidebar-list-item-is-active']);
     }
 
@@ -110,7 +110,9 @@ class Favorites extends React.Component {
    * @returns {React.Component}
    */
   renderFavorites() {
-    const favorites = this.props.connections
+    const favorites = Object
+      .keys(this.props.connections)
+      .map((key) => this.props.connections[key])
       .filter((connection) => connection.isFavorite);
 
     return map(favorites, (favorite, i) => {

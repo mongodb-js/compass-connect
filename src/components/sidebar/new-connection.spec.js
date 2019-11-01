@@ -60,10 +60,10 @@ describe('NewConnection [Component]', () => {
       _id: '47d5a91a-0920-43e7-a4ef-71430023f484',
       isFavorite: true
     };
-    const connections = [
-      { _id: '6fffae26-e10e-481d-97b5-5c75dc5d628a', isFavorite: false },
-      { _id: '47d5a91a-0920-43e7-a4ef-71430023f484', isFavorite: true }
-    ];
+    const connections = {
+      '6fffae26-e10e-481d-97b5-5c75dc5d628a': { isFavorite: false },
+      '47d5a91a-0920-43e7-a4ef-71430023f484': { isFavorite: true }
+    };
     let component;
 
     beforeEach(() => {
@@ -89,10 +89,10 @@ describe('NewConnection [Component]', () => {
       _id: '47d5a91a-0920-43e7-a4ef-71430023f484',
       isFavorite: false
     };
-    const connections = [
-      { _id: '47d5a91a-0920-43e7-a4ef-71430023f484', isFavorite: false },
-      { _id: '3f2a5083-6e85-47d8-ab13-7c5939a81406', isFavorite: true }
-    ];
+    const connections = {
+      '6fffae26-e10e-481d-97b5-5c75dc5d628a': { isFavorite: false },
+      '47d5a91a-0920-43e7-a4ef-71430023f484': { isFavorite: true }
+    };
     let component;
 
     beforeEach(() => {
