@@ -15,10 +15,7 @@ class Favorites extends React.Component {
 
   static propTypes = {
     currentConnection: PropTypes.object.isRequired,
-    connections: PropTypes.oneOfType([
-      PropTypes.object,
-      PropTypes.array
-    ]).isRequired
+    connections: PropTypes.object.isRequired
   };
 
   /**
