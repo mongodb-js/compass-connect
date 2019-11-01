@@ -10,7 +10,8 @@ class NewConnection extends React.Component {
 
   static propTypes = {
     currentConnection: PropTypes.object.isRequired,
-    connections: PropTypes.oneOfType([PropTypes.object,
+    connections: PropTypes.oneOfType([
+      PropTypes.object,
       PropTypes.array
     ]).isRequired
   };

@@ -5,7 +5,7 @@ import NewConnection from './new-connection';
 import styles from './sidebar.less';
 
 describe('NewConnection [Component]', () => {
-  context('when the connection is not a favourite and not a recent', () => {
+  context('when a connection is new', () => {
     const currentConnection = {
       _id: '47d5a91a-0920-43e7-a4ef-71430023f484',
       isFavorite: false
@@ -55,7 +55,7 @@ describe('NewConnection [Component]', () => {
     });
   });
 
-  context('when the connection is a favorite', () => {
+  context('when a connection is favorite', () => {
     const currentConnection = {
       _id: '47d5a91a-0920-43e7-a4ef-71430023f484',
       isFavorite: true
@@ -80,11 +80,12 @@ describe('NewConnection [Component]', () => {
 
     it('does not highlight the panel', () => {
       const style = `.${styles['connect-sidebar-new-connection-is-active']}`;
+
       expect(component.find(style)).to.not.be.present();
     });
   });
 
-  context('when the connection is a recent', () => {
+  context('when a connection is recent', () => {
     const currentConnection = {
       _id: '47d5a91a-0920-43e7-a4ef-71430023f484',
       isFavorite: false
@@ -109,6 +110,7 @@ describe('NewConnection [Component]', () => {
 
     it('does not highlight the panel', () => {
       const style = `.${styles['connect-sidebar-new-connection-is-active']}`;
+
       expect(component.find(style)).to.not.be.present();
     });
   });

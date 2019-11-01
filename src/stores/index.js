@@ -80,7 +80,10 @@ const Store = Reflux.createStore({
     this.state.fetchedConnections.fetch({
       success: () => {
         this.state.fetchedConnections.forEach((item) => {
-          this.state.connections[item._id] = item.getAttributes({ props: true, derived: true });
+          this.state.connections[item._id] = item.getAttributes({
+            props: true,
+            derived: true
+          });
         });
         this.trigger(this.state);
       }
@@ -117,9 +120,12 @@ const Store = Reflux.createStore({
   getInitialState() {
     return {
       currentConnection: new Connection(),
-      fetchedConnections: new ConnectionCollection(), // Collection that contains the current state of connections
-      connections: {}, // Hash for storing unchanged connections for the discard feature
-      customUrl: '', // URL from connection string input
+      // Collection that contains the current state of connections
+      fetchedConnections: new ConnectionCollection(),
+      // Hash for storing unchanged connections for the discard feature
+      connections: {},
+      // URL from connection string input
+      customUrl: '',
       isValid: true,
       isConnected: false,
       errorMessage: null,
@@ -179,7 +185,9 @@ const Store = Reflux.createStore({
       this._clearForm();
       this._clearConnection();
     } else if (!Connection.isURI(customUrl)) {
-      this._setSyntaxErrorMessage('Invalid schema, expected `mongodb` or `mongodb+srv`');
+      this._setSyntaxErrorMessage(
+        'Invalid schema, expected `mongodb` or `mongodb+srv`'
+      );
     } else {
       Connection.from(customUrl, (error) => {
         if (error) {
@@ -313,7 +321,9 @@ const Store = Reflux.createStore({
       this.StatusActions.showIndeterminateProgressBar();
 
       if (!Connection.isURI(customUrl)) {
-        this._setSyntaxErrorMessage('Invalid schema, expected `mongodb` or `mongodb+srv`');
+        this._setSyntaxErrorMessage(
+          'Invalid schema, expected `mongodb` or `mongodb+srv`'
+        );
       } else {
         Connection.from(customUrl, (error, parsedConnection) => {
           if (error) {
@@ -766,11 +776,17 @@ const Store = Reflux.createStore({
     const connection = this.state.currentConnection;
 
     if (
-      (connection.authStrategy === 'MONGODB' || connection.authStrategy === 'SCRAM-SHA-256') &&
+      (
+        connection.authStrategy === 'MONGODB' ||
+        connection.authStrategy === 'SCRAM-SHA-256'
+      ) &&
       isEmpty(connection.mongodbDatabaseName)
     ) {
       connection.mongodbDatabaseName = 'admin';
-    } else if (connection.authStrategy === 'KERBEROS' && isEmpty(connection.kerberosServiceName)) {
+    } else if (
+      connection.authStrategy === 'KERBEROS' &&
+      isEmpty(connection.kerberosServiceName)
+    ) {
       connection.kerberosServiceName = 'mongodb';
     }
   },
@@ -782,7 +798,10 @@ const Store = Reflux.createStore({
    */
   _saveConnection(connection) {
     this.state.currentConnection = connection;
-    this.state.connections[connection._id] = connection.getAttributes({ props: true, derived: true });
+    this.state.connections[connection._id] = connection.getAttributes({
+      props: true,
+      derived: true
+    });
     this.state.fetchedConnections.add(connection);
     this.trigger(this.state);
     connection.save();
