@@ -475,7 +475,6 @@ const Store = Reflux.createStore({
         this.state.isConnected = false;
         this.state.errorMessage = null;
         this.state.syntaxErrorMessage = null;
-        this.state.viewType = 'connectionString';
         this.state.hasUnsavedChanges = false;
         this._saveConnection(this.state.currentConnection);
 
@@ -797,12 +796,15 @@ const Store = Reflux.createStore({
    * @param {Object} connection - A connection.
    */
   _saveConnection(connection) {
+    connection.replicaSet = connection.replicaSet || '';
+    connection.mongodbDatabaseName = connection.mongodbDatabaseName || '';
+
     this.state.currentConnection = connection;
+    this.state.fetchedConnections.add(connection);
     this.state.connections[connection._id] = connection.getAttributes({
       props: true,
       derived: true
     });
-    this.state.fetchedConnections.add(connection);
     this.trigger(this.state);
     connection.save();
   },
