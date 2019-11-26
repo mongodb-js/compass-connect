@@ -80,10 +80,7 @@ const Store = Reflux.createStore({
     this.state.fetchedConnections.fetch({
       success: () => {
         this.state.fetchedConnections.forEach((item) => {
-          this.state.connections[item._id] = item.getAttributes({
-            props: true,
-            derived: true
-          });
+          this.state.connections[item._id] = { ...item._values };
         });
         this.trigger(this.state);
       }
@@ -796,15 +793,9 @@ const Store = Reflux.createStore({
    * @param {Object} connection - A connection.
    */
   _saveConnection(connection) {
-    connection.replicaSet = connection.replicaSet || '';
-    connection.mongodbDatabaseName = connection.mongodbDatabaseName || '';
-
     this.state.currentConnection = connection;
     this.state.fetchedConnections.add(connection);
-    this.state.connections[connection._id] = connection.getAttributes({
-      props: true,
-      derived: true
-    });
+    this.state.connections[connection._id] = { ...connection._values };
     this.trigger(this.state);
     connection.save();
   },
