@@ -1,6 +1,6 @@
 const webpackConfig = require('./config/webpack.karma.config');
 
-module.exports = (config) => {
+module.exports = config => {
   config.set({
     basePath: '',
     singleRun: true,
@@ -14,6 +14,6 @@ module.exports = (config) => {
     // DEV: `useIframe: false` is for launching a new window instead of using an iframe
     // In Electron, iframes don't get `nodeIntegration` priveleges yet windows do.
     client: { useIframe: false },
-    logLevel: config.LOG_ERROR
+    logLevel: config.LOG_DEBUG
   });
 };
