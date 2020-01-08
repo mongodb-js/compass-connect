@@ -20,7 +20,7 @@
     "check": "mongodb-js-precommit './src/**/*{.js,.jsx}' './test/**/*.js' './electron/**/*.js' './config/**/*{.js,.jsx}'",
     "link-plugin": "./scripts/link.sh",
     "unlink-plugin": "./scripts/unlink.sh",
-    "prepublish": "npm run compile"
+    "prepublishOnly": "npm run compile"
   },
   "dependency-check": {
     "ignore": [
@@ -100,7 +100,7 @@
     "mocha-webpack": "^2.0.0-beta.0",
     "moment": "^2.10.6",
     "mongodb-connection-model": "^14.4.0",
-    "mongodb-data-service": "^16.1.1",
+    "mongodb-data-service": "^16.1.2",
     "mongodb-js-precommit": "^2.0.0",
     "mongodb-shell-to-url": "^0.1.0",
     "node-loader": "^0.6.0",
