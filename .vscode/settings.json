@@ -9,5 +9,6 @@
   "search.exclude": {
     "coverage": true,
     ".nyc_output": true
-  }
+  },
+  "prettier.arrowParens": "always"
 }

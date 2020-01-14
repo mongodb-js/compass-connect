@@ -1,6 +1,6 @@
 const webpackConfig = require('./config/webpack.karma.config');
 
-module.exports = config => {
+module.exports = (config) => {
   config.set({
     basePath: '',
     singleRun: true,
