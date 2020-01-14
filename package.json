@@ -5,6 +5,10 @@
   "apiVersion": "3.0.0",
   "description": "Connection Screen Plugin that supports Compass",
   "main": "lib/index.js",
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/mongodb-js/compass-connect.git"
+  },
   "scripts": {
     "clean": "rimraf lib",
     "precompile": "npm run clean",
@@ -16,7 +20,6 @@
     "test:watch": "cross-env NODE_ENV=test mocha-webpack \"./src/**/*.spec.js\" --watch",
     "test:karma": "npm run prestart && cross-env NODE_ENV=test karma start",
     "cover": "nyc npm run test",
-    "ci": "npm run cover && npm run test:karma && npm run compile && npm run check",
     "check": "mongodb-js-precommit './src/**/*{.js,.jsx}' './test/**/*.js' './electron/**/*.js' './config/**/*{.js,.jsx}'",
     "link-plugin": "./scripts/link.sh",
     "unlink-plugin": "./scripts/unlink.sh",
@@ -132,12 +135,6 @@
     "webpack-sources": "1.0.1"
   },
   "dependencies": {
-    "lodash.debounce": "^4.0.8",
-    "lodash.find": "^4.6.0",
-    "lodash.foreach": "^4.5.0",
-    "lodash.isempty": "^4.4.0",
-    "lodash.map": "^4.6.0",
-    "lodash.omit": "^4.5.0",
-    "lodash.sortby": "^4.7.0"
+    "lodash": "^4.17.15"
   }
 }
