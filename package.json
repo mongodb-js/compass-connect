@@ -108,7 +108,7 @@
     "mongodb-js-precommit": "^2.0.0",
     "mongodb-shell-to-url": "^0.1.0",
     "node-loader": "^0.6.0",
-    "nyc": "^14.1.1",
+    "nyc": "^15.0.0",
     "peer-deps-externals-webpack-plugin": "^1.0.2",
     "postcss-loader": "^2.0.6",
     "prop-types": "^15.5.8",
