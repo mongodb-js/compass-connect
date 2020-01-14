@@ -27,7 +27,7 @@ before_script:
     eval $(/usr/bin/gnome-keyring-daemon --components=secrets --start);
     /usr/bin/python -c "import gnomekeyring;gnomekeyring.create_sync('login', '');";
 script:
-  - npm run check
   - npm run cover
   - npm run test:karma
+  - npm run check
 cache: npm
