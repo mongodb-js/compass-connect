@@ -16,7 +16,8 @@ class FormActions extends React.Component {
     errorMessage: PropTypes.string,
     syntaxErrorMessage: PropTypes.string,
     hasUnsavedChanges: PropTypes.bool,
-    viewType: PropTypes.string
+    viewType: PropTypes.string,
+    isURIEditable: PropTypes.bool
   };
 
   /**
@@ -49,6 +50,17 @@ class FormActions extends React.Component {
   onChangesDiscarded(evt) {
     evt.preventDefault();
     Actions.onChangesDiscarded();
+  }
+
+  /**
+   * Shows an input to edit URI.
+   *
+   * @param {Object} evt - evt.
+   */
+  onEditURIClicked(evt) {
+    evt.preventDefault();
+    evt.stopPropagation();
+    Actions.onEditURIClicked();
   }
 
   /**
@@ -141,6 +153,24 @@ class FormActions extends React.Component {
   };
 
   /**
+   * Renders "Edit" button.
+   *
+   * @returns {React.Component}
+   */
+  renderEditURI = () => {
+    return (
+      <button
+        type="submit"
+        name="editUrl"
+        className="btn btn-sm btn-default"
+        onClick={this.onEditURIClicked.bind(this)}
+      >
+        Edit
+      </button>
+    );
+  };
+
+  /**
    * Renders connect or disconnect button depending on state.
    *
    * @returns {React.Component}
@@ -148,6 +178,7 @@ class FormActions extends React.Component {
   renderConnectButtons() {
     return (
       <div className={classnames(styles.buttons)}>
+        {this.props.isURIEditable ? null : this.renderEditURI()}
         {this.props.isConnected
           ? this.renderDisconnect()
           : this.renderConnect()}

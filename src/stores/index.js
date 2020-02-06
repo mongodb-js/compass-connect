@@ -73,7 +73,7 @@ const Store = Reflux.createStore({
   init() {
     this.state.fetchedConnections.fetch({
       success: () => {
-        this.state.fetchedConnections.forEach(item => {
+        this.state.fetchedConnections.forEach((item) => {
           this.state.connections[item._id] = { ...item._values };
         });
         this.trigger(this.state);
@@ -91,7 +91,7 @@ const Store = Reflux.createStore({
   onActivated(appRegistry) {
     const role = appRegistry.getRole(EXTENSION) || [];
 
-    forEach(role, extension => extension(this));
+    forEach(role, (extension) => extension(this));
 
     this.StatusActions = appRegistry.getAction('Status.Actions');
     this.appRegistry = appRegistry;
@@ -127,6 +127,7 @@ const Store = Reflux.createStore({
       isPortChanged: false,
       isModalVisible: false,
       isMessageVisible: false,
+      isURIEditable: true,
       savedMessage: 'Saved to favorites'
     };
   },
@@ -180,7 +181,7 @@ const Store = Reflux.createStore({
         'Invalid schema, expected `mongodb` or `mongodb+srv`'
       );
     } else {
-      Connection.from(customUrl, error => {
+      Connection.from(customUrl, (error) => {
         if (error) {
           this._setSyntaxErrorMessage(error.message);
         } else {
@@ -404,7 +405,7 @@ const Store = Reflux.createStore({
    */
   onDeleteConnectionClicked(connection) {
     const toDestrioy = this.state.fetchedConnections.find(
-      item => item._id === connection._id
+      (item) => item._id === connection._id
     );
 
     toDestrioy.destroy({
@@ -428,16 +429,16 @@ const Store = Reflux.createStore({
    */
   onDeleteConnectionsClicked() {
     const recentsKeys = Object.keys(this.state.connections).filter(
-      key => !this.state.connections[key].isFavorite
+      (key) => !this.state.connections[key].isFavorite
     );
     const recentsLength = recentsKeys.length;
     let index = 1;
 
-    recentsKeys.forEach(key => {
+    recentsKeys.forEach((key) => {
       this.state.connections = this._removeFromCollection(key);
 
       const toDestrioy = this.state.fetchedConnections.find(
-        item => item._id === key
+        (item) => item._id === key
       );
 
       toDestrioy.destroy({
@@ -471,6 +472,15 @@ const Store = Reflux.createStore({
         this.dataService = undefined;
       });
     }
+  },
+
+  /**
+   * Makes URI editable.
+   */
+  onEditURIClicked() {
+    this.state.isURIEditable = true;
+
+    this.trigger(this.state);
   },
 
   /**
@@ -514,6 +524,7 @@ const Store = Reflux.createStore({
     this.trigger(this.state);
 
     this.setState({
+      isURIEditable: false,
       isValid: true,
       isConnected: false,
       errorMessage: null,
@@ -590,6 +601,7 @@ const Store = Reflux.createStore({
     this.state.viewType = 'connectionString';
     this.state.savedMessage = 'Saved to favorites';
     this.state.currentConnection = new Connection();
+    this.state.isURIEditable = true;
     this._clearForm();
     this.trigger(this.state);
   },
@@ -796,7 +808,7 @@ const Store = Reflux.createStore({
    * Clears authentication fields.
    */
   _clearAuthFields() {
-    AUTH_FIELDS.forEach(field => {
+    AUTH_FIELDS.forEach((field) => {
       this.state.currentConnection[field] = undefined;
     });
   },
@@ -805,7 +817,7 @@ const Store = Reflux.createStore({
    * Clears ssl fields.
    */
   _clearSSLFields() {
-    SSL_FIELDS.forEach(field => {
+    SSL_FIELDS.forEach((field) => {
       this.state.currentConnection[field] = undefined;
     });
   },
@@ -814,7 +826,7 @@ const Store = Reflux.createStore({
    * Clears SSH tunnel fields.
    */
   _clearSSHTunnelFields() {
-    SSH_TUNNEL_FIELDS.forEach(field => {
+    SSH_TUNNEL_FIELDS.forEach((field) => {
       this.state.currentConnection[field] = undefined;
     });
   },
@@ -849,15 +861,17 @@ const Store = Reflux.createStore({
   _saveRecent(currentConnection) {
     // Keeps 10 recent connections and deletes rest of them.
     let recents = Object.keys(this.state.connections).filter(
-      key => !this.state.connections[key].isFavorite
+      (key) => !this.state.connections[key].isFavorite
     );
+
+    this.state.isURIEditable = false;
 
     if (recents.length === 10) {
       recents = sortBy(recents, 'lastUsed');
       this.state.connections = this._removeFromCollection(recents[9]);
 
       const toDestrioy = this.state.fetchedConnections.find(
-        item => item._id === recents[9]
+        (item) => item._id === recents[9]
       );
 
       toDestrioy.destroy({
@@ -898,6 +912,7 @@ const Store = Reflux.createStore({
         this.state.errorMessage = null;
         this.state.syntaxErrorMessage = null;
         this.state.hasUnsavedChanges = false;
+        this.state.isURIEditable = false;
 
         currentConnection.lastUsed = new Date();
 
@@ -951,6 +966,7 @@ const Store = Reflux.createStore({
 
     currentConnection.isFavorite = true;
     this.state.hasUnsavedChanges = false;
+    this.state.isURIEditable = false;
 
     if (this.state.viewType === 'connectionString') {
       Connection.from(this.state.customUrl, (error, parsedConnection) => {

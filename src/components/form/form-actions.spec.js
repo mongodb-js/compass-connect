@@ -8,38 +8,78 @@ describe('FormActions [Component]', () => {
   context('when no error is present', () => {
     context('when is not connected', () => {
       context('when it is a connection string view', () => {
-        const connection = { name: 'myconnection' };
-        const isConnected = false;
-        const viewType = 'connectionString';
-        let component;
+        context('when URI is editable', () => {
+          const connection = { name: 'myconnection' };
+          const isConnected = false;
+          const viewType = 'connectionString';
+          const isURIEditable = true;
+          let component;
 
-        beforeEach(() => {
-          component = mount(
-            <FormActions
-              currentConnection={connection}
-              isConnected={isConnected}
-              viewType={viewType}
-              isValid
-            />
-          );
+          beforeEach(() => {
+            component = mount(
+              <FormActions
+                currentConnection={connection}
+                isConnected={isConnected}
+                viewType={viewType}
+                isURIEditable={isURIEditable}
+                isValid
+              />
+            );
+          });
+
+          afterEach(() => {
+            component = null;
+          });
+
+          it('renders the wrapper div', () => {
+            expect(component.find(`.${styles['form-group']}`)).to.be.present();
+          });
+
+          it('does not render any message', () => {
+            const classname = `.${styles['connection-message-container']}`;
+
+            expect(component.find(classname)).to.be.blank();
+          });
+
+          it('renders the connect button', () => {
+            expect(component.find('button[name="connect"]')).to.be.present();
+          });
+
+          it('does not render an edit button', () => {
+            const editButton = component.find('button[name="editUrl"]');
+
+            expect(editButton).to.be.not.present();
+          });
         });
 
-        afterEach(() => {
-          component = null;
-        });
+        context('when URI is not editable', () => {
+          const connection = { name: 'myconnection' };
+          const isConnected = false;
+          const viewType = 'connectionString';
+          const isURIEditable = false;
+          let component;
 
-        it('renders the wrapper div', () => {
-          expect(component.find(`.${styles['form-group']}`)).to.be.present();
-        });
+          beforeEach(() => {
+            component = mount(
+              <FormActions
+                currentConnection={connection}
+                isConnected={isConnected}
+                viewType={viewType}
+                isURIEditable={isURIEditable}
+                isValid
+              />
+            );
+          });
 
-        it('does not render any message', () => {
-          const classname = `.${styles['connection-message-container']}`;
+          afterEach(() => {
+            component = null;
+          });
 
-          expect(component.find(classname)).to.be.blank();
-        });
+          it('renders an edit button', () => {
+            const editButton = component.find('button[name="editUrl"]');
 
-        it('renders the connect button', () => {
-          expect(component.find('button[name="connect"]')).to.be.present();
+            expect(editButton).to.be.present();
+          });
         });
       });
 

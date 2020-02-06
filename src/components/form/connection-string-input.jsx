@@ -22,7 +22,10 @@ const CONNECTION_STRING_LINK =
 class ConnectionStringInput extends React.PureComponent {
   static displayName = 'DriverUrlInput';
 
-  static propTypes = { customUrl: PropTypes.string };
+  static propTypes = {
+    customUrl: PropTypes.string,
+    isURIEditable: PropTypes.bool
+  };
 
   constructor(props) {
     super(props);
@@ -58,26 +61,57 @@ class ConnectionStringInput extends React.PureComponent {
    * @returns {String} customUrl.
    */
   getCustomUrl() {
-    return this.props.customUrl;
+    if (this.props.isURIEditable) {
+      return this.props.customUrl;
+    }
+
+    const re = /^(?:(?<prefix>[^:\/?#\s]+):\/{2})?(?:(?<auth>[^@\/?#\s]+)@)?(?<db>[^\/?#\s]+)?(?:\/)?(?<query>.*)$/;
+    const matchObj = re.exec(this.props.customUrl);
+    const { prefix = '', auth, db, query = '' } = matchObj.groups;
+    let safeAuth = '';
+
+    if (auth && auth.includes(':')) {
+      safeAuth = `${auth.split(':')[0]}:*****@`;
+    } else if (auth) {
+      safeAuth = `${auth}@`;
+    }
+
+    return `${prefix}://${safeAuth}${db}${query ? `/${query}` : ''}`;
   }
 
   render() {
+    const className = classnames({
+      [styles['form-control']]: true,
+      [styles['disabled-uri']]: !this.props.isURIEditable
+    });
+    const title = this.props.isURIEditable ? (
+      <span>
+        Paste your connection string (SRV or Standard{' '}
+        <InfoSprinkle
+          helpLink={CONNECTION_STRING_LINK}
+          onClickHandler={this.onExternalLinkClicked.bind(this)}
+        />
+        )
+      </span>
+    ) : (
+      <span>
+        Click edit to modify your connection string (SRV or Standard{' '}
+        <InfoSprinkle
+          helpLink={CONNECTION_STRING_LINK}
+          onClickHandler={this.onExternalLinkClicked.bind(this)}
+        />
+        )
+      </span>
+    );
+
     return (
       <div className={classnames(styles['connect-string-item'])}>
-        <label>
-          <span>
-            Paste your connection string (SRV or Standard{' '}
-            <InfoSprinkle
-              helpLink={CONNECTION_STRING_LINK}
-              onClickHandler={this.onExternalLinkClicked.bind(this)}
-            />
-            )
-          </span>
-        </label>
+        <label>{title}</label>
         <input
+          disabled={!this.props.isURIEditable}
           name="connectionString"
           placeholder={PLACEHOLDER}
-          className={classnames(styles['form-control'])}
+          className={className}
           value={this.getCustomUrl()}
           onChange={this.onCustomUrlChanged.bind(this)}
         />
