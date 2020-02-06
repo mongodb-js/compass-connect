@@ -53,7 +53,7 @@ describe('ConnectionStringInput [Component]', () => {
         component = null;
       });
 
-      it('renders an editable connection string input', () => {
+      it('renders a read-only connection string', () => {
         const connectionString = component.find(
           'input[name="connectionString"]'
         );

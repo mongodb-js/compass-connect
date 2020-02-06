@@ -19,7 +19,8 @@ class ConnectionString extends React.Component {
     syntaxErrorMessage: PropTypes.string,
     hasUnsavedChanges: PropTypes.bool,
     viewType: PropTypes.string,
-    isURIEditable: PropTypes.bool
+    isURIEditable: PropTypes.bool,
+    isSavedConnection: PropTypes.bool
   };
 
   render() {
@@ -43,6 +44,7 @@ class ConnectionString extends React.Component {
           hasUnsavedChanges={this.props.hasUnsavedChanges}
           viewType={this.props.viewType}
           isURIEditable={this.props.isURIEditable}
+          isSavedConnection={this.props.isSavedConnection}
         />
       </form>
     );

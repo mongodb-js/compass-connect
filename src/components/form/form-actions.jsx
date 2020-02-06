@@ -17,7 +17,8 @@ class FormActions extends React.Component {
     syntaxErrorMessage: PropTypes.string,
     hasUnsavedChanges: PropTypes.bool,
     viewType: PropTypes.string,
-    isURIEditable: PropTypes.bool
+    isURIEditable: PropTypes.bool,
+    isSavedConnection: PropTypes.bool
   };
 
   /**
@@ -53,7 +54,7 @@ class FormActions extends React.Component {
   }
 
   /**
-   * Shows an input to edit URI.
+   * Shows an editable URI input.
    *
    * @param {Object} evt - evt.
    */
@@ -64,7 +65,7 @@ class FormActions extends React.Component {
   }
 
   /**
-   * Makes URI input read-only.
+   * Shows a read-only URI.
    *
    * @param {Object} evt - evt.
    */
@@ -164,7 +165,7 @@ class FormActions extends React.Component {
   };
 
   /**
-   * Renders "Edit" button.
+   * Renders the "Edit" button.
    *
    * @returns {React.Component}
    */
@@ -182,21 +183,23 @@ class FormActions extends React.Component {
   };
 
   /**
-   * Renders "Hide" button.
+   * Renders the "Hide" button.
    *
    * @returns {React.Component}
    */
   renderHideURI = () => {
-    return (
-      <button
-        type="submit"
-        name="hideUrl"
-        className="btn btn-sm btn-default"
-        onClick={this.onHideURIClicked.bind(this)}
-      >
-        Hide
-      </button>
-    );
+    if (this.props.isSavedConnection) {
+      return (
+        <button
+          type="submit"
+          name="hideUrl"
+          className="btn btn-sm btn-default"
+          onClick={this.onHideURIClicked.bind(this)}
+        >
+          Hide
+        </button>
+      );
+    }
   };
 
   /**

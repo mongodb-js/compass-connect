@@ -129,6 +129,7 @@ const Store = Reflux.createStore({
       isMessageVisible: false,
       isURIEditable: true,
       isEditURIConfirm: false,
+      isSavedConnection: false,
       savedMessage: 'Saved to favorites'
     };
   },
@@ -550,6 +551,7 @@ const Store = Reflux.createStore({
 
     this.setState({
       isURIEditable: false,
+      isSavedConnection: true,
       isValid: true,
       isConnected: false,
       errorMessage: null,
@@ -627,6 +629,7 @@ const Store = Reflux.createStore({
     this.state.savedMessage = 'Saved to favorites';
     this.state.currentConnection = new Connection();
     this.state.isURIEditable = true;
+    this.state.isSavedConnection = false;
     this._clearForm();
     this.trigger(this.state);
   },
