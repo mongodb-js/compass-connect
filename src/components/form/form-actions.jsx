@@ -64,6 +64,17 @@ class FormActions extends React.Component {
   }
 
   /**
+   * Makes URI input read-only.
+   *
+   * @param {Object} evt - evt.
+   */
+  onHideURIClicked(evt) {
+    evt.preventDefault();
+    evt.stopPropagation();
+    Actions.onHideURIClicked();
+  }
+
+  /**
    * Updates favorite attributes if a favorite already exists.
    *
    * @param {Object} evt - evt.
@@ -171,6 +182,24 @@ class FormActions extends React.Component {
   };
 
   /**
+   * Renders "Hide" button.
+   *
+   * @returns {React.Component}
+   */
+  renderHideURI = () => {
+    return (
+      <button
+        type="submit"
+        name="hideUrl"
+        className="btn btn-sm btn-default"
+        onClick={this.onHideURIClicked.bind(this)}
+      >
+        Hide
+      </button>
+    );
+  };
+
+  /**
    * Renders connect or disconnect button depending on state.
    *
    * @returns {React.Component}
@@ -178,7 +207,7 @@ class FormActions extends React.Component {
   renderConnectButtons() {
     return (
       <div className={classnames(styles.buttons)}>
-        {this.props.isURIEditable ? null : this.renderEditURI()}
+        {this.props.isURIEditable ? this.renderHideURI() : this.renderEditURI()}
         {this.props.isConnected
           ? this.renderDisconnect()
           : this.renderConnect()}

@@ -2,8 +2,6 @@ import React from 'react';
 import { mount } from 'enzyme';
 import ConnectionStringInput from './connection-string-input';
 
-import styles from '../connect.less';
-
 describe('ConnectionStringInput [Component]', () => {
   context('when input was not changed', () => {
     context('when URI is editable', () => {

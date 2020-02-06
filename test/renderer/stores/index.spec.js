@@ -1258,18 +1258,12 @@ describe('Store', () => {
       Store.state.connections = {};
     });
 
-    afterEach((done) => {
-      Store.onDeleteConnectionClicked(
-        Store.state.connections[Store.state.currentConnection._id]
-      );
-      done();
-    });
-
     it('creates a new favorite in the store', (done) => {
       const unsubscribe = Store.listen((state) => {
+        unsubscribe();
+
         const currentId = state.currentConnection._id;
 
-        unsubscribe();
         expect(state.currentConnection.isFavorite).to.equal(true);
         expect(state.connections[currentId]._id).to.equal(currentId);
         done();
@@ -1292,10 +1286,11 @@ describe('Store', () => {
           Store.state.currentConnection = new Connection();
         });
 
-        it('sets the database name to admin', () => {
+        it('sets the database name to admin', (done) => {
           expect(Store.state.currentConnection.mongodbDatabaseName).to.equal(
             'admin'
           );
+          done();
         });
       });
     });
@@ -1311,10 +1306,11 @@ describe('Store', () => {
           Store.state.currentConnection = new Connection();
         });
 
-        it('sets the service name to mongodb', () => {
+        it('sets the service name to mongodb', (done) => {
           expect(Store.state.currentConnection.kerberosServiceName).to.equal(
             'mongodb'
           );
+          done();
         });
       });
     });
@@ -1390,20 +1386,13 @@ describe('Store', () => {
         Store.state.currentConnection = connection;
       });
 
-      afterEach((done) => {
-        Store.onDeleteConnectionClicked(
-          Store.state.connections[Store.state.currentConnection._id]
-        );
-        done();
-      });
-
       it('selects a copy as current connection with new name and color', (done) => {
         const unsubscribe = Store.listen((state) => {
+          unsubscribe();
+
           const copyId = Object.keys(state.connections).find(
             (key) => !Object.keys(connections).includes(key)
           );
-
-          unsubscribe();
 
           expect(Object.keys(state.connections).length).to.equal(2);
           expect(state.connections[copyId].name).to.equal(
@@ -1454,20 +1443,20 @@ describe('Store', () => {
         Store.state.currentConnection = currentConnection;
       });
 
-      afterEach((done) => {
+      afterEach(() => {
         Store.onDeleteConnectionClicked(
           Store.state.connections[Store.state.currentConnection._id]
         );
-        done();
       });
 
       it('selects a copy as current connection with new name and color', (done) => {
         const unsubscribe = Store.listen((state) => {
+          unsubscribe();
+
           const copyId = Object.keys(state.connections).find(
             (key) => !Object.keys(connections).includes(key)
           );
 
-          unsubscribe();
           expect(Object.keys(state.connections).length).to.equal(3);
           expect(state.connections[copyId].name).to.equal(
             `${connectionToCopy.name} (copy)`
@@ -1520,10 +1509,11 @@ describe('Store', () => {
 
         it('discards changes', (done) => {
           const unsubscribe = Store.listen((state) => {
+            unsubscribe();
+
             const driverUrl =
               'mongodb://server.example.com:27017/?readPreference=primary&ssl=false';
 
-            unsubscribe();
             expect(state.currentConnection.hostname).to.equal(
               favorite.hostname
             );
@@ -1556,10 +1546,11 @@ describe('Store', () => {
 
         it('discards changes', (done) => {
           const unsubscribe = Store.listen((state) => {
+            unsubscribe();
+
             const driverUrl =
               'mongodb://server.example.com:27001/?readPreference=primary&ssl=false';
 
-            unsubscribe();
             expect(state.currentConnection.hostname).to.equal(recent.hostname);
             expect(state.customUrl).to.equal(driverUrl);
             done();
@@ -1793,17 +1784,72 @@ describe('Store', () => {
   describe('#onEditURIClicked', () => {
     beforeEach(() => {
       Store.state.isURIEditable = false;
+      Store.state.isEditURIConfirm = false;
     });
 
-    it('updates properties of the saved connection', (done) => {
+    it('shows a confirmation modal', (done) => {
       const unsubscribe = Store.listen((state) => {
         unsubscribe();
-        expect(Object.keys(state.connections).length).to.equal(1);
-        expect(state.isURIEditable).to.equal(true);
+        expect(state.isURIEditable).to.equal(false);
+        expect(state.isEditURIConfirm).to.equal(true);
         done();
       });
 
       Actions.onEditURIClicked();
+    });
+  });
+
+  describe('#onEditURIConfirmed', () => {
+    beforeEach(() => {
+      Store.state.isURIEditable = false;
+      Store.state.isEditURIConfirm = true;
+    });
+
+    it('makes a connection string input editable', (done) => {
+      const unsubscribe = Store.listen((state) => {
+        unsubscribe();
+        expect(state.isURIEditable).to.equal(true);
+        expect(state.isEditURIConfirm).to.equal(false);
+        done();
+      });
+
+      Actions.onEditURIConfirmed();
+    });
+  });
+
+  describe('#onEditURICanceled', () => {
+    beforeEach(() => {
+      Store.state.isURIEditable = false;
+      Store.state.isEditURIConfirm = true;
+    });
+
+    it('hides a confirmation modal', (done) => {
+      const unsubscribe = Store.listen((state) => {
+        unsubscribe();
+        expect(state.isURIEditable).to.equal(false);
+        expect(state.isEditURIConfirm).to.equal(false);
+        done();
+      });
+
+      Actions.onEditURICanceled();
+    });
+  });
+
+  describe('#onHideURIClicked', () => {
+    beforeEach(() => {
+      Store.state.isURIEditable = true;
+      Store.state.isEditURIConfirm = false;
+    });
+
+    it('makes URI read-only', (done) => {
+      const unsubscribe = Store.listen((state) => {
+        unsubscribe();
+        expect(state.isURIEditable).to.equal(false);
+        expect(state.isEditURIConfirm).to.equal(false);
+        done();
+      });
+
+      Actions.onHideURIClicked();
     });
   });
 });

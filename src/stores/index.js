@@ -128,6 +128,7 @@ const Store = Reflux.createStore({
       isModalVisible: false,
       isMessageVisible: false,
       isURIEditable: true,
+      isEditURIConfirm: false,
       savedMessage: 'Saved to favorites'
     };
   },
@@ -374,6 +375,14 @@ const Store = Reflux.createStore({
   },
 
   /**
+   * Makes URI read-only again.
+   */
+  onHideURIClicked() {
+    this.state.isURIEditable = false;
+    this.trigger(this.state);
+  },
+
+  /**
    * Creates a favorite from the current connection.
    *
    * @param {String} name - The favorite name.
@@ -475,11 +484,27 @@ const Store = Reflux.createStore({
   },
 
   /**
-   * Makes URI editable.
+   * Hides a modal with confirmation to proceed.
+   */
+  onEditURICanceled() {
+    this.state.isEditURIConfirm = false;
+    this.trigger(this.state);
+  },
+
+  /**
+   * Shows a modal with confirmation to proceed.
    */
   onEditURIClicked() {
-    this.state.isURIEditable = true;
+    this.state.isEditURIConfirm = true;
+    this.trigger(this.state);
+  },
 
+  /**
+   * Makes URI editable.
+   */
+  onEditURIConfirmed() {
+    this.state.isURIEditable = true;
+    this.state.isEditURIConfirm = false;
     this.trigger(this.state);
   },
 

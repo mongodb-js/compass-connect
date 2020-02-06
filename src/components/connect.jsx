@@ -8,6 +8,7 @@ import Help from './form/help';
 import Actions from 'actions';
 import classnames from 'classnames';
 import IsFavoritePill from './form//is-favorite-pill';
+import ConfirmEditConnectionString from './modal/confirm-edit-connection-string';
 
 import styles from './connect.less';
 
@@ -20,7 +21,8 @@ class Connect extends React.Component {
     viewType: PropTypes.string,
     isModalVisible: PropTypes.bool,
     isMessageVisible: PropTypes.bool,
-    savedMessage: PropTypes.string
+    savedMessage: PropTypes.string,
+    isEditURIConfirm: PropTypes.bool
   };
 
   componentDidMount() {
@@ -138,6 +140,9 @@ class Connect extends React.Component {
             </div>
             <Help {...this.props} />
           </div>
+          <ConfirmEditConnectionString
+            isEditURIConfirm={this.props.isEditURIConfirm}
+          />
         </div>
       </div>
     );
