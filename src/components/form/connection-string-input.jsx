@@ -76,7 +76,7 @@ class ConnectionStringInput extends React.PureComponent {
       safeAuth = `${auth}@`;
     }
 
-    return `${prefix}://${safeAuth}${db}${query}`;
+    return `${prefix}://${safeAuth}${db}/${query}`;
   }
 
   render() {

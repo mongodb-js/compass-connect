@@ -22,28 +22,16 @@ describe('ConnectionStringInput [Component]', () => {
         component = null;
       });
 
-      it('renders a connection string input with no value', () => {
-        expect(component.find('input[name="connectionString"]')).to.have.value(
-          ''
-        );
-      });
-
-      it('renders a connection string input with placeholder', () => {
+      it('renders an editable connection string input with placeholder', () => {
         const placeholder =
           'e.g. mongodb+srv://username:password@cluster0-jtpxd.mongodb.net/admin';
-        const connectionString = component
-          .find('input[name="connectionString"]')
-          .prop('placeholder');
-
-        expect(connectionString).to.equal(placeholder);
-      });
-
-      it('renders an editable connection string input', () => {
         const connectionString = component.find(
           'input[name="connectionString"]'
         );
 
+        expect(connectionString).to.have.value('');
         expect(connectionString.hasClass('disabled')).to.equal(false);
+        expect(connectionString.prop('placeholder')).to.equal(placeholder);
       });
     });
 
