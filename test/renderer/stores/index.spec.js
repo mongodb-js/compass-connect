@@ -5,12 +5,13 @@ import Actions from 'actions';
 import Store from 'stores';
 
 describe('Store', () => {
-  afterEach(() => {
+  beforeEach(() => {
     Store.state = Store.getInitialState();
   });
 
   describe('#getInitialState', () => {
     it('initializes with an empty current connection', () => {
+      expect(Store.state.currentConnection).to.exist;
       expect(Store.state.currentConnection.username).to.equal('');
       expect(Store.state.currentConnection.hostname).to.equal('localhost');
       expect(Store.state.currentConnection.port).to.equal(27017);
@@ -32,7 +33,7 @@ describe('Store', () => {
       ExtActions.onKerberosPrincipalChanged.listen(principal);
     };
 
-    before(() => {
+    beforeEach(() => {
       const registry = new AppRegistry();
 
       registry.registerRole(Store.EXTENSION, extension);
@@ -42,6 +43,7 @@ describe('Store', () => {
     it('binds the store context to the extension', (done) => {
       const unsubscribe = Store.listen((state) => {
         unsubscribe();
+        expect(state.currentConnection).to.exist;
         expect(state.currentConnection.kerberosPrincipal).to.equal('testing');
         done();
       });
@@ -62,6 +64,7 @@ describe('Store', () => {
       it('updates the hostname and id in the current connection model', (done) => {
         const unsubscribe = Store.listen((state) => {
           unsubscribe();
+          expect(state.currentConnection).to.exist;
           expect(state.currentConnection.mongodbUsername).to.equal(undefined);
           expect(state.currentConnection._id).to.not.equal(connection._id);
           expect(state.isURIEditable).to.equal(true);
@@ -73,7 +76,7 @@ describe('Store', () => {
     });
 
     context('when the form is not valid', () => {
-      before(() => {
+      beforeEach(() => {
         Store.state.isValid = false;
       });
 
@@ -231,6 +234,7 @@ describe('Store', () => {
     it('updates the hostname in the current connection model', (done) => {
       const unsubscribe = Store.listen((state) => {
         unsubscribe();
+        expect(state.currentConnection).to.exist;
         expect(state.currentConnection.hostname).to.equal('myserver');
         done();
       });
@@ -242,6 +246,7 @@ describe('Store', () => {
       it('updates the hostname and sets the systemca ssl option', (done) => {
         const unsubscribe = Store.listen((state) => {
           unsubscribe();
+          expect(state.currentConnection).to.exist;
           expect(state.currentConnection.hostname).to.equal('mongodb.net');
           expect(state.currentConnection.sslMethod).to.equal('SYSTEMCA');
           done();
@@ -255,6 +260,7 @@ describe('Store', () => {
       it('trims the whitespace', (done) => {
         const unsubscribe = Store.listen((state) => {
           unsubscribe();
+          expect(state.currentConnection).to.exist;
           expect(state.currentConnection.hostname).to.equal('example.com');
           done();
         });
@@ -272,6 +278,7 @@ describe('Store', () => {
     it('updates the srv record property', (done) => {
       const unsubscribe = Store.listen((state) => {
         unsubscribe();
+        expect(state.currentConnection).to.exist;
         expect(state.currentConnection.isSrvRecord).to.equal(true);
         done();
       });
@@ -283,6 +290,7 @@ describe('Store', () => {
     it('updates the port in the current connection model', (done) => {
       const unsubscribe = Store.listen((state) => {
         unsubscribe();
+        expect(state.currentConnection).to.exist;
         expect(state.currentConnection.port).to.equal('27018');
         done();
       });
@@ -294,6 +302,7 @@ describe('Store', () => {
       it('trims the whitespace', (done) => {
         const unsubscribe = Store.listen((state) => {
           unsubscribe();
+          expect(state.currentConnection).to.exist;
           expect(state.currentConnection.port).to.equal('27018');
           done();
         });
@@ -307,6 +316,7 @@ describe('Store', () => {
     it('updates the replica set name in the current connection model', (done) => {
       const unsubscribe = Store.listen((state) => {
         unsubscribe();
+        expect(state.currentConnection).to.exist;
         expect(state.currentConnection.replicaSet).to.equal('myreplicaset');
         done();
       });
@@ -318,6 +328,7 @@ describe('Store', () => {
       it('trims the whitespace', (done) => {
         const unsubscribe = Store.listen((state) => {
           unsubscribe();
+          expect(state.currentConnection).to.exist;
           expect(state.currentConnection.replicaSet).to.equal('myreplicaset');
           done();
         });
@@ -331,6 +342,7 @@ describe('Store', () => {
     it('updates the read preference in the current connection model', (done) => {
       const unsubscribe = Store.listen((state) => {
         unsubscribe();
+        expect(state.currentConnection).to.exist;
         expect(state.currentConnection.readPreference).to.equal(
           'primaryPreferred'
         );
@@ -345,6 +357,7 @@ describe('Store', () => {
     it('updates the ssh method in the current connection model', (done) => {
       const unsubscribe = Store.listen((state) => {
         unsubscribe();
+        expect(state.currentConnection).to.exist;
         expect(state.currentConnection.sshTunnel).to.equal('IDENTITY_FILE');
         done();
       });
@@ -365,6 +378,7 @@ describe('Store', () => {
       it('clears out all previous values', (done) => {
         const unsubscribe = Store.listen((state) => {
           unsubscribe();
+          expect(state.currentConnection).to.exist;
           expect(state.currentConnection.sshTunnel).to.equal('IDENTITY_FILE');
           expect(state.currentConnection.sshTunnelHostname).to.equal(undefined);
           expect(state.currentConnection.sshTunnelPort).to.equal(22);
@@ -391,6 +405,7 @@ describe('Store', () => {
     it('updates the ssl method in the current connection model', (done) => {
       const unsubscribe = Store.listen((state) => {
         unsubscribe();
+        expect(state.currentConnection).to.exist;
         expect(state.currentConnection.sslMethod).to.equal('SYSTEMCA');
         done();
       });
@@ -409,6 +424,7 @@ describe('Store', () => {
       it('clears out all previous values', (done) => {
         const unsubscribe = Store.listen((state) => {
           unsubscribe();
+          expect(state.currentConnection).to.exist;
           expect(state.currentConnection.sslMethod).to.equal('SYSTEMCA');
           expect(state.currentConnection.sslCert).to.equal(undefined);
           expect(state.currentConnection.sslKey).to.equal(undefined);
@@ -426,6 +442,7 @@ describe('Store', () => {
     it('updates the authentication method in the current connection model', (done) => {
       const unsubscribe = Store.listen((state) => {
         unsubscribe();
+        expect(state.currentConnection).to.exist;
         expect(state.currentConnection.authStrategy).to.equal('MONGODB');
         done();
       });
@@ -449,6 +466,7 @@ describe('Store', () => {
       it('clears out all previous values', (done) => {
         const unsubscribe = Store.listen((state) => {
           unsubscribe();
+          expect(state.currentConnection).to.exist;
           expect(state.currentConnection.authStrategy).to.equal('MONGODB');
           expect(state.currentConnection.mongodbUsername).to.equal(undefined);
           expect(state.currentConnection.mongodbPassword).to.equal(undefined);
@@ -475,6 +493,7 @@ describe('Store', () => {
     it('updates the username in the current connection model', (done) => {
       const unsubscribe = Store.listen((state) => {
         unsubscribe();
+        expect(state.currentConnection).to.exist;
         expect(state.currentConnection.mongodbUsername).to.equal('user');
         done();
       });
@@ -487,6 +506,7 @@ describe('Store', () => {
     it('updates the password in the current connection model', (done) => {
       const unsubscribe = Store.listen((state) => {
         unsubscribe();
+        expect(state.currentConnection).to.exist;
         expect(state.currentConnection.mongodbPassword).to.equal('pass');
         done();
       });
@@ -499,6 +519,7 @@ describe('Store', () => {
     it('updates the auth source in the current connection model', (done) => {
       const unsubscribe = Store.listen((state) => {
         unsubscribe();
+        expect(state.currentConnection).to.exist;
         expect(state.currentConnection.mongodbDatabaseName).to.equal(
           'database'
         );
@@ -513,6 +534,7 @@ describe('Store', () => {
     it('updates the ssl ca field in the current connection model', (done) => {
       const unsubscribe = Store.listen((state) => {
         unsubscribe();
+        expect(state.currentConnection).to.exist;
         expect(state.currentConnection.sslCA).to.deep.equal(['file']);
         done();
       });
@@ -525,6 +547,7 @@ describe('Store', () => {
     it('updates the ssl certificate field in the current connection model', (done) => {
       const unsubscribe = Store.listen((state) => {
         unsubscribe();
+        expect(state.currentConnection).to.exist;
         expect(state.currentConnection.sslCert).to.deep.equal(['file']);
         done();
       });
@@ -537,6 +560,7 @@ describe('Store', () => {
     it('updates the ssl private key field in the current connection model', (done) => {
       const unsubscribe = Store.listen((state) => {
         unsubscribe();
+        expect(state.currentConnection).to.exist;
         expect(state.currentConnection.sslKey).to.deep.equal(['file']);
         done();
       });
@@ -549,6 +573,7 @@ describe('Store', () => {
     it('updates the ssl private key password field in the current connection model', (done) => {
       const unsubscribe = Store.listen((state) => {
         unsubscribe();
+        expect(state.currentConnection).to.exist;
         expect(state.currentConnection.sslPass).to.equal('testing');
         done();
       });
@@ -561,6 +586,7 @@ describe('Store', () => {
     it('updates the SSH Tunnel port in the current connection model', (done) => {
       const unsubscribe = Store.listen((state) => {
         unsubscribe();
+        expect(state.currentConnection).to.exist;
         expect(state.currentConnection.sshTunnelPort).to.equal('5000');
         done();
       });
@@ -573,6 +599,7 @@ describe('Store', () => {
     it('updates the SSH Tunnel username in the current connection model', (done) => {
       const unsubscribe = Store.listen((state) => {
         unsubscribe();
+        expect(state.currentConnection).to.exist;
         expect(state.currentConnection.sshTunnelUsername).to.equal('mongodb');
         done();
       });
@@ -585,6 +612,7 @@ describe('Store', () => {
     it('updates the SSH Tunnel hostname in the current connection model', (done) => {
       const unsubscribe = Store.listen((state) => {
         unsubscribe();
+        expect(state.currentConnection).to.exist;
         expect(state.currentConnection.sshTunnelHostname).to.equal('localhost');
         done();
       });
@@ -597,6 +625,7 @@ describe('Store', () => {
     it('updates the SSH Tunnel password in the current connection model', (done) => {
       const unsubscribe = Store.listen((state) => {
         unsubscribe();
+        expect(state.currentConnection).to.exist;
         expect(state.currentConnection.sshTunnelPassword).to.equal('mongodb');
         done();
       });
@@ -609,6 +638,7 @@ describe('Store', () => {
     it('updates the SSH Tunnel passphrase in the current connection model', (done) => {
       const unsubscribe = Store.listen((state) => {
         unsubscribe();
+        expect(state.currentConnection).to.exist;
         expect(state.currentConnection.sshTunnelPassphrase).to.equal('mongodb');
         done();
       });
@@ -621,6 +651,7 @@ describe('Store', () => {
     it('updates the SSH Tunnel identity file in the current connection model', (done) => {
       const unsubscribe = Store.listen((state) => {
         unsubscribe();
+        expect(state.currentConnection).to.exist;
         expect(state.currentConnection.sshTunnelIdentityFile).to.deep.equal([
           'file'
         ]);
@@ -656,6 +687,7 @@ describe('Store', () => {
         it('sets the current connection in the store', (done) => {
           const unsubscribe = Store.listen((state) => {
             unsubscribe();
+            expect(state.currentConnection).to.exist;
             expect(state.currentConnection._id).to.equal(
               favoriteConnection._id
             );
@@ -703,6 +735,7 @@ describe('Store', () => {
         it('sets the current connection in the store', (done) => {
           const unsubscribe = Store.listen((state) => {
             unsubscribe();
+            expect(state.currentConnection).to.exist;
             expect(state.currentConnection._id).to.equal(recentConnection._id);
             expect(state.currentConnection.color).to.equal(undefined);
             expect(state.currentConnection.name).to.equal('Local');
@@ -759,6 +792,7 @@ describe('Store', () => {
         it('sets the current connection in the store', (done) => {
           const unsubscribe = Store.listen((state) => {
             unsubscribe();
+            expect(state.currentConnection).to.exist;
             expect(state.currentConnection._id).to.equal(newFavConnection._id);
             expect(state.currentConnection.color).to.equal(
               newFavConnection.color
@@ -813,6 +847,7 @@ describe('Store', () => {
         it('sets the current connection in the store', (done) => {
           const unsubscribe = Store.listen((state) => {
             unsubscribe();
+            expect(state.currentConnection).to.exist;
             expect(state.currentConnection._id).to.equal(recent._id);
             expect(state.currentConnection.color).to.equal(undefined);
             expect(state.currentConnection.name).to.equal('Local');
@@ -867,6 +902,7 @@ describe('Store', () => {
         it('sets the current connection in the store', (done) => {
           const unsubscribe = Store.listen((state) => {
             unsubscribe();
+            expect(state.currentConnection).to.exist;
             expect(state.currentConnection._id).to.equal(newFavConnection._id);
             expect(state.currentConnection.color).to.equal(
               newFavConnection.color
@@ -923,6 +959,7 @@ describe('Store', () => {
         it('sets the current connection in the store', (done) => {
           const unsubscribe = Store.listen((state) => {
             unsubscribe();
+            expect(state.currentConnection).to.exist;
             expect(state.currentConnection._id).to.equal(newRecent._id);
             expect(state.currentConnection.color).to.equal(undefined);
             expect(state.currentConnection.name).to.equal('Local');
@@ -946,7 +983,7 @@ describe('Store', () => {
   });
 
   describe('#onConnectionFormChanged', () => {
-    before(() => {
+    beforeEach(() => {
       Store.state.syntaxErrorMessage = 'Some syntax error';
     });
 
@@ -966,7 +1003,7 @@ describe('Store', () => {
   describe('#onCustomUrlChanged', () => {
     const customUrl = 'mongodb://localhost/';
 
-    before(() => {
+    beforeEach(() => {
       Store.state.customUrl = '';
     });
 
@@ -1013,6 +1050,7 @@ describe('Store', () => {
               'mongodb://server.example.com:27017/?readPreference=primary&ssl=false';
             const unsubscribe = Store.listen((state) => {
               unsubscribe();
+              expect(state.currentConnection).to.exist;
               expect(state.currentConnection.driverUrl).to.equal(driverUrl);
               done();
             });
@@ -1023,6 +1061,7 @@ describe('Store', () => {
           it('keeps the current connection id', (done) => {
             const unsubscribe = Store.listen((state) => {
               unsubscribe();
+              expect(state.currentConnection).to.exist;
               expect(state.currentConnection._id).to.equal(connection._id);
               done();
             });
@@ -1057,6 +1096,7 @@ describe('Store', () => {
               'mongodb://localhost:27017/?readPreference=primary&ssl=false';
             const unsubscribe = Store.listen((state) => {
               unsubscribe();
+              expect(state.currentConnection).to.exist;
               expect(state.currentConnection.driverUrl).to.equal(driverUrl);
               expect(state.isValid).to.equal(false);
               expect(state.errorMessage).to.equal(null);
@@ -1093,6 +1133,7 @@ describe('Store', () => {
               'mongodb://localhost:27017/?readPreference=primary&ssl=false';
             const unsubscribe = Store.listen((state) => {
               unsubscribe();
+              expect(state.currentConnection).to.exist;
               expect(state.currentConnection.driverUrl).to.equal(driverUrl);
               expect(state.isValid).to.equal(true);
               expect(state.errorMessage).to.equal(null);
@@ -1145,6 +1186,7 @@ describe('Store', () => {
           it('keeps the current connection id', (done) => {
             const unsubscribe = Store.listen((state) => {
               unsubscribe();
+              expect(state.currentConnection).to.exist;
               expect(state.currentConnection._id).to.equal(connection._id);
               done();
             });
@@ -1238,6 +1280,7 @@ describe('Store', () => {
     it('updates the name on the current connection model', (done) => {
       const unsubscribe = Store.listen((state) => {
         unsubscribe();
+        expect(state.currentConnection).to.exist;
         expect(state.currentConnection.name).to.equal('myconnection');
         done();
       });
@@ -1264,55 +1307,13 @@ describe('Store', () => {
 
         const currentId = state.currentConnection._id;
 
+        expect(state.currentConnection).to.exist;
         expect(state.currentConnection.isFavorite).to.equal(true);
         expect(state.connections[currentId]._id).to.equal(currentId);
         done();
       });
 
       Actions.onCreateFavoriteClicked('myconnection', '#deb342');
-    });
-  });
-
-  describe('#updateDefaults', () => {
-    context('when auth is mongodb', () => {
-      context('when the database name is empty', () => {
-        beforeEach(() => {
-          Store.state.currentConnection.authStrategy = 'MONGODB';
-          Store.state.currentConnection.mongodbDatabaseName = '';
-          Store._updateDefaults();
-        });
-
-        afterEach(() => {
-          Store.state.currentConnection = new Connection();
-        });
-
-        it('sets the database name to admin', (done) => {
-          expect(Store.state.currentConnection.mongodbDatabaseName).to.equal(
-            'admin'
-          );
-          done();
-        });
-      });
-    });
-
-    context('when auth is kerberos', () => {
-      context('when the service name is empty', () => {
-        before(() => {
-          Store.state.currentConnection.authStrategy = 'KERBEROS';
-          Store._updateDefaults();
-        });
-
-        after(() => {
-          Store.state.currentConnection = new Connection();
-        });
-
-        it('sets the service name to mongodb', (done) => {
-          expect(Store.state.currentConnection.kerberosServiceName).to.equal(
-            'mongodb'
-          );
-          done();
-        });
-      });
     });
   });
 
@@ -1389,6 +1390,8 @@ describe('Store', () => {
       it('selects a copy as current connection with new name and color', (done) => {
         const unsubscribe = Store.listen((state) => {
           unsubscribe();
+          expect(state.connections).to.exist;
+          expect(state.currentConnection).to.exist;
 
           const copyId = Object.keys(state.connections).find(
             (key) => !Object.keys(connections).includes(key)
@@ -1443,15 +1446,11 @@ describe('Store', () => {
         Store.state.currentConnection = currentConnection;
       });
 
-      afterEach(() => {
-        Store.onDeleteConnectionClicked(
-          Store.state.connections[Store.state.currentConnection._id]
-        );
-      });
-
       it('selects a copy as current connection with new name and color', (done) => {
         const unsubscribe = Store.listen((state) => {
           unsubscribe();
+          expect(state.connections).to.exist;
+          expect(state.currentConnection).to.exist;
 
           const copyId = Object.keys(state.connections).find(
             (key) => !Object.keys(connections).includes(key)
@@ -1510,6 +1509,7 @@ describe('Store', () => {
         it('discards changes', (done) => {
           const unsubscribe = Store.listen((state) => {
             unsubscribe();
+            expect(state.currentConnection).to.exist;
 
             const driverUrl =
               'mongodb://server.example.com:27017/?readPreference=primary&ssl=false';
@@ -1547,6 +1547,7 @@ describe('Store', () => {
         it('discards changes', (done) => {
           const unsubscribe = Store.listen((state) => {
             unsubscribe();
+            expect(state.currentConnection).to.exist;
 
             const driverUrl =
               'mongodb://server.example.com:27001/?readPreference=primary&ssl=false';
@@ -1585,6 +1586,7 @@ describe('Store', () => {
         it('discards changes', (done) => {
           const unsubscribe = Store.listen((state) => {
             unsubscribe();
+            expect(state.currentConnection).to.exist;
             expect(state.currentConnection.port).to.equal(favorite.port);
             done();
           });
@@ -1613,6 +1615,7 @@ describe('Store', () => {
         it('discards changes', (done) => {
           const unsubscribe = Store.listen((state) => {
             unsubscribe();
+            expect(state.currentConnection).to.exist;
             expect(state.currentConnection.port).to.equal(recent.port);
             done();
           });
@@ -1643,6 +1646,8 @@ describe('Store', () => {
       it('adds recent to favorites', (done) => {
         const unsubscribe = Store.listen((state) => {
           unsubscribe();
+          expect(state.connections).to.exist;
+          expect(state.currentConnection).to.exist;
           expect(Object.keys(state.connections).length).to.equal(1);
           expect(state.isMessageVisible).to.equal(true);
           expect(state.currentConnection.isFavorite).to.equal(true);
@@ -1678,6 +1683,8 @@ describe('Store', () => {
       it('adds recent to favorites', (done) => {
         const unsubscribe = Store.listen((state) => {
           unsubscribe();
+          expect(state.connections).to.exist;
+          expect(state.currentConnection).to.exist;
           expect(Object.keys(state.connections).length).to.equal(1);
           expect(state.isMessageVisible).to.equal(true);
           expect(state.currentConnection.isFavorite).to.equal(true);
@@ -1720,6 +1727,8 @@ describe('Store', () => {
       it('updates properties of the saved connection', (done) => {
         const unsubscribe = Store.listen((state) => {
           unsubscribe();
+          expect(state.connections).to.exist;
+          expect(state.currentConnection).to.exist;
           expect(Object.keys(state.connections).length).to.equal(1);
           expect(state.currentConnection._id).to.equal(favorite._id);
           expect(state.currentConnection.port).to.equal(27018);
@@ -1763,6 +1772,8 @@ describe('Store', () => {
       it('updates properties of the saved connection', (done) => {
         const unsubscribe = Store.listen((state) => {
           unsubscribe();
+          expect(state.connections).to.exist;
+          expect(state.currentConnection).to.exist;
           expect(Object.keys(state.connections).length).to.equal(1);
           expect(state.currentConnection._id).to.equal(favorite._id);
           expect(state.currentConnection.port).to.equal(27018);

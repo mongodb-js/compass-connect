@@ -799,27 +799,6 @@ const Store = Reflux.createStore({
   /** --- Help methods ---  */
 
   /**
-   * Updates default values for the connection depending on the authentication
-   * strategy method and database values.
-   */
-  _updateDefaults() {
-    const connection = this.state.currentConnection;
-
-    if (
-      (connection.authStrategy === 'MONGODB' ||
-        connection.authStrategy === 'SCRAM-SHA-256') &&
-      isEmpty(connection.mongodbDatabaseName)
-    ) {
-      connection.mongodbDatabaseName = 'admin';
-    } else if (
-      connection.authStrategy === 'KERBEROS' &&
-      isEmpty(connection.kerberosServiceName)
-    ) {
-      connection.kerberosServiceName = 'mongodb';
-    }
-  },
-
-  /**
    * Saves a connection in the connections list.
    *
    * @param {Object} connection - A connection.
@@ -920,7 +899,6 @@ const Store = Reflux.createStore({
    * @param {Object} connection - The current connection.
    */
   _connect(connection) {
-    this._updateDefaults();
     this.dataService = new DataService(connection);
     this.appRegistry.emit('data-service-initialized', this.dataService);
     this.dataService.connect((error, ds) => {
