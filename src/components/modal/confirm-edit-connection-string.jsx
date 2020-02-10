@@ -49,7 +49,7 @@ class ConfirmEditConnectionString extends PureComponent {
   render() {
     return (
       <Modal show={this.props.isEditURIConfirm}>
-        <Modal.Header closeButton>
+        <Modal.Header closeButton onHide={this.onClose}>
           <h4>{QUESTION}</h4>
         </Modal.Header>
         <Modal.Body>
