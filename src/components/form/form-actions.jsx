@@ -188,7 +188,7 @@ class FormActions extends React.Component {
    * @returns {React.Component}
    */
   renderHideURI = () => {
-    if (this.props.isSavedConnection) {
+    if (this.props.isSavedConnection && !this.props.hasUnsavedChanges) {
       return (
         <button
           type="submit"

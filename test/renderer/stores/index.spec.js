@@ -1486,13 +1486,13 @@ describe('Store', () => {
     context('when it is a connection string view', () => {
       context('when it is a favorite connection', () => {
         const favorite = new Connection({
-          hostname: 'server.example.com',
+          hostname: 'favorite.example.com',
           name: 'ConnectionToCopy',
           color: '#3b8196',
           isFavorite: true
         });
         const connections = {
-          [favorite._id]: favorite.getAttributes({ props: true, derived: true })
+          [favorite._id]: favorite.getAttributes({ props: true })
         };
 
         beforeEach(() => {
@@ -1503,7 +1503,7 @@ describe('Store', () => {
           Store.state.currentConnection = favorite.set({
             hostname: 'server.newexample.com'
           });
-          Store.state.customUrl = 'mongodb://server.newexample.com/';
+          Store.state.customUrl = 'mongodb://favorite.newexample.com/';
         });
 
         it('discards changes', (done) => {
@@ -1512,7 +1512,7 @@ describe('Store', () => {
             expect(state.currentConnection).to.exist;
 
             const driverUrl =
-              'mongodb://server.example.com:27017/?readPreference=primary&ssl=false';
+              'mongodb://favorite.example.com:27017/?readPreference=primary&ssl=false';
 
             expect(state.currentConnection.hostname).to.equal(
               favorite.hostname
@@ -1751,6 +1751,9 @@ describe('Store', () => {
       const favorite = new Connection({
         hostname: 'server.example.com',
         port: 27001,
+        authStrategy: 'MONGODB',
+        mongodbUsername: 'user',
+        mongodbPassword: 'somepass',
         name: 'It is a favorite connection',
         color: '#3b8196',
         isFavorite: true
@@ -1760,9 +1763,10 @@ describe('Store', () => {
       };
 
       beforeEach(() => {
+        Store.state.isURIEditable = true;
         Store.state.viewType = 'connectionString';
         Store.state.customUrl =
-          'mongodb://server.example.com:27018/?readPreference=primary&ssl=false';
+          'mongodb://user:somepass@localhost:27018/?authSource=admin&readPreference=primary&ssl=false';
         Store.state.fetchedConnections = new ConnectionCollection();
         Store.state.fetchedConnections.add(favorite);
         Store.state.connections = { ...connections };
@@ -1784,6 +1788,18 @@ describe('Store', () => {
           expect(state.currentConnection.isFavorite).to.equal(true);
           expect(state.connections[favorite._id].port).to.equal(27018);
           expect(state.connections[favorite._id].isFavorite).to.equal(true);
+          done();
+        });
+
+        Actions.onSaveFavoriteClicked();
+      });
+
+      it('updates customUrl with a safe value', (done) => {
+        const unsubscribe = Store.listen((state) => {
+          unsubscribe();
+          expect(state.customUrl).to.equal(
+            'mongodb://user:*****@localhost:27018/?authSource=admin&readPreference=primary&ssl=false'
+          );
           done();
         });
 

@@ -1,5 +1,5 @@
 const Reflux = require('reflux');
-const { sortBy, isEmpty, forEach, omit } = require('lodash');
+const { sortBy, forEach, omit } = require('lodash');
 
 const DataService = require('mongodb-data-service');
 const Actions = require('actions');
@@ -369,9 +369,8 @@ const Store = Reflux.createStore({
     const connection = this.state.connections[this.state.currentConnection._id];
 
     this.state.currentConnection.set(connection);
-    this.state.customUrl = connection.driverUrl;
+    this.state.customUrl = this.state.currentConnection.driverUrl;
     this.state.hasUnsavedChanges = false;
-
     this.trigger(this.state);
   },
 
@@ -380,6 +379,7 @@ const Store = Reflux.createStore({
    */
   onHideURIClicked() {
     this.state.isURIEditable = false;
+    this.state.customUrl = this.state.currentConnection.safeUrl;
     this.trigger(this.state);
   },
 
@@ -505,6 +505,7 @@ const Store = Reflux.createStore({
    */
   onEditURIConfirmed() {
     this.state.isURIEditable = true;
+    this.state.customUrl = this.state.currentConnection.driverUrl;
     this.state.isEditURIConfirm = false;
     this.trigger(this.state);
   },
@@ -548,7 +549,6 @@ const Store = Reflux.createStore({
     this.state.currentConnection.set({ name: 'Local', color: undefined });
     this.state.currentConnection.set(connection);
     this.trigger(this.state);
-
     this.setState({
       isURIEditable: false,
       isSavedConnection: true,
@@ -558,7 +558,7 @@ const Store = Reflux.createStore({
       syntaxErrorMessage: null,
       isHostChanged: true,
       isPortChanged: true,
-      customUrl: this.state.currentConnection.driverUrl,
+      customUrl: this.state.currentConnection.safeUrl,
       hasUnsavedChanges: false
     });
   },
@@ -807,6 +807,7 @@ const Store = Reflux.createStore({
     this.state.currentConnection = connection;
     this.state.fetchedConnections.add(connection);
     this.state.connections[connection._id] = { ...connection._values };
+    this.state.customUrl = connection.safeUrl;
     this.trigger(this.state);
     connection.save();
   },
@@ -871,8 +872,6 @@ const Store = Reflux.createStore({
       (key) => !this.state.connections[key].isFavorite
     );
 
-    this.state.isURIEditable = false;
-
     if (recents.length === 10) {
       recents = sortBy(recents, 'lastUsed');
       this.state.connections = this._removeFromCollection(recents[9]);
@@ -919,6 +918,7 @@ const Store = Reflux.createStore({
         this.state.syntaxErrorMessage = null;
         this.state.hasUnsavedChanges = false;
         this.state.isURIEditable = false;
+        this.state.customUrl = this.state.currentConnection.driverUrl;
 
         currentConnection.lastUsed = new Date();
 

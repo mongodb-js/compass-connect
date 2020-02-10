@@ -61,22 +61,7 @@ class ConnectionStringInput extends React.PureComponent {
    * @returns {String} customUrl.
    */
   getCustomUrl() {
-    if (this.props.isURIEditable) {
-      return this.props.customUrl;
-    }
-
-    const re = /^(?:(?<prefix>[^:\/?#\s]+):\/{2})?(?:(?<auth>[^@\/?#\s]+)@)?(?<db>[^\/?#\s]+)?(?:\/)?(?<query>.*)$/;
-    const matchObj = re.exec(this.props.customUrl);
-    const { prefix = '', auth, db, query = '' } = matchObj.groups;
-    let safeAuth = '';
-
-    if (auth && auth.includes(':')) {
-      safeAuth = `${auth.split(':')[0]}:*****@`;
-    } else if (auth) {
-      safeAuth = `${auth}@`;
-    }
-
-    return `${prefix}://${safeAuth}${db}/${query}`;
+    return this.props.customUrl;
   }
 
   render() {

@@ -61,40 +61,84 @@ describe('FormActions [Component]', () => {
         });
 
         context('when URI is editable and the connection is saved', () => {
-          const connection = { name: 'myconnection' };
-          const isConnected = false;
-          const viewType = 'connectionString';
-          const isURIEditable = true;
-          const isSavedConnection = true;
-          let component;
+          context('when URI was not changed', () => {
+            const connection = { name: 'myconnection' };
+            const isConnected = false;
+            const viewType = 'connectionString';
+            const isURIEditable = true;
+            const isSavedConnection = true;
+            const hasUnsavedChanges = false;
+            let component;
 
-          beforeEach(() => {
-            component = mount(
-              <FormActions
-                currentConnection={connection}
-                isConnected={isConnected}
-                viewType={viewType}
-                isURIEditable={isURIEditable}
-                isSavedConnection={isSavedConnection}
-                isValid
-              />
-            );
+            beforeEach(() => {
+              component = mount(
+                <FormActions
+                  currentConnection={connection}
+                  isConnected={isConnected}
+                  viewType={viewType}
+                  isURIEditable={isURIEditable}
+                  isSavedConnection={isSavedConnection}
+                  hasUnsavedChanges={hasUnsavedChanges}
+                  isValid
+                />
+              );
+            });
+
+            afterEach(() => {
+              component = null;
+            });
+
+            it('does not render an edit button', () => {
+              const editButton = component.find('button[name="editUrl"]');
+
+              expect(editButton).to.be.not.present();
+            });
+
+            it('renders a hide button', () => {
+              const hideButton = component.find('button[name="hideUrl"]');
+
+              expect(hideButton).to.be.present();
+            });
           });
 
-          afterEach(() => {
-            component = null;
-          });
+          context('when URI was changed', () => {
+            const connection = { name: 'myconnection' };
+            const isConnected = false;
+            const viewType = 'connectionString';
+            const isURIEditable = true;
+            const isSavedConnection = true;
+            const hasUnsavedChanges = true;
+            let component;
 
-          it('does not render an edit button', () => {
-            const editButton = component.find('button[name="editUrl"]');
+            beforeEach(() => {
+              component = mount(
+                <FormActions
+                  currentConnection={connection}
+                  isConnected={isConnected}
+                  viewType={viewType}
+                  isURIEditable={isURIEditable}
+                  isSavedConnection={isSavedConnection}
+                  hasUnsavedChanges={hasUnsavedChanges}
+                  isValid
+                />
+              );
+            });
 
-            expect(editButton).to.be.not.present();
-          });
+            afterEach(() => {
+              component = null;
+            });
 
-          it('renders a hide button', () => {
-            const hideButton = component.find('button[name="hideUrl"]');
+            it('does not render an edit button', () => {
+              const editButton = component.find('button[name="editUrl"]');
 
-            expect(hideButton).to.be.present();
+              expect(editButton).to.be.not.present();
+            });
+
+            it('does not render a hide button', () => {
+              const hideButton = component.find('button[name="hideUrl"]');
+
+              expect(hideButton).to.be.not.present();
+            });
           });
         });
 
