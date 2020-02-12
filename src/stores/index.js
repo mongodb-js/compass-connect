@@ -304,16 +304,15 @@ const Store = Reflux.createStore({
    */
   onConnectClicked() {
     const currentConnection = this.state.currentConnection;
-    let url = this.state.currentConnection.driverUrl;
 
     // We replace custom appname with proper appname
     // to avoid sending malicious value to the server
     currentConnection.appname = electron.remote.app.getName();
 
     if (this.state.viewType === 'connectionString') {
-      if (this.state.isURIEditable) {
-        url = this.state.customUrl || DEFAULT_DRIVER_URL;
-      }
+      const url = this.state.isURIEditable
+        ? this.state.customUrl || DEFAULT_DRIVER_URL
+        : this.state.currentConnection.driverUrl;
 
       this.StatusActions.showIndeterminateProgressBar();
 
