@@ -282,11 +282,15 @@ const Store = Reflux.createStore({
         });
       }
     } else {
-      this.state.customUrl =
+      if (!this.state.isURIEditable) {
+        this.state.customUrl = this.state.currentConnection.safeUrl;
+      } else if (
         isValid &&
         (this.state.isHostChanged === true || this.state.isPortChanged === true)
-          ? driverUrl
-          : url;
+      ) {
+        this.state.customUrl = driverUrl;
+      }
+
       this.trigger(this.state);
     }
   },
