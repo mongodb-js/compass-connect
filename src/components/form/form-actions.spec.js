@@ -215,6 +215,12 @@ describe('FormActions [Component]', () => {
 
           expect(editButton).to.be.not.present();
         });
+
+        it('does not render the hide button', () => {
+          const hideButton = component.find('button[name="hideUrl"]');
+
+          expect(hideButton).to.be.not.present();
+        });
       });
     });
 
