@@ -990,9 +990,14 @@ const Store = Reflux.createStore({
   _saveFavorite() {
     const currentConnection = this.state.currentConnection;
     const isFavorite = currentConnection.isFavorite;
+    let url = this.state.customUrl;
 
     if (isFavorite) {
       this.state.savedMessage = 'Favorite is updated';
+    }
+
+    if (!this.state.isURIEditable) {
+      url = currentConnection.driverUrl;
     }
 
     currentConnection.isFavorite = true;
@@ -1000,11 +1005,11 @@ const Store = Reflux.createStore({
     this.state.isURIEditable = false;
 
     if (this.state.viewType === 'connectionString') {
-      Connection.from(this.state.customUrl, (error, parsedConnection) => {
+      Connection.from(url, (error, parsedConnection) => {
         if (!error) {
           currentConnection.set(this._getPoorAttributes(parsedConnection));
 
-          if (this.state.customUrl.match(/[?&]ssl=true/i)) {
+          if (url.match(/[?&]ssl=true/i)) {
             currentConnection.sslMethod = 'SYSTEMCA';
           }
 
