@@ -394,7 +394,13 @@ const Store = Reflux.createStore({
     const connection = this.state.connections[this.state.currentConnection._id];
 
     this.state.currentConnection.set(connection);
-    this.state.customUrl = this.state.currentConnection.driverUrl;
+
+    if (this.state.isURIEditable) {
+      this.state.customUrl = this.state.currentConnection.driverUrl;
+    } else {
+      this.state.customUrl = this.state.currentConnection.safeUrl;
+    }
+
     this.state.hasUnsavedChanges = false;
     this.trigger(this.state);
   },

@@ -1526,43 +1526,90 @@ describe('Store', () => {
   describe('#onChangesDiscarded', () => {
     context('when it is a connection string view', () => {
       context('when it is a favorite connection', () => {
-        const favorite = new Connection({
-          hostname: 'favorite.example.com',
-          name: 'ConnectionToCopy',
-          color: '#3b8196',
-          isFavorite: true
-        });
-        const connections = {
-          [favorite._id]: favorite.getAttributes({ props: true })
-        };
-
-        beforeEach(() => {
-          Store.state.viewType = 'connectionString';
-          Store.state.fetchedConnections = new ConnectionCollection();
-          Store.state.fetchedConnections.add(favorite);
-          Store.state.connections = { ...connections };
-          Store.state.currentConnection = favorite.set({
-            hostname: 'server.newexample.com'
+        context('when a connection string is editable', () => {
+          const favorite = new Connection({
+            hostname: 'favorite.example.com',
+            name: 'ConnectionToCopy',
+            color: '#3b8196',
+            isFavorite: true
           });
-          Store.state.customUrl = 'mongodb://favorite.newexample.com/';
-        });
+          const connections = {
+            [favorite._id]: favorite.getAttributes({ props: true })
+          };
 
-        it('discards changes', (done) => {
-          const unsubscribe = Store.listen((state) => {
-            unsubscribe();
-            expect(state.currentConnection).to.exist;
-
-            const driverUrl =
-              'mongodb://favorite.example.com:27017/?readPreference=primary&ssl=false';
-
-            expect(state.currentConnection.hostname).to.equal(
-              favorite.hostname
-            );
-            expect(state.customUrl).to.equal(driverUrl);
-            done();
+          beforeEach(() => {
+            Store.state.viewType = 'connectionString';
+            Store.state.fetchedConnections = new ConnectionCollection();
+            Store.state.fetchedConnections.add(favorite);
+            Store.state.connections = { ...connections };
+            Store.state.currentConnection = favorite.set({
+              hostname: 'server.newexample.com'
+            });
+            Store.state.isURIEditable = true;
+            Store.state.customUrl = 'mongodb://favorite.newexample.com/';
           });
 
-          Actions.onChangesDiscarded();
+          it('discards changes and shows the password', (done) => {
+            const unsubscribe = Store.listen((state) => {
+              unsubscribe();
+              expect(state.currentConnection).to.exist;
+
+              const driverUrl =
+                'mongodb://favorite.example.com:27017/?readPreference=primary&ssl=false';
+
+              expect(state.currentConnection.hostname).to.equal(
+                favorite.hostname
+              );
+              expect(state.customUrl).to.equal(driverUrl);
+              done();
+            });
+
+            Actions.onChangesDiscarded();
+          });
+        });
+
+        context('when a connection string is not editable', () => {
+          const favorite = new Connection({
+            hostname: 'favorite.example.com',
+            port: 27001,
+            authStrategy: 'MONGODB',
+            mongodbUsername: 'user',
+            mongodbPassword: 'password',
+            name: 'ConnectionToCopy',
+            color: '#3b8196',
+            isFavorite: true
+          });
+          const connections = {
+            [favorite._id]: favorite.getAttributes({ props: true })
+          };
+
+          beforeEach(() => {
+            Store.state.viewType = 'connectionString';
+            Store.state.fetchedConnections = new ConnectionCollection();
+            Store.state.fetchedConnections.add(favorite);
+            Store.state.connections = { ...connections };
+            Store.state.currentConnection = favorite.set({
+              hostname: 'server.newexample.com'
+            });
+            Store.state.isURIEditable = false;
+            Store.state.customUrl =
+              'mongodb://newuser:*****@favorite.example.com:27001/?authSource=admin&readPreference=primary&ssl=false';
+          });
+
+          it('discards changes and hides the password', (done) => {
+            const unsubscribe = Store.listen((state) => {
+              unsubscribe();
+              expect(state.currentConnection).to.exist;
+
+              const driverUrl =
+                'mongodb://user:*****@favorite.example.com:27001/?authSource=admin&readPreference=primary&ssl=false';
+
+              expect(state.customUrl).to.equal(driverUrl);
+              done();
+            });
+
+            Actions.onChangesDiscarded();
+          });
         });
       });
 
