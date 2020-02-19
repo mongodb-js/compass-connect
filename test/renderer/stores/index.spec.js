@@ -1096,7 +1096,7 @@ describe('Store', () => {
               Store.state.isURIEditable = false;
             });
 
-            it('sets the driverUrl', (done) => {
+            it('sets the real password for the current connection', (done) => {
               const unsubscribe = Store.listen((state) => {
                 unsubscribe();
                 expect(state.currentConnection).to.exist;
