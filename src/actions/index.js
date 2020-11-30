@@ -15,7 +15,7 @@ const Actions = Reflux.createActions({
   onDeleteConnectionClicked: { sync: true },
   onDeleteConnectionsClicked: { sync: true },
   onDisconnectClicked: { sync: true },
-  onDupicateConnectionClicked: { sync: true },
+  onDuplicateConnectionClicked: { sync: true },
   onEditURICanceled: { sync: true },
   onEditURIClicked: { sync: true },
   onEditURIConfirmed: { sync: true },
