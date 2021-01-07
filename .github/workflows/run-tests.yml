@@ -42,6 +42,8 @@ jobs:
 
       - name: Setup credential store for ubuntu
         run: |
+          export DISPLAY=:99.0;
+          export NO_AT_BRIDGE=1;
           echo "activating dbus..."
           export "$(dbus-launch)"
           echo "activating gnome-keyring daemon..."
