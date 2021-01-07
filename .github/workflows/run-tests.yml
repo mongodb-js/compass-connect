@@ -32,7 +32,9 @@ jobs:
         run: npm ci
 
       - name: Install ubuntu credential store dependencies
-        run: sudo apt-get install libkrb5-dev xvfb libsecret-1-dev gnome-keyring python-gnomekeyring
+        run: |
+          sudo add-apt-repository ppa:ubuntu-toolchain-r
+          sudo apt-get install libkrb5-dev xvfb libsecret-1-dev gnome-keyring python-gnomekeyring
 
       - name: Setup credential store for ubuntu
         run: |
