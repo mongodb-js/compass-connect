@@ -3,11 +3,12 @@ import ReactDOM from 'react-dom';
 import app from 'hadron-app';
 import AppRegistry from 'hadron-app-registry';
 import { AppContainer } from 'react-hot-loader';
-import CompassConnectPlugin, { activate } from '../../src';
 import { activate as activateKerberos } from '@mongodb-js/compass-auth-kerberos';
 import { activate as activateLdap } from '@mongodb-js/compass-auth-ldap';
 import { activate as activateX509 } from '@mongodb-js/compass-auth-x509';
 import { activate as activateCompassStatus } from '@mongodb-js/compass-status';
+
+import CompassConnectPlugin, { activate } from '../../src';
 
 // Import global less file. Note: these styles WILL NOT be used in compass, as compass provides its own set
 // of global styles. If you are wishing to style a given component, you should be writing a less file per
@@ -77,5 +78,5 @@ if (module.hot) {
     }
   };
 
-  module.hot.accept('plugin', () => render(CompassConnectPlugin));
+  module.hot.accept('../../src', () => render(CompassConnectPlugin));
 }
