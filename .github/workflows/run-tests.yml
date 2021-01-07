@@ -42,7 +42,7 @@ jobs:
 
       - name: Setup credential store for ubuntu
         run: |
-          /usr/bin/xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
+          export DISPLAY=:99.0; sh -e /usr/bin/xvfb start; sleep 3;
           echo "activating dbus..."
           export "$(dbus-launch)"
           echo "activating gnome-keyring daemon..."
