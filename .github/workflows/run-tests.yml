@@ -33,8 +33,11 @@ jobs:
 
       - name: Install ubuntu credential store dependencies
         run: |
-          sudo add-apt-repository ppa:ubuntu-toolchain-r
-          sudo apt-get install libkrb5-dev xvfb libsecret-1-dev gnome-keyring python-gnomekeyring
+          sudo apt-get install libkrb5-dev
+          sudo apt-get install xvfb
+          sudo apt-get install libsecret-1-dev
+          sudo apt-get install gnome-keyring
+          sudo apt-get install libsecret-tools
 
       - name: Setup credential store for ubuntu
         run: |
