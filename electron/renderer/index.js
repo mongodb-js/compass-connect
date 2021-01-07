@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import app from 'hadron-app';
 import AppRegistry from 'hadron-app-registry';
 import { AppContainer } from 'react-hot-loader';
-import CompassConnectPlugin, { activate } from 'plugin';
+import CompassConnectPlugin, { activate } from '../../src';
 import { activate as activateKerberos } from '@mongodb-js/compass-auth-kerberos';
 import { activate as activateLdap } from '@mongodb-js/compass-auth-ldap';
 import { activate as activateX509 } from '@mongodb-js/compass-auth-x509';
@@ -13,7 +13,7 @@ import { activate as activateCompassStatus } from '@mongodb-js/compass-status';
 // of global styles. If you are wishing to style a given component, you should be writing a less file per
 // component as per the CSS Modules ICSS spec.
 import 'bootstrap/less/bootstrap.less';
-import 'less/index.less';
+import '../../src/assets/less/index.less';
 
 const appRegistry = new AppRegistry();
 
