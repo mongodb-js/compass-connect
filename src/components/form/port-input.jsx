@@ -39,7 +39,8 @@ class PortInput extends React.PureComponent {
         placeholder="27017"
         changeHandler={this.onPortChanged.bind(this)}
         value={this.getPort()}
-        type="number" />
+        type="number"
+        otherInputAttributes={{min: 1, max: 65536}} />
     );
   }
 }
