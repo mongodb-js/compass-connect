@@ -3,7 +3,10 @@
 import React from 'react';
 import Actions from '../actions';
 
-import { CONNECT_VIEWS } from '../stores';
+import {
+  CONNECTION_FORM_VIEW,
+  CONNECTION_STRING_VIEW
+} from '../stores';
 
 /**
  * Visits help page.
@@ -84,7 +87,7 @@ const createParagraph = (contect) => React.createElement(
  * Components for help items depending on viewType.
  */
 export const HelpItems = {
-  [CONNECT_VIEWS.CONNECTION_FORM]: [
+  [CONNECTION_FORM_VIEW]: [
     {
       title: 'How do I find my username and password?',
       body: createParagraph([
@@ -92,7 +95,7 @@ export const HelpItems = {
       ])
     }
   ],
-  [CONNECT_VIEWS.CONNECTION_STRING]: [
+  [CONNECTION_STRING_VIEW]: [
     {
       title: 'How do I find my connection string in Atlas?',
       body: [

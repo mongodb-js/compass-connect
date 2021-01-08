@@ -60,10 +60,8 @@ const SSH_TUNNEL_FIELDS = [
  */
 const EXTENSION = 'Connect.Extension';
 
-const CONNECT_VIEWS = {
-  CONNECTION_STRING: 'connectionString',
-  CONNECTION_FORM: 'connectionForm'
-};
+const CONNECTION_FORM_VIEW = 'connectionForm';
+const CONNECTION_STRING_VIEW = 'connectionString';
 
 /**
  * The store that backs the connect plugin.
@@ -129,7 +127,7 @@ const Store = Reflux.createStore({
       errorMessage: null,
       syntaxErrorMessage: null,
       hasUnsavedChanges: false,
-      viewType: CONNECT_VIEWS.CONNECTION_STRING,
+      viewType: CONNECTION_STRING_VIEW,
       isHostChanged: false,
       isPortChanged: false,
       isModalVisible: false,
@@ -237,9 +235,9 @@ const Store = Reflux.createStore({
     this.state.viewType = viewType;
 
     // Target view
-    if (viewType === CONNECT_VIEWS.CONNECTION_FORM) {
+    if (viewType === CONNECTION_FORM_VIEW) {
       await this._onViewChangedToConnectionForm();
-    } else if (viewType === CONNECT_VIEWS.CONNECTION_STRING) {
+    } else if (viewType === CONNECTION_STRING_VIEW) {
       await this._onViewChangedToConnectionString();
     }
 
@@ -268,9 +266,9 @@ const Store = Reflux.createStore({
    * validate instead the existing connection object.
    */
   onConnectClicked() {
-    if (this.state.viewType === CONNECT_VIEWS.CONNECTION_STRING) {
+    if (this.state.viewType === CONNECTION_STRING_VIEW) {
       this._connectWithConnectionString();
-    } else if (this.state.viewType === CONNECT_VIEWS.CONNECTION_FORM) {
+    } else if (this.state.viewType === CONNECTION_FORM_VIEW) {
       this._connectWithConnectionForm();
     }
   },
@@ -402,23 +400,25 @@ const Store = Reflux.createStore({
    * Disconnects the current connection.
    */
   async onDisconnectClicked() {
-    if (this.dataService) {
-      const runDisconnect = promisify(
-        this.dataService.disconnect.bind(this.dataService)
-      );
-
-      await runDisconnect();
-
-      this.appRegistry.emit('data-service-disconnected');
-      this.state.isValid = true;
-      this.state.isConnected = false;
-      this.state.errorMessage = null;
-      this.state.syntaxErrorMessage = null;
-      this.state.hasUnsavedChanges = false;
-      this._saveConnection(this.state.currentConnection);
-
-      this.dataService = undefined;
+    if (!this.dataService) {
+      return;
     }
+
+    const runDisconnect = promisify(
+      this.dataService.disconnect.bind(this.dataService)
+    );
+
+    await runDisconnect();
+
+    this.appRegistry.emit('data-service-disconnected');
+    this.state.isValid = true;
+    this.state.isConnected = false;
+    this.state.errorMessage = null;
+    this.state.syntaxErrorMessage = null;
+    this.state.hasUnsavedChanges = false;
+    this._saveConnection(this.state.currentConnection);
+
+    this.dataService = undefined;
   },
 
   /**
@@ -562,7 +562,7 @@ const Store = Reflux.createStore({
    * Resets the connection after clicking on the new connection section.
    */
   onResetConnectionClicked() {
-    this.state.viewType = CONNECT_VIEWS.CONNECTION_STRING;
+    this.state.viewType = CONNECTION_STRING_VIEW;
     this.state.savedMessage = 'Saved to favorites';
     this.state.currentConnection = new Connection();
     this.state.isURIEditable = true;
@@ -1077,7 +1077,7 @@ const Store = Reflux.createStore({
     this.state.hasUnsavedChanges = false;
     this.state.isURIEditable = false;
 
-    if (this.state.viewType === CONNECT_VIEWS.CONNECTION_STRING) {
+    if (this.state.viewType === CONNECTION_STRING_VIEW) {
       try {
         const buildConnectionModelFromUrl = promisify(Connection.from);
         const parsedConnection = await buildConnectionModelFromUrl(url);
@@ -1090,7 +1090,7 @@ const Store = Reflux.createStore({
 
         this._saveConnection(currentConnection);
       } catch (error) { /* Ignore saving invalid connection string */ }
-    } else if (this.state.viewType === CONNECT_VIEWS.CONNECTION_FORM) {
+    } else if (this.state.viewType === CONNECTION_FORM_VIEW) {
       if (!currentConnection.isValid()) {
         const validationError = currentConnection.validate(currentConnection);
 
@@ -1166,4 +1166,5 @@ const Store = Reflux.createStore({
 
 module.exports = Store;
 module.exports.EXTENSION = EXTENSION;
-module.exports.CONNECT_VIEWS = CONNECT_VIEWS;
+module.exports.CONNECTION_FORM_VIEW = CONNECTION_FORM_VIEW;
+module.exports.CONNECTION_STRING_VIEW = CONNECTION_STRING_VIEW;
