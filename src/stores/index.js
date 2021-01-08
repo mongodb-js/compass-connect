@@ -882,7 +882,7 @@ const Store = Reflux.createStore({
   /**
    * Connects to the current connection form connection configuration.
    */
-  _connectWithConnectionForm() {
+  async _connectWithConnectionForm() {
     const currentConnection = this.state.currentConnection;
 
     if (!currentConnection.isValid()) {
@@ -896,7 +896,7 @@ const Store = Reflux.createStore({
       });
     } else {
       this.StatusActions.showIndeterminateProgressBar();
-      this._connect(currentConnection);
+      await this._connect(currentConnection);
     }
   },
 
@@ -943,10 +943,10 @@ const Store = Reflux.createStore({
     }
 
     if (isFavorite && driverUrl !== parsedConnection.driverUrl) {
-      this._connect(parsedConnection);
+      await this._connect(parsedConnection);
     } else {
       currentConnection.set(this._getPoorAttributes(parsedConnection));
-      this._connect(currentConnection);
+      await this._connect(currentConnection);
     }
   },
 
