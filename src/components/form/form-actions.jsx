@@ -4,7 +4,7 @@ import classnames from 'classnames';
 
 import Actions from '../../actions';
 import FormGroup from './form-group';
-import { CONNECTION_STRING_VIEW } from '../../stores';
+import { CONNECTION_STRING_VIEW } from '../../constants/connection-views';
 
 import styles from '../connect.less';
 

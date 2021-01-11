@@ -8,6 +8,10 @@ const StateMixin = require('reflux-state-mixin');
 const { promisify } = require('util');
 
 const Actions = require('../actions');
+const {
+  CONNECTION_FORM_VIEW,
+  CONNECTION_STRING_VIEW
+} = require('../constants/connection-views');
 
 const ConnectionCollection = Connection.ConnectionCollection;
 const userAgent = navigator.userAgent.toLowerCase();
@@ -60,8 +64,6 @@ const SSH_TUNNEL_FIELDS = [
  */
 const EXTENSION = 'Connect.Extension';
 
-const CONNECTION_FORM_VIEW = 'connectionForm';
-const CONNECTION_STRING_VIEW = 'connectionString';
 
 /**
  * The store that backs the connect plugin.
@@ -1166,5 +1168,3 @@ const Store = Reflux.createStore({
 
 module.exports = Store;
 module.exports.EXTENSION = EXTENSION;
-module.exports.CONNECTION_FORM_VIEW = CONNECTION_FORM_VIEW;
-module.exports.CONNECTION_STRING_VIEW = CONNECTION_STRING_VIEW;

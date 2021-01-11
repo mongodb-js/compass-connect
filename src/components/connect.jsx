@@ -14,7 +14,7 @@ import ConfirmEditConnectionString from './modal/confirm-edit-connection-string'
 import {
   CONNECTION_FORM_VIEW,
   CONNECTION_STRING_VIEW
-} from '../stores';
+} from '../constants/connection-views';
 
 import styles from './connect.less';
 

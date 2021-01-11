@@ -6,7 +6,7 @@ import Actions from '../actions';
 import {
   CONNECTION_FORM_VIEW,
   CONNECTION_STRING_VIEW
-} from '../stores';
+} from '../constants/connection-views';
 
 /**
  * Visits help page.
