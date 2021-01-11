@@ -914,7 +914,7 @@ const Store = Reflux.createStore({
 
     const url = this.state.isURIEditable
       ? this.state.customUrl || DEFAULT_DRIVER_URL
-      : this.state.currentConnection;
+      : this.state.currentConnection.driverUrl;
 
     this.StatusActions.showIndeterminateProgressBar();
 
@@ -924,7 +924,6 @@ const Store = Reflux.createStore({
       );
       return;
     }
-
 
     let parsedConnection;
     try {
