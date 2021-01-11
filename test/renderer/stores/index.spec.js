@@ -1821,6 +1821,10 @@ describe('Store', () => {
     it('uses a real password when builds a driverUrl', (done) => {
       const unsubscribe = Store.listen((state) => {
         unsubscribe();
+        console.log('does');
+        console.log(state.currentConnection.driverUrl);
+        console.log('equal');
+        console.log('mongodb://user:password@server.example.com:27001/?authSource=admin&readPreference=primary&appname=Electron&ssl=false');
         expect(state.currentConnection.driverUrl).to.equal(
           'mongodb://user:password@server.example.com:27001/?authSource=admin&readPreference=primary&appname=Electron&ssl=false'
         );

@@ -908,6 +908,10 @@ const Store = Reflux.createStore({
   async _connectWithConnectionString() {
     const currentConnection = this.state.currentConnection;
 
+    // Set the connection's app name to the electron app name
+    // of Compass before building the connection string.
+    currentConnection.appname = electron.remote.app.getName();
+
     const url = this.state.isURIEditable
       ? this.state.customUrl || DEFAULT_DRIVER_URL
       : this.state.currentConnection;
