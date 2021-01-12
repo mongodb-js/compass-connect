@@ -1802,7 +1802,10 @@ describe('Store', () => {
         Store.state.currentConnection = parsedConnection;
         Store.trigger(Store.state);
       };
-      Store.StatusActions = { showIndeterminateProgressBar: () => {} };
+      Store.StatusActions = {
+        done: () => {},
+        showIndeterminateProgressBar: () => {}
+      };
     });
 
     it('uses a real password when builds a driverUrl', (done) => {
@@ -1815,6 +1818,22 @@ describe('Store', () => {
       });
 
       Actions.onConnectClicked();
+    });
+
+    it('shows and hides the progress bar', async() => {
+      const spyShow = sinon.spy(
+        Store.StatusActions,
+        'showIndeterminateProgressBar'
+      );
+      const spyDone = sinon.spy(
+        Store.StatusActions,
+        'done'
+      );
+
+      await Store.onConnectClicked();
+
+      expect(spyShow.calledOnce).to.equal(true);
+      expect(spyDone.calledOnce).to.equal(true);
     });
   });
 

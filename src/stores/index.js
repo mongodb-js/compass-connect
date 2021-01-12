@@ -267,12 +267,16 @@ const Store = Reflux.createStore({
    * In case of connecting via the form we can skip a parsing stage and
    * validate instead the existing connection object.
    */
-  onConnectClicked() {
+  async onConnectClicked() {
+    this.StatusActions.showIndeterminateProgressBar();
+
     if (this.state.viewType === CONNECTION_STRING_VIEW) {
-      this._connectWithConnectionString();
+      await this._connectWithConnectionString();
     } else if (this.state.viewType === CONNECTION_FORM_VIEW) {
-      this._connectWithConnectionForm();
+      await this._connectWithConnectionForm();
     }
+
+    this.StatusActions.done();
   },
 
   /**
@@ -872,7 +876,6 @@ const Store = Reflux.createStore({
         connectedDataService
       );
     } catch (error) {
-      this.StatusActions.done();
       this.setState({
         isValid: false,
         errorMessage: error.message,
@@ -897,7 +900,6 @@ const Store = Reflux.createStore({
           : 'The required fields can not be empty'
       });
     } else {
-      this.StatusActions.showIndeterminateProgressBar();
       await this._connect(currentConnection);
     }
   },
@@ -915,8 +917,6 @@ const Store = Reflux.createStore({
     const url = this.state.isURIEditable
       ? this.state.customUrl || DEFAULT_DRIVER_URL
       : this.state.currentConnection.driverUrl;
-
-    this.StatusActions.showIndeterminateProgressBar();
 
     if (!Connection.isURI(url)) {
       this._setSyntaxErrorMessage(
