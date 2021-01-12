@@ -1840,7 +1840,7 @@ describe('Store', () => {
       expect(spyDone.calledOnce).to.equal(true);
     });
 
-    it('shows and hides the progress bar', async() => {
+    it('shows and hides the progress bar when theres an error connecting', async() => {
       const spyShow = sinon.spy(
         Store.StatusActions,
         'showIndeterminateProgressBar'
