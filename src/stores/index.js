@@ -270,13 +270,21 @@ const Store = Reflux.createStore({
   async onConnectClicked() {
     this.StatusActions.showIndeterminateProgressBar();
 
-    if (this.state.viewType === CONNECTION_STRING_VIEW) {
-      await this._connectWithConnectionString();
-    } else if (this.state.viewType === CONNECTION_FORM_VIEW) {
-      await this._connectWithConnectionForm();
+    try {
+      if (this.state.viewType === CONNECTION_STRING_VIEW) {
+        await this._connectWithConnectionString();
+      } else if (this.state.viewType === CONNECTION_FORM_VIEW) {
+        await this._connectWithConnectionForm();
+      }
+    } catch (error) {
+      this.setState({
+        isValid: false,
+        errorMessage: error.message,
+        syntaxErrorMessage: null
+      });
+    } finally {
+      this.StatusActions.done();
     }
-
-    this.StatusActions.done();
   },
 
   /**

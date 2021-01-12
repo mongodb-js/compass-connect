@@ -1808,6 +1808,10 @@ describe('Store', () => {
       };
     });
 
+    afterEach(() => {
+      sinon.restore();
+    });
+
     it('uses a real password when builds a driverUrl', (done) => {
       const unsubscribe = Store.listen((state) => {
         unsubscribe();
@@ -1828,6 +1832,28 @@ describe('Store', () => {
       const spyDone = sinon.spy(
         Store.StatusActions,
         'done'
+      );
+
+      await Store.onConnectClicked();
+
+      expect(spyShow.calledOnce).to.equal(true);
+      expect(spyDone.calledOnce).to.equal(true);
+    });
+
+    it('shows and hides the progress bar', async() => {
+      const spyShow = sinon.spy(
+        Store.StatusActions,
+        'showIndeterminateProgressBar'
+      );
+      const spyDone = sinon.spy(
+        Store.StatusActions,
+        'done'
+      );
+
+      sinon.replace(
+        Store,
+        '_connectWithConnectionString',
+        sinon.fake.throws(new Error('test error'))
       );
 
       await Store.onConnectClicked();
