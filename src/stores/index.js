@@ -860,7 +860,7 @@ const Store = Reflux.createStore({
       const currentConnection = this.state.currentConnection;
       const currentSaved = this.state.connections[currentConnection._id];
 
-      this.state.dataService = dataService;
+      this.dataService = dataService;
       this.state.isValid = true;
       this.state.isConnected = true;
       this.state.errorMessage = null;
