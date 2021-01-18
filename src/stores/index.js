@@ -854,7 +854,7 @@ const Store = Reflux.createStore({
     const dataService = new DataService(connection);
 
     try {
-      const runConnect = promisify(this.dataService.connect.bind(this.dataService));
+      const runConnect = promisify(dataService.connect.bind(dataService));
       const connectedDataService = await runConnect();
 
       const currentConnection = this.state.currentConnection;
