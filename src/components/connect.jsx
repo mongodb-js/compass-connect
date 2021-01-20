@@ -24,6 +24,8 @@ class Connect extends React.Component {
   static propTypes = {
     currentConnection: PropTypes.object,
     connections: PropTypes.object,
+    isConnected: PropTypes.bool,
+    isConnecting: PropTypes.bool,
     viewType: PropTypes.string,
     isModalVisible: PropTypes.bool,
     isMessageVisible: PropTypes.bool,

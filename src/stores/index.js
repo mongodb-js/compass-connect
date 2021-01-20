@@ -6,6 +6,7 @@ const Connection = require('mongodb-connection-model');
 const Reflux = require('reflux');
 const StateMixin = require('reflux-state-mixin');
 const { promisify } = require('util');
+const { v4: uuidv4 } = require('uuid');
 
 const Actions = require('../actions');
 const {
@@ -121,10 +122,14 @@ const Store = Reflux.createStore({
       fetchedConnections: new ConnectionCollection(),
       // Hash for storing unchanged connections for the discard feature
       connections: {},
+      // Stores a uuid for the current connection attempt. Useful for
+      // disregarding past connection attempts.
+      connectionAttemptId: null,
       // URL from connection string input
       customUrl: '',
       isValid: true,
       isConnected: false,
+      isConnecting: false,
       errorMessage: null,
       syntaxErrorMessage: null,
       hasUnsavedChanges: false,
@@ -245,6 +250,15 @@ const Store = Reflux.createStore({
     this.trigger(this.state);
   },
 
+  onCancelConnectionAttemptClicked() {
+    if (!this.state.isConnected) {
+      this.connectionAttemptId = null;
+      this.setState({
+        isConnecting: false
+      });
+    }
+  },
+
   /**
    * Resests URL validation.
    */
@@ -267,22 +281,29 @@ const Store = Reflux.createStore({
    * validate instead the existing connection object.
    */
   async onConnectClicked() {
-    this.StatusActions.showIndeterminateProgressBar();
+    if (this.state.isConnecting) {
+      return;
+    }
+
+    this.setState({
+      isConnecting: true
+    });
+    const connectionAttemptId = uuidv4();
+    this.connectionAttemptId = connectionAttemptId;
 
     try {
       if (this.state.viewType === CONNECTION_STRING_VIEW) {
-        await this._connectWithConnectionString();
+        await this._connectWithConnectionString(connectionAttemptId);
       } else if (this.state.viewType === CONNECTION_FORM_VIEW) {
-        await this._connectWithConnectionForm();
+        await this._connectWithConnectionForm(connectionAttemptId);
       }
     } catch (error) {
       this.setState({
+        isConnecting: false,
         isValid: false,
         errorMessage: error.message,
         syntaxErrorMessage: null
       });
-    } finally {
-      this.StatusActions.done();
     }
   },
 
@@ -846,10 +867,19 @@ const Store = Reflux.createStore({
    * recent connection is created.
    *
    * @param {Object} connection - The current connection.
+   * @param {string} connectionAttemptId - An id for current connection attempt.
    */
-  async _connect(connection) {
+  async _connect(connection, connectionAttemptId) {
     // Set the connection's app name to the electron app name of Compass.
     connection.appname = electron.remote.app.getName();
+
+    if (
+      connectionAttemptId !== this.connectionAttemptId
+    ) {
+      // When this connection attempt is no longer the most recent
+      // attempt we can avoid attempting to connect.
+      return;
+    }
 
     const dataService = new DataService(connection);
 
@@ -857,17 +887,31 @@ const Store = Reflux.createStore({
       const runConnect = promisify(dataService.connect.bind(dataService));
       const connectedDataService = await runConnect();
 
+      if (
+        connectionAttemptId !== this.connectionAttemptId
+      ) {
+        // When this connection attempt is no longer the most recent
+        // attempt we disconnect and forget this attempt.
+        dataService.disconnect(() => {});
+        return;
+      }
+
       const currentConnection = this.state.currentConnection;
       const currentSaved = this.state.connections[currentConnection._id];
 
       this.dataService = dataService;
-      this.state.isValid = true;
-      this.state.isConnected = true;
-      this.state.errorMessage = null;
-      this.state.syntaxErrorMessage = null;
-      this.state.hasUnsavedChanges = false;
-      this.state.isURIEditable = false;
-      this.state.customUrl = this.state.currentConnection.driverUrl;
+
+      this.setState({
+        connectionAttemptId: null,
+        isValid: true,
+        isConnected: true,
+        isConnecting: false,
+        errorMessage: null,
+        syntaxErrorMessage: null,
+        hasUnsavedChanges: false,
+        isURIEditable: false,
+        customUrl: this.state.currentConnection.driverUrl
+      });
 
       currentConnection.lastUsed = new Date();
 
@@ -884,6 +928,7 @@ const Store = Reflux.createStore({
       );
     } catch (error) {
       this.setState({
+        isConnecting: false,
         isValid: false,
         errorMessage: error.message,
         syntaxErrorMessage: null
@@ -893,8 +938,10 @@ const Store = Reflux.createStore({
 
   /**
    * Connects to the current connection form connection configuration.
+   *
+   * @param {string} connectionAttemptId - An id for current connection attempt.
    */
-  async _connectWithConnectionForm() {
+  async _connectWithConnectionForm(connectionAttemptId) {
     const currentConnection = this.state.currentConnection;
 
     if (!currentConnection.isValid()) {
@@ -906,15 +953,18 @@ const Store = Reflux.createStore({
           ? validationError.message
           : 'The required fields can not be empty'
       });
-    } else {
-      await this._connect(currentConnection);
+      return;
     }
+
+    await this._connect(currentConnection, connectionAttemptId);
   },
 
   /**
    * Connects to the current connection string connection.
+   *
+   * @param {string} connectionAttemptId - An id for current connection attempt.
    */
-  async _connectWithConnectionString() {
+  async _connectWithConnectionString(connectionAttemptId) {
     const currentConnection = this.state.currentConnection;
 
     // Set the connection's app name to the electron app name
@@ -955,10 +1005,10 @@ const Store = Reflux.createStore({
     }
 
     if (isFavorite && driverUrl !== parsedConnection.driverUrl) {
-      await this._connect(parsedConnection);
+      await this._connect(parsedConnection, connectionAttemptId);
     } else {
       currentConnection.set(this._getPoorAttributes(parsedConnection));
-      await this._connect(currentConnection);
+      await this._connect(currentConnection, connectionAttemptId);
     }
   },
 

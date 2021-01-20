@@ -140,6 +140,8 @@
     "webpack-sources": "1.4.3"
   },
   "dependencies": {
-    "lodash": "^4.17.15"
+    "@leafygreen-ui/button": "9.0.0",
+    "lodash": "^4.17.15",
+    "uuid": "^8.3.2"
   }
 }

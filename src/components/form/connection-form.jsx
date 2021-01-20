@@ -21,6 +21,7 @@ class ConnectionForm extends React.Component {
 
   static propTypes = {
     currentConnection: PropTypes.object.isRequired,
+    isConnecting: PropTypes.bool,
     isValid: PropTypes.bool.isRequired,
     isHostChanged: PropTypes.bool,
     isPortChanged: PropTypes.bool

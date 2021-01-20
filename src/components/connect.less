@@ -508,13 +508,28 @@ label {
 
   .buttons {
     margin: 0 25px 10px;
-    overflow: auto;
     display: flex;
     justify-content: flex-end;
 
-    button {
+    .button {
       margin-left: 5px;
     }
+  }
+
+  .btn-loading {
+    border: 2px solid transparent;
+    border-top: 2px solid @green2;
+    border-radius: 50%;
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    width: 14px;
+    height: 14px;
+    background: none;
+    outline: none;
+    margin-right: 5px;
+
+    animation: connect-btn-loader-spin 500ms linear infinite;
   }
 
   .disabled-uri {
@@ -710,6 +725,10 @@ label {
   }
 }
 
+.confirm-edit-modal-button {
+  margin-left: 5px;
+}
+
 .favorite-modal {
   width: 500px;
   padding-left: 40px;
@@ -886,4 +905,9 @@ label {
     box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075),
       0 0 4px rgba(88, 151, 251, 1);
   }
+}
+
+@keyframes connect-btn-loader-spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }

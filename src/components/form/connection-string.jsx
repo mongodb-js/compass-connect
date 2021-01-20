@@ -16,6 +16,7 @@ class ConnectionString extends React.Component {
     customUrl: PropTypes.string,
     isValid: PropTypes.bool,
     isConnected: PropTypes.bool,
+    isConnecting: PropTypes.bool,
     errorMessage: PropTypes.string,
     syntaxErrorMessage: PropTypes.string,
     hasUnsavedChanges: PropTypes.bool,
@@ -40,6 +41,7 @@ class ConnectionString extends React.Component {
           currentConnection={this.props.currentConnection}
           isValid={this.props.isValid}
           isConnected={this.props.isConnected}
+          isConnecting={this.props.isConnecting}
           errorMessage={this.props.errorMessage}
           syntaxErrorMessage={this.props.syntaxErrorMessage}
           hasUnsavedChanges={this.props.hasUnsavedChanges}
