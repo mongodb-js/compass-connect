@@ -72,6 +72,12 @@ const Store = Reflux.createStore({
   mixins: [StateMixin.store],
   listenables: Actions,
 
+  // Stores a uuid for the current connection attempt. Useful for
+  // disregarding past connection attempts.
+  connectionAttemptId: null,
+  dataService: null,
+  connectingDataService: null,
+
   /** --- Reflux lifecycle methods ---  */
 
   /**
@@ -122,9 +128,6 @@ const Store = Reflux.createStore({
       fetchedConnections: new ConnectionCollection(),
       // Hash for storing unchanged connections for the discard feature
       connections: {},
-      // Stores a uuid for the current connection attempt. Useful for
-      // disregarding past connection attempts.
-      connectionAttemptId: null,
       // URL from connection string input
       customUrl: '',
       isValid: true,
@@ -240,6 +243,11 @@ const Store = Reflux.createStore({
   async onChangeViewClicked(viewType) {
     this.state.viewType = viewType;
 
+    // Cancel the connection because currently we sometimes
+    // change the connection details when swapping the views
+    // which may lead to unintended results.
+    await this._cancelCurrentConnectionAttempt();
+
     // Target view
     if (viewType === CONNECTION_FORM_VIEW) {
       await this._onViewChangedToConnectionForm();
@@ -251,18 +259,45 @@ const Store = Reflux.createStore({
   },
 
   onCancelConnectionAttemptClicked() {
-    if (!this.state.isConnected) {
-      this.connectionAttemptId = null;
-      this.setState({
-        isConnecting: false
-      });
-    }
+    this._cancelCurrentConnectionAttempt();
   },
 
   /**
-   * Resests URL validation.
+   * Cancels the current connection attempt if there is one
+   * in progress, and ends the connection.
+   */
+  async _cancelCurrentConnectionAttempt() {
+    if (this.state.isConnected || !this.state.isConnecting) {
+      return;
+    }
+
+    this.connectionAttemptId = null;
+
+    try {
+      const runDisconnect = promisify(
+        this.connectingDataService.disconnect.bind(this.connectingDataService )
+      );
+
+      await runDisconnect();
+    } catch (err) {
+      // When the disconnect fails, we free up the ui and
+      // we can silently wait for the timeout if it's still attempting to connect.
+    }
+
+    this.connectingDataService = null;
+
+    this.setState({
+      isConnecting: false
+    });
+  },
+
+  /**
+   * Resets URL validation.
    */
   onConnectionFormChanged() {
+    // Cancel any current connection attempt if there is one.
+    this._cancelCurrentConnectionAttempt();
+
     const currentConnection = this.state.currentConnection;
     const currentSaved = this.state.connections[currentConnection._id];
 
@@ -313,6 +348,9 @@ const Store = Reflux.createStore({
    * @param {Connection} connection - The favorite connection to copy.
    */
   onDuplicateConnectionClicked(connection) {
+    // Cancel any current connection attempt if there is one.
+    this._cancelCurrentConnectionAttempt();
+
     const newConnection = new Connection();
 
     newConnection.set(omit(connection, ['_id', 'color']));
@@ -367,6 +405,9 @@ const Store = Reflux.createStore({
    * @param {String} customUrl - A connection string.
    */
   onCustomUrlChanged(customUrl) {
+    // Cancel any current connection attempt if there is one.
+    this._cancelCurrentConnectionAttempt();
+
     this.state.errorMessage = null;
     this.state.syntaxErrorMessage = null;
     this.state.customUrl = customUrl;
@@ -379,16 +420,19 @@ const Store = Reflux.createStore({
    * @param {Connection} connection - The connection to delete.
    */
   onDeleteConnectionClicked(connection) {
-    const toDestrioy = this.state.fetchedConnections.find(
+    const toDestroy = this.state.fetchedConnections.find(
       (item) => item._id === connection._id
     );
 
-    toDestrioy.destroy({
+    toDestroy.destroy({
       success: () => {
-        this.state.fetchedConnections.remove(toDestrioy._id);
+        this.state.fetchedConnections.remove(toDestroy._id);
         this.state.connections = this._removeFromCollection(connection._id);
 
         if (connection._id === this.state.currentConnection._id) {
+          // Cancel any current connection attempt if there is one.
+          this._cancelCurrentConnectionAttempt();
+
           this.state.currentConnection = new Connection();
         }
 
@@ -412,15 +456,18 @@ const Store = Reflux.createStore({
     recentsKeys.forEach((key) => {
       this.state.connections = this._removeFromCollection(key);
 
-      const toDestrioy = this.state.fetchedConnections.find(
+      const toDestroy = this.state.fetchedConnections.find(
         (item) => item._id === key
       );
 
-      toDestrioy.destroy({
+      toDestroy.destroy({
         success: () => {
-          this.state.fetchedConnections.remove(toDestrioy._id);
+          this.state.fetchedConnections.remove(toDestroy._id);
 
           if (index === recentsLength) {
+            // Cancel any current connection attempt if there is one.
+            this._cancelCurrentConnectionAttempt();
+
             this.trigger(this.state);
           }
 
@@ -517,6 +564,11 @@ const Store = Reflux.createStore({
    * @param {Connection} connection - The connection to select.
    */
   onConnectionSelected(connection) {
+    if (this.state.currentConnection._id !== connection._id) {
+      // Cancel any current connection attempt if there is one.
+      this._cancelCurrentConnectionAttempt();
+    }
+
     this.state.currentConnection.set({ name: 'Local', color: undefined });
     this.state.currentConnection.set(connection);
     this.trigger(this.state);
@@ -596,6 +648,9 @@ const Store = Reflux.createStore({
    * Resets the connection after clicking on the new connection section.
    */
   onResetConnectionClicked() {
+    // Cancel any current connection attempt if there is one.
+    this._cancelCurrentConnectionAttempt();
+
     this.state.viewType = CONNECTION_STRING_VIEW;
     this.state.savedMessage = 'Saved to favorites';
     this.state.currentConnection = new Connection();
@@ -847,13 +902,13 @@ const Store = Reflux.createStore({
       recents = sortBy(recents, 'lastUsed');
       this.state.connections = this._removeFromCollection(recents[9]);
 
-      const toDestrioy = this.state.fetchedConnections.find(
+      const toDestroy = this.state.fetchedConnections.find(
         (item) => item._id === recents[9]
       );
 
-      toDestrioy.destroy({
+      toDestroy.destroy({
         success: () => {
-          this.state.fetchedConnections.remove(toDestrioy._id);
+          this.state.fetchedConnections.remove(toDestroy._id);
           this._saveConnection(currentConnection);
         }
       });
@@ -882,6 +937,7 @@ const Store = Reflux.createStore({
     }
 
     const dataService = new DataService(connection);
+    this.connectingDataService = dataService;
 
     try {
       const runConnect = promisify(dataService.connect.bind(dataService));
@@ -890,9 +946,6 @@ const Store = Reflux.createStore({
       if (
         connectionAttemptId !== this.connectionAttemptId
       ) {
-        // When this connection attempt is no longer the most recent
-        // attempt we disconnect and forget this attempt.
-        dataService.disconnect(() => {});
         return;
       }
 
@@ -902,7 +955,6 @@ const Store = Reflux.createStore({
       this.dataService = dataService;
 
       this.setState({
-        connectionAttemptId: null,
         isValid: true,
         isConnected: true,
         isConnecting: false,
@@ -927,6 +979,14 @@ const Store = Reflux.createStore({
         connectedDataService
       );
     } catch (error) {
+      if (
+        connectionAttemptId !== this.connectionAttemptId
+      ) {
+        // If the connection attempt was cancelled it should throw a
+        // 'Topology Closed' error. Here we can silently ignore it.
+        return;
+      }
+
       this.setState({
         isConnecting: false,
         isValid: false,
