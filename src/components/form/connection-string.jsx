@@ -31,24 +31,26 @@ class ConnectionString extends React.Component {
         data-test-id="connect-string"
         className={classnames(styles['connect-string'])}
       >
-        <FormGroup separator>
-          <ConnectionStringInput
-            customUrl={this.props.customUrl}
+        <fieldset disabled={!!this.props.isConnecting}>
+          <FormGroup separator>
+            <ConnectionStringInput
+              customUrl={this.props.customUrl}
+              isURIEditable={this.props.isURIEditable}
+            />
+          </FormGroup>
+          <FormActions
+            currentConnection={this.props.currentConnection}
+            isValid={this.props.isValid}
+            isConnected={this.props.isConnected}
+            isConnecting={this.props.isConnecting}
+            errorMessage={this.props.errorMessage}
+            syntaxErrorMessage={this.props.syntaxErrorMessage}
+            hasUnsavedChanges={this.props.hasUnsavedChanges}
+            viewType={this.props.viewType}
             isURIEditable={this.props.isURIEditable}
+            isSavedConnection={this.props.isSavedConnection}
           />
-        </FormGroup>
-        <FormActions
-          currentConnection={this.props.currentConnection}
-          isValid={this.props.isValid}
-          isConnected={this.props.isConnected}
-          isConnecting={this.props.isConnecting}
-          errorMessage={this.props.errorMessage}
-          syntaxErrorMessage={this.props.syntaxErrorMessage}
-          hasUnsavedChanges={this.props.hasUnsavedChanges}
-          viewType={this.props.viewType}
-          isURIEditable={this.props.isURIEditable}
-          isSavedConnection={this.props.isSavedConnection}
-        />
+        </fieldset>
       </form>
     );
   }

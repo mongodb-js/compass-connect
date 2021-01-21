@@ -295,9 +295,6 @@ const Store = Reflux.createStore({
    * Resets URL validation.
    */
   onConnectionFormChanged() {
-    // Cancel any current connection attempt if there is one.
-    this._cancelCurrentConnectionAttempt();
-
     const currentConnection = this.state.currentConnection;
     const currentSaved = this.state.connections[currentConnection._id];
 
@@ -408,9 +405,6 @@ const Store = Reflux.createStore({
    * @param {String} customUrl - A connection string.
    */
   onCustomUrlChanged(customUrl) {
-    // Cancel any current connection attempt if there is one.
-    this._cancelCurrentConnectionAttempt();
-
     this.state.errorMessage = null;
     this.state.syntaxErrorMessage = null;
     this.state.customUrl = customUrl;
