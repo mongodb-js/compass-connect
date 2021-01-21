@@ -334,10 +334,13 @@ const Store = Reflux.createStore({
       }
     } catch (error) {
       this.setState({
-        isConnecting: false,
         isValid: false,
         errorMessage: error.message,
         syntaxErrorMessage: null
+      });
+    } finally {
+      this.setState({
+        isConnecting: false
       });
     }
   },
@@ -957,7 +960,6 @@ const Store = Reflux.createStore({
       this.setState({
         isValid: true,
         isConnected: true,
-        isConnecting: false,
         errorMessage: null,
         syntaxErrorMessage: null,
         hasUnsavedChanges: false,
@@ -988,7 +990,6 @@ const Store = Reflux.createStore({
       }
 
       this.setState({
-        isConnecting: false,
         isValid: false,
         errorMessage: error.message,
         syntaxErrorMessage: null

@@ -1795,14 +1795,11 @@ describe('Store', () => {
       Store.state.fetchedConnections = new ConnectionCollection();
       Store.state.fetchedConnections.add(favorite);
       Store.state.connections = { ...connections };
+      Store.state.isConnecting = false;
       Store.state.currentConnection = favorite;
       Store._connect = (parsedConnection) => {
         Store.state.currentConnection = parsedConnection;
         Store.trigger(Store.state);
-      };
-      Store.StatusActions = {
-        done: () => {},
-        showIndeterminateProgressBar: () => {}
       };
     });
 
@@ -1810,44 +1807,86 @@ describe('Store', () => {
       sinon.restore();
     });
 
-    it('uses a real password when builds a driverUrl', (done) => {
-      const unsubscribe = Store.listen((state) => {
-        unsubscribe();
-        expect(state.currentConnection.driverUrl).to.equal(
-          'mongodb://user:password@server.example.com:27001/?authSource=admin&readPreference=primary&appname=Electron&ssl=false'
-        );
-        done();
+    it('uses a real password when builds a driverUrl', async() => {
+      await Actions.onConnectClicked();
+
+      expect(Store.state.currentConnection.driverUrl).to.equal(
+        'mongodb://user:password@server.example.com:27001/?authSource=admin&readPreference=primary&appname=Electron&ssl=false'
+      );
+    });
+
+    it('updates state to connecting when it is connecting', async() => {
+      expect(Store.state.isConnecting).to.equal(false);
+
+      let didCallConnect;
+      const promiseWaitForConnect = () => new Promise((resolve) => {
+        didCallConnect = resolve;
       });
 
+      let checkFinished;
+      const promiseWaitForCheck = () => new Promise((resolve) => {
+        checkFinished = resolve;
+      });
+
+      const originalStoreConnectWithString = Store._connectWithConnectionString.bind(Store);
+
+      let didFinishConnect = false;
+      sinon.replace(
+        Store,
+        '_connectWithConnectionString',
+        async() => {
+          await promiseWaitForCheck();
+
+          await originalStoreConnectWithString();
+
+          if (didCallConnect) {
+            didCallConnect();
+          }
+          didFinishConnect = true;
+        }
+      );
+
       Actions.onConnectClicked();
+
+      expect(Store.state.isConnecting).to.equal(true);
+
+      checkFinished();
+      if (!didFinishConnect) {
+        await promiseWaitForConnect();
+      }
+      await Actions.onConnectClicked();
+
+      expect(Store.state.isConnecting).to.equal(false);
     });
 
-    it('shows and hides the progress bar', async() => {
-      const spyShow = sinon.spy(
-        Store.StatusActions,
-        'showIndeterminateProgressBar'
-      );
-      const spyDone = sinon.spy(
-        Store.StatusActions,
-        'done'
+    it('attempts to connect when isConnecting is false', async() => {
+      expect(Store.state.isConnecting).to.equal(false);
+
+      const spyConnect = sinon.spy(
+        Store,
+        '_connectWithConnectionString'
       );
 
-      await Store.onConnectClicked();
+      await Actions.onConnectClicked();
 
-      expect(spyShow.calledOnce).to.equal(true);
-      expect(spyDone.calledOnce).to.equal(true);
+      expect(spyConnect.calledOnce).to.equal(true);
     });
 
-    it('shows and hides the progress bar when theres an error connecting', async() => {
-      const spyShow = sinon.spy(
-        Store.StatusActions,
-        'showIndeterminateProgressBar'
-      );
-      const spyDone = sinon.spy(
-        Store.StatusActions,
-        'done'
+    it('does not attempt to connect when isConnecting is true', async() => {
+      Store.state.isConnecting = true;
+
+      const spyConnect = sinon.spy(
+        Store,
+        '_connectWithConnectionString'
       );
 
+      await Actions.onConnectClicked();
+
+      expect(Store.state.isConnecting).to.equal(true);
+      expect(spyConnect.calledOnce).to.equal(false);
+    });
+
+    it('sets isConnecting to false when theres an error connecting', async() => {
       sinon.replace(
         Store,
         '_connectWithConnectionString',
@@ -1856,8 +1895,7 @@ describe('Store', () => {
 
       await Store.onConnectClicked();
 
-      expect(spyShow.calledOnce).to.equal(true);
-      expect(spyDone.calledOnce).to.equal(true);
+      expect(Store.state.isConnecting).to.equal(false);
     });
   });
 

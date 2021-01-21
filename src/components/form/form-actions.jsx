@@ -163,8 +163,9 @@ class FormActions extends React.Component {
       <Button
         className={styles.button}
         type="submit"
+        name="connect"
         variant="primary"
-        disabled={this.hasSyntaxError()}
+        disabled={!!this.hasSyntaxError()}
         onClick={this.onConnectClicked.bind(this)}
       >
         Connect
@@ -178,6 +179,7 @@ class FormActions extends React.Component {
         <Button
           className={styles.button}
           type="submit"
+          name="cancelConnect"
           onClick={this.onCancelConnectionAttemptClicked.bind(this)}
         >
           Cancel
@@ -185,6 +187,7 @@ class FormActions extends React.Component {
         <Button
           className={styles.button}
           type="submit"
+          name="connecting"
           disabled
           onClick={(e) => {
             e.preventDefault();
