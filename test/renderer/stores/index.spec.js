@@ -10,11 +10,7 @@ const delay = (amt) => new Promise((resolve) => setTimeout(resolve, amt));
 export const ensureResult = async(timeout, getFn, testFn, failMsg) => {
   let result = await getFn();
   while (!testFn(result)) {
-    if (timeout > 1000) {
-      // eslint-disable-next-line no-console
-      console.log(`looping at timeout=${timeout}, result=${result}`);
-    }
-    if (timeout > 30000) {
+    if (timeout > 2000) {
       throw new Error(`Waited for ${failMsg}, never happened`);
     }
     await delay(timeout);
@@ -1857,6 +1853,7 @@ describe('Store', () => {
 
       expect(Store.dataService).to.not.equal(null);
       expect(Store.state.isConnected).to.equal(true);
+      expect(appRegistryEmitStub.calledOnce).to.equal(true);
     });
 
     it('shows the progress bar when it successfully connects', async() => {
@@ -1913,6 +1910,55 @@ describe('Store', () => {
       const differentConnectionAttemptId = uuidv4();
       await Store._connect(connection, differentConnectionAttemptId);
 
+      expect(Store.dataService).to.equal(null);
+    });
+  });
+
+  describe('#_cancelCurrentConnectionAttempt', () => {
+    afterEach(() => {
+      sinon.restore();
+    });
+
+    it('cancels the current connection attempt', async() => {
+      let finishedConnecting = false;
+      const connectionAttemptId = uuidv4();
+      const startConnecting = async() => {
+        Store.connectionAttemptId = connectionAttemptId;
+        await Store._connect({
+          port: 29799 // Hopefully not in use.
+        }, connectionAttemptId);
+
+        finishedConnecting = true;
+      };
+      Store.state.isConnecting = true;
+
+      const spySetState = sinon.spy(
+        Store,
+        'setState'
+      );
+
+      startConnecting();
+
+      await ensureResult(
+        3,
+        () => Store.connectingDataService,
+        () => Store.connectingDataService !== null,
+        'Never started connecting to failing connection.'
+      );
+
+      await Store._cancelCurrentConnectionAttempt();
+
+      expect(Store.connectionAttemptId).to.equal(null);
+
+      await ensureResult(
+        3,
+        () => finishedConnecting,
+        () => finishedConnecting,
+        'Never finished connecting to failing connection.'
+      );
+
+      expect(Store.state.isConnected).to.equal(false);
+      expect(Store.connectingDataService).to.equal(null);
       expect(Store.dataService).to.equal(null);
     });
   });
