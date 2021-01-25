@@ -7,7 +7,7 @@ import Actions from '../../../src/actions';
 import Store from '../../../src/stores';
 
 const delay = (amt) => new Promise((resolve) => setTimeout(resolve, amt));
-export const ensureResult = async(timeout, getFn, testFn, failMsg): Promise<any> => {
+export const ensureResult = async(timeout, getFn, testFn, failMsg) => {
   let result = await getFn();
   while (!testFn(result)) {
     if (timeout > 1000) {
