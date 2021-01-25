@@ -1,9 +1,28 @@
 import AppRegistry from 'hadron-app-registry';
 import Connection, { ConnectionCollection } from 'mongodb-connection-model';
 import Reflux from 'reflux';
+import { v4 as uuidv4 } from 'uuid';
 
 import Actions from '../../../src/actions';
 import Store from '../../../src/stores';
+
+const delay = (amt) => new Promise((resolve) => setTimeout(resolve, amt));
+export const ensureResult = async(timeout, getFn, testFn, failMsg): Promise<any> => {
+  let result = await getFn();
+  while (!testFn(result)) {
+    if (timeout > 1000) {
+      // eslint-disable-next-line no-console
+      console.log(`looping at timeout=${timeout}, result=${result}`);
+    }
+    if (timeout > 30000) {
+      throw new Error(`Waited for ${failMsg}, never happened`);
+    }
+    await delay(timeout);
+    timeout *= 2; // Try again but wait double.
+    result = await getFn();
+  }
+  return result;
+};
 
 describe('Store', () => {
   beforeEach(() => {
@@ -1769,6 +1788,132 @@ describe('Store', () => {
 
         Actions.onSaveAsFavoriteClicked(connections[recent._id]);
       });
+    });
+  });
+
+  describe('#_connect', () => {
+    const connection = new Connection({
+      hostname: 'localhost',
+      port: 27018,
+      authStrategy: 'NONE'
+    });
+    let appRegistryEmitStub;
+    let connectionAttemptId;
+
+    beforeEach(() => {
+      const connections = {
+        [connection._id]: connection.getAttributes({ props: true, derived: true })
+      };
+      Store.state.fetchedConnections = new ConnectionCollection();
+      Store.state.fetchedConnections.add(connection);
+      Store.state.connections = { ...connections };
+      Store.state.isConnecting = false;
+      Store.state.currentConnection = connection;
+      Store.state.isURIEditable = false;
+      Store.state.viewType = 'connectionString';
+      Store.state.customUrl = connection.driverUrl;
+      Store.state.fetchedConnections = new ConnectionCollection();
+      Store.state.fetchedConnections.add(connection);
+      Store.state.connections = { ...connections };
+      Store.state.isConnecting = false;
+      Store.state.isConnected = false;
+      Store.state.currentConnection = connection;
+
+      connectionAttemptId = uuidv4();
+      Store.connectionAttemptId = connectionAttemptId;
+      Store.dataService = null;
+      Store.connectingDataService = null;
+
+      appRegistryEmitStub = sinon.fake();
+      sinon.replace(
+        Store,
+        'appRegistry',
+        {
+          emit: appRegistryEmitStub
+        }
+      );
+    });
+
+    afterEach(async() => {
+      if (Store.dataService) {
+        try {
+          await Store.dataService.disconnect();
+        } catch (err) { /* */ }
+        Store.dataService = null;
+      }
+
+      if (Store.connectingDataService) {
+        try {
+          await Store.connectingDataService.disconnect();
+        } catch (err) { /* */ }
+        Store.connectingDataService = null;
+      }
+
+      sinon.restore();
+    });
+
+    it('connects to the database and sets the dataService on the store', async() => {
+      await Store._connect(connection, connectionAttemptId);
+
+      expect(Store.dataService).to.not.equal(null);
+      expect(Store.state.isConnected).to.equal(true);
+    });
+
+    it('shows the progress bar when it successfully connects', async() => {
+      const spyShow = sinon.spy(
+        Store.StatusActions,
+        'showIndeterminateProgressBar'
+      );
+
+      await Store._connect(connection, connectionAttemptId);
+
+      expect(spyShow.calledOnce).to.equal(true);
+    });
+
+    it('does not show the progress bar when it errors when connecting', async() => {
+      const spyShow = sinon.spy(
+        Store.StatusActions,
+        'showIndeterminateProgressBar'
+      );
+
+      let finishedConnecting = false;
+      const startConnecting = async() => {
+        await Store._connect({
+          port: 29799 // Hopefully not in use.
+        }, connectionAttemptId);
+
+        finishedConnecting = true;
+      };
+
+      startConnecting();
+
+      await ensureResult(
+        3,
+        () => Store.connectingDataService,
+        () => Store.connectingDataService !== null,
+        'Never started connecting to failing connection.'
+      );
+
+      Store.connectingDataService.disconnect();
+
+      await ensureResult(
+        3,
+        () => finishedConnecting,
+        () => finishedConnecting,
+        'Never finished connecting to failing connection.'
+      );
+
+      expect(Store.state.isConnected).to.equal(false);
+      expect(Store.connectingDataService).to.equal(null);
+      expect(Store.dataService).to.equal(null);
+      expect(spyShow.calledOnce).to.equal(false);
+    });
+
+    it('does not attempt to connect when the connectionAttemptId does not match the one on the store', async() => {
+      const differentConnectionAttemptId = uuidv4();
+      await Store._connect(connection, differentConnectionAttemptId);
+
+      expect(Store.dataService).to.equal(null);
     });
   });
 

@@ -949,6 +949,7 @@ const Store = Reflux.createStore({
       const currentConnection = this.state.currentConnection;
       const currentSaved = this.state.connections[currentConnection._id];
 
+      this.connectingDataService = null;
       this.dataService = dataService;
 
       this.setState({
@@ -974,6 +975,11 @@ const Store = Reflux.createStore({
         null, // No error connecting.
         connectedDataService
       );
+
+      // Compass relies on `compass-connect` showing a progress
+      // bar, which is hidden after the instance information is loaded
+      // in another plugin.
+      this.StatusActions.showIndeterminateProgressBar();
     } catch (error) {
       if (
         connectionAttemptId !== this.connectionAttemptId
@@ -982,6 +988,8 @@ const Store = Reflux.createStore({
         // 'Topology Closed' error. Here we can silently ignore it.
         return;
       }
+
+      this.connectingDataService = null;
 
       this.setState({
         isValid: false,
