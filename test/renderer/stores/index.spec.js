@@ -1932,11 +1932,6 @@ describe('Store', () => {
       };
       Store.state.isConnecting = true;
 
-      const spySetState = sinon.spy(
-        Store,
-        'setState'
-      );
-
       startConnecting();
 
       await ensureResult(
