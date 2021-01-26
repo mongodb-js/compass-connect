@@ -5,16 +5,16 @@ on:
       - master
   pull_request:
 
-services:
-  mongodb:
-    image: mongo:4.2.3
-    ports:
-      - 27018:27017
-
 jobs:
   check-and-test:
     name: Check and Test
     runs-on: ubuntu-20.04
+
+    services:
+      mongodb:
+        image: mongo:4.2.3
+        ports:
+          - 27018:27017
 
     steps:
       - uses: actions/checkout@v2
