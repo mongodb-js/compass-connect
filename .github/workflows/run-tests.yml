@@ -5,6 +5,12 @@ on:
       - master
   pull_request:
 
+services:
+  mongodb:
+    image: mongo:4.2.3
+    ports:
+      - 27018:27017
+
 jobs:
   check-and-test:
     name: Check and Test
@@ -55,4 +61,5 @@ jobs:
       - name: Check and Test
         run: |
           npm run check
+          npm run cover
           xvfb-run --auto-servernum npm run test
