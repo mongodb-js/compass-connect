@@ -55,5 +55,4 @@ jobs:
       - name: Check and Test
         run: |
           npm run check
-          npm run cover
-          xvfb-run --auto-servernum npm run test:karma
+          xvfb-run --auto-servernum npm run test
