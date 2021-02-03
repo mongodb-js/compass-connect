@@ -1,7 +1,6 @@
 @import './sidebar/sidebar.less';
 
 @compass-sidebar-secondary-text-color: @gray6;
-@compass-sidebar-atlas-background-color: @gray1;
 @compass-sidebar-atlas-background-color: lighten(hsl(204, 29%, 18%), 5%);
 
 .page {
@@ -633,6 +632,72 @@ label {
       text-decoration: none;
       cursor: pointer;
     }
+  }
+}
+
+.connecting-modal-backdrop {
+  background-color: transparent !important;// rgb(245, 246, 247) !important;
+}
+
+.connecting-background {
+  position: fixed;
+  z-index: 500;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+
+  .connecting-background-gradient {
+    opacity:0.9;
+  }
+}
+
+.connecting-modal-content {
+  text-align: center;
+  padding: 24px;
+
+  .connecting-modal-status {
+    margin-top: 24px;
+    font-weight: bold;
+  }
+
+  .connecting-modal-animation {
+    margin-top: 24px;
+    text-align: center;
+
+    .connecting-compass-animation-svg {
+      width: 60px;
+      height: auto;
+    }
+
+    .connecting-compass-shadow {
+      fill:#136149;
+      opacity:0.12;
+    }
+
+    .connecting-compass-circle-1 {
+      fill:none;
+      stroke:#136149;
+      stroke-linecap:round;
+      stroke-linejoin:round;
+    }
+    .connecting-compass-circle-2 {
+      fill:#f7a76f;
+    }
+    .connecting-compass-circle-3 {
+      fill:#fef7e3;
+      opacity:0.85;
+    }
+    .connecting-compass-arrow-1 {
+      fill:#f9d3c5;
+    }
+    .connecting-compass-arrow-2 {
+      fill:#09804c;
+    }
+  }
+
+  .connecting-modal-cancel-btn {
+    margin-top: 24px;
   }
 }
 

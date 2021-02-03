@@ -1,7 +1,6 @@
 import AppRegistry from 'hadron-app-registry';
 import Connection, { ConnectionCollection } from 'mongodb-connection-model';
 import Reflux from 'reflux';
-import { v4 as uuidv4 } from 'uuid';
 
 import Actions from '../../../src/actions';
 import Store from '../../../src/stores';
@@ -1794,7 +1793,6 @@ describe('Store', () => {
       authStrategy: 'NONE'
     });
     let appRegistryEmitStub;
-    let connectionAttemptId;
 
     beforeEach(() => {
       const connections = {
@@ -1815,10 +1813,8 @@ describe('Store', () => {
       Store.state.isConnected = false;
       Store.state.currentConnection = connection;
 
-      connectionAttemptId = uuidv4();
-      Store.connectionAttemptId = connectionAttemptId;
+      Store.connectingConnectionAttempt = null;
       Store.dataService = null;
-      Store.connectingDataService = null;
 
       appRegistryEmitStub = sinon.fake();
       sinon.replace(
@@ -1838,18 +1834,19 @@ describe('Store', () => {
         Store.dataService = null;
       }
 
-      if (Store.connectingDataService) {
+      if (Store.connectingConnectionAttempt) {
         try {
-          await Store.connectingDataService.disconnect();
+          await Store.connectingConnectionAttempt.cancelConnectionAttempt();
         } catch (err) { /* */ }
-        Store.connectingDataService = null;
+        Store.connectingConnectionAttempt = null;
       }
 
       sinon.restore();
     });
 
     it('connects to the database and sets the dataService on the store', async() => {
-      await Store._connect(connection, connectionAttemptId);
+      Store.state.isConnecting = true;
+      await Store._connect(connection);
 
       expect(Store.dataService).to.not.equal(null);
       expect(Store.state.isConnected).to.equal(true);
@@ -1857,17 +1854,19 @@ describe('Store', () => {
     });
 
     it('shows the progress bar when it successfully connects', async() => {
+      Store.state.isConnecting = true;
       const spyShow = sinon.spy(
         Store.StatusActions,
         'showIndeterminateProgressBar'
       );
 
-      await Store._connect(connection, connectionAttemptId);
+      await Store._connect(connection);
 
       expect(spyShow.calledOnce).to.equal(true);
     });
 
     it('does not show the progress bar when it errors when connecting', async() => {
+      Store.state.isConnecting = true;
       const spyShow = sinon.spy(
         Store.StatusActions,
         'showIndeterminateProgressBar'
@@ -1877,7 +1876,7 @@ describe('Store', () => {
       const startConnecting = async() => {
         await Store._connect({
           port: 29799 // Hopefully not in use.
-        }, connectionAttemptId);
+        });
 
         finishedConnecting = true;
       };
@@ -1886,12 +1885,12 @@ describe('Store', () => {
 
       await ensureResult(
         3,
-        () => Store.connectingDataService,
-        () => Store.connectingDataService !== null,
+        () => Store.connectingConnectionAttempt,
+        () => Store.connectingConnectionAttempt !== null,
         'Never started connecting to failing connection.'
       );
 
-      Store.connectingDataService.disconnect();
+      Store.connectingConnectionAttempt.cancelConnectionAttempt();
 
       await ensureResult(
         3,
@@ -1901,14 +1900,14 @@ describe('Store', () => {
       );
 
       expect(Store.state.isConnected).to.equal(false);
-      expect(Store.connectingDataService).to.equal(null);
+      expect(Store.connectingConnectionAttempt).to.equal(null);
       expect(Store.dataService).to.equal(null);
       expect(spyShow.calledOnce).to.equal(false);
     });
 
-    it('does not attempt to connect when the connectionAttemptId does not match the one on the store', async() => {
-      const differentConnectionAttemptId = uuidv4();
-      await Store._connect(connection, differentConnectionAttemptId);
+    it('does not connect when isConnecting is false', async() => {
+      Store.state.isConnecting = false;
+      await Store._connect(connection);
 
       expect(Store.dataService).to.equal(null);
     });
@@ -1921,12 +1920,10 @@ describe('Store', () => {
 
     it('cancels the current connection attempt', async() => {
       let finishedConnecting = false;
-      const connectionAttemptId = uuidv4();
       const startConnecting = async() => {
-        Store.connectionAttemptId = connectionAttemptId;
         await Store._connect({
           port: 29799 // Hopefully not in use.
-        }, connectionAttemptId);
+        });
 
         finishedConnecting = true;
       };
@@ -1936,14 +1933,14 @@ describe('Store', () => {
 
       await ensureResult(
         3,
-        () => Store.connectingDataService,
-        () => Store.connectingDataService !== null,
+        () => Store.connectingConnectionAttempt,
+        () => Store.connectingConnectionAttempt !== null,
         'Never started connecting to failing connection.'
       );
 
       await Store._cancelCurrentConnectionAttempt();
 
-      expect(Store.connectionAttemptId).to.equal(null);
+      expect(Store.connectingConnectionAttempt).to.equal(null);
 
       await ensureResult(
         3,
@@ -1953,7 +1950,7 @@ describe('Store', () => {
       );
 
       expect(Store.state.isConnected).to.equal(false);
-      expect(Store.connectingDataService).to.equal(null);
+      expect(Store.connectingConnectionAttempt).to.equal(null);
       expect(Store.dataService).to.equal(null);
     });
   });

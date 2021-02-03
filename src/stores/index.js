@@ -6,13 +6,13 @@ const Connection = require('mongodb-connection-model');
 const Reflux = require('reflux');
 const StateMixin = require('reflux-state-mixin');
 const { promisify } = require('util');
-const { v4: uuidv4 } = require('uuid');
 
 const Actions = require('../actions');
 const {
   CONNECTION_FORM_VIEW,
   CONNECTION_STRING_VIEW
 } = require('../constants/connection-views');
+const { createConnectionAttempt } = require('../modules/connection-attempt');
 
 const ConnectionCollection = Connection.ConnectionCollection;
 const userAgent = navigator.userAgent.toLowerCase();
@@ -72,11 +72,8 @@ const Store = Reflux.createStore({
   mixins: [StateMixin.store],
   listenables: Actions,
 
-  // Stores a uuid for the current connection attempt. Useful for
-  // disregarding past connection attempts.
-  connectionAttemptId: null,
   dataService: null,
-  connectingDataService: null,
+  connectingConnectionAttempt: null,
 
   /** --- Reflux lifecycle methods ---  */
 
@@ -128,6 +125,8 @@ const Store = Reflux.createStore({
       fetchedConnections: new ConnectionCollection(),
       // Hash for storing unchanged connections for the discard feature
       connections: {},
+      // Message shown when attempting connection.
+      connectingStatus: 'Establishing connection...',
       // URL from connection string input
       customUrl: '',
       isValid: true,
@@ -271,20 +270,16 @@ const Store = Reflux.createStore({
       return;
     }
 
-    this.connectionAttemptId = null;
+    if (this.connectingConnectionAttempt) {
+      try {
+        this.connectingConnectionAttempt.cancelConnectionAttempt();
+      } catch (err) {
+        // When the disconnect fails, we free up the ui and we can
+        // silently wait for the timeout if it's still attempting to connect.
+      }
 
-    try {
-      const runDisconnect = promisify(
-        this.connectingDataService.disconnect.bind(this.connectingDataService )
-      );
-
-      await runDisconnect();
-    } catch (err) {
-      // When the disconnect fails, we free up the ui and
-      // we can silently wait for the timeout if it's still attempting to connect.
+      this.connectingConnectionAttempt = null;
     }
-
-    this.connectingDataService = null;
 
     this.setState({
       isConnecting: false
@@ -318,16 +313,15 @@ const Store = Reflux.createStore({
     }
 
     this.setState({
-      isConnecting: true
+      isConnecting: true,
+      connectingStatus: 'Loading connection'
     });
-    const connectionAttemptId = uuidv4();
-    this.connectionAttemptId = connectionAttemptId;
 
     try {
       if (this.state.viewType === CONNECTION_STRING_VIEW) {
-        await this._connectWithConnectionString(connectionAttemptId);
+        await this._connectWithConnectionString();
       } else if (this.state.viewType === CONNECTION_FORM_VIEW) {
-        await this._connectWithConnectionForm(connectionAttemptId);
+        await this._connectWithConnectionForm();
       }
     } catch (error) {
       this.setState({
@@ -919,38 +913,33 @@ const Store = Reflux.createStore({
    * recent connection is created.
    *
    * @param {Object} connection - The current connection.
-   * @param {string} connectionAttemptId - An id for current connection attempt.
    */
-  async _connect(connection, connectionAttemptId) {
+  async _connect(connection) {
     // Set the connection's app name to the electron app name of Compass.
     connection.appname = electron.remote.app.getName();
 
-    if (
-      connectionAttemptId !== this.connectionAttemptId
-    ) {
-      // When this connection attempt is no longer the most recent
-      // attempt we can avoid attempting to connect.
+    if (!this.state.isConnecting) {
+      // The connection attempt might have been cancelled while
+      // we were parsing the connection information, so we return here.
       return;
     }
 
-    const dataService = new DataService(connection);
-    this.connectingDataService = dataService;
-
     try {
-      const runConnect = promisify(dataService.connect.bind(dataService));
-      const connectedDataService = await runConnect();
+      const dataService = new DataService(connection);
+      this.connectingConnectionAttempt = createConnectionAttempt(dataService);
 
-      if (
-        connectionAttemptId !== this.connectionAttemptId
-      ) {
+      const connectedDataService = await this.connectingConnectionAttempt.connect();
+
+      this.connectingConnectionAttempt = null;
+
+      if (!connectedDataService || !this.state.isConnecting) {
         return;
       }
 
       const currentConnection = this.state.currentConnection;
       const currentSaved = this.state.connections[currentConnection._id];
 
-      this.connectingDataService = null;
-      this.dataService = dataService;
+      this.dataService = connectedDataService;
 
       this.setState({
         isValid: true,
@@ -981,15 +970,7 @@ const Store = Reflux.createStore({
       // in another plugin.
       this.StatusActions.showIndeterminateProgressBar();
     } catch (error) {
-      if (
-        connectionAttemptId !== this.connectionAttemptId
-      ) {
-        // If the connection attempt was cancelled it should throw a
-        // 'Topology Closed' error. Here we can silently ignore it.
-        return;
-      }
-
-      this.connectingDataService = null;
+      this.connectingConnectionAttempt = null;
 
       this.setState({
         isValid: false,
@@ -1001,10 +982,8 @@ const Store = Reflux.createStore({
 
   /**
    * Connects to the current connection form connection configuration.
-   *
-   * @param {string} connectionAttemptId - An id for current connection attempt.
    */
-  async _connectWithConnectionForm(connectionAttemptId) {
+  async _connectWithConnectionForm() {
     const currentConnection = this.state.currentConnection;
 
     if (!currentConnection.isValid()) {
@@ -1019,15 +998,17 @@ const Store = Reflux.createStore({
       return;
     }
 
-    await this._connect(currentConnection, connectionAttemptId);
+    this.setState({
+      connectingStatus: `Connecting to ${currentConnection.title}`
+    });
+
+    await this._connect(currentConnection);
   },
 
   /**
    * Connects to the current connection string connection.
-   *
-   * @param {string} connectionAttemptId - An id for current connection attempt.
    */
-  async _connectWithConnectionString(connectionAttemptId) {
+  async _connectWithConnectionString() {
     const currentConnection = this.state.currentConnection;
 
     // Set the connection's app name to the electron app name
@@ -1035,7 +1016,7 @@ const Store = Reflux.createStore({
     currentConnection.appname = electron.remote.app.getName();
 
     const url = this.state.isURIEditable
-      ? this.state.customUrl || DEFAULT_DRIVER_URL
+      ? (this.state.customUrl || DEFAULT_DRIVER_URL)
       : this.state.currentConnection.driverUrl;
 
     if (!Connection.isURI(url)) {
@@ -1067,11 +1048,15 @@ const Store = Reflux.createStore({
       this._setTlsAttributes(currentConnection, parsedConnection);
     }
 
+    this.setState({
+      connectingStatus: `Connecting to ${parsedConnection.title}`
+    });
+
     if (isFavorite && driverUrl !== parsedConnection.driverUrl) {
-      await this._connect(parsedConnection, connectionAttemptId);
+      await this._connect(parsedConnection);
     } else {
       currentConnection.set(this._getPoorAttributes(parsedConnection));
-      await this._connect(currentConnection, connectionAttemptId);
+      await this._connect(currentConnection);
     }
   },
 

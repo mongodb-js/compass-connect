@@ -20,8 +20,6 @@ const NOTE = 'Editing this connection string will reveal your credentials.';
  * Confirm edit a connection string modal.
  */
 class ConfirmEditConnectionString extends PureComponent {
-  static displayName = 'ConfirmNewPipelineComponent';
-
   static propTypes = {
     isEditURIConfirm: PropTypes.bool.isRequired
   };
