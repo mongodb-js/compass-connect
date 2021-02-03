@@ -242,11 +242,6 @@ const Store = Reflux.createStore({
   async onChangeViewClicked(viewType) {
     this.state.viewType = viewType;
 
-    // Cancel the connection because currently we sometimes
-    // change the connection details when swapping the views
-    // which may lead to unintended results.
-    await this._cancelCurrentConnectionAttempt();
-
     // Target view
     if (viewType === CONNECTION_FORM_VIEW) {
       await this._onViewChangedToConnectionForm();
@@ -342,9 +337,6 @@ const Store = Reflux.createStore({
    * @param {Connection} connection - The favorite connection to copy.
    */
   onDuplicateConnectionClicked(connection) {
-    // Cancel any current connection attempt if there is one.
-    this._cancelCurrentConnectionAttempt();
-
     const newConnection = new Connection();
 
     newConnection.set(omit(connection, ['_id', 'color']));
@@ -421,9 +413,6 @@ const Store = Reflux.createStore({
         this.state.connections = this._removeFromCollection(connection._id);
 
         if (connection._id === this.state.currentConnection._id) {
-          // Cancel any current connection attempt if there is one.
-          this._cancelCurrentConnectionAttempt();
-
           this.state.currentConnection = new Connection();
         }
 
@@ -456,9 +445,6 @@ const Store = Reflux.createStore({
           this.state.fetchedConnections.remove(toDestroy._id);
 
           if (index === recentsLength) {
-            // Cancel any current connection attempt if there is one.
-            this._cancelCurrentConnectionAttempt();
-
             this.trigger(this.state);
           }
 
@@ -555,11 +541,6 @@ const Store = Reflux.createStore({
    * @param {Connection} connection - The connection to select.
    */
   onConnectionSelected(connection) {
-    if (this.state.currentConnection._id !== connection._id) {
-      // Cancel any current connection attempt if there is one.
-      this._cancelCurrentConnectionAttempt();
-    }
-
     this.state.currentConnection.set({ name: 'Local', color: undefined });
     this.state.currentConnection.set(connection);
     this.trigger(this.state);
@@ -639,9 +620,6 @@ const Store = Reflux.createStore({
    * Resets the connection after clicking on the new connection section.
    */
   onResetConnectionClicked() {
-    // Cancel any current connection attempt if there is one.
-    this._cancelCurrentConnectionAttempt();
-
     this.state.viewType = CONNECTION_STRING_VIEW;
     this.state.savedMessage = 'Saved to favorites';
     this.state.currentConnection = new Connection();
