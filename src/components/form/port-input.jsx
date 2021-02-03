@@ -7,7 +7,7 @@ import FormInput from './form-input';
 class PortInput extends React.PureComponent {
   static displayName = 'PortInput';
 
-  static propTypes = { port: PropTypes.number, isPortChanged: PropTypes.bool };
+  static propTypes = { port: PropTypes.number };
 
   /**
    * Changes port.
