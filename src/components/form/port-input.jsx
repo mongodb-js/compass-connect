@@ -18,19 +18,6 @@ class PortInput extends React.PureComponent {
     Actions.onPortChanged(+evt.target.value);
   }
 
-  /**
-   * Gets port.
-   *
-   * @returns {Number} port.
-   */
-  getPort() {
-    if (this.props.isPortChanged === false) {
-      return 27017;
-    }
-
-    return +this.props.port;
-  }
-
   render() {
     return (
       <FormInput
@@ -38,7 +25,7 @@ class PortInput extends React.PureComponent {
         name="port"
         placeholder="27017"
         changeHandler={this.onPortChanged.bind(this)}
-        value={this.getPort()}
+        value={this.props.port}
         type="number"
         otherInputAttributes={{min: 1, max: 65536}} />
     );
