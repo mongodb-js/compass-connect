@@ -15,7 +15,7 @@ class PortInput extends React.PureComponent {
    * @param {Object} evt - evt.
    */
   onPortChanged(evt) {
-    Actions.onPortChanged(+evt.target.value);
+    Actions.onPortChanged(evt.target.value);
   }
 
   render() {
