@@ -104,15 +104,23 @@ class ConnectingAnimation extends React.Component {
           viewBox="0 0 50.82 64.05"
         >
           <g>
-            <path
-              className={styles['connecting-compass-shadow']}
-              d="M33.14,16.22a8.94,8.94,0,1,0-13.42,0,24.39,24.39,0,1,0,13.42,0ZM18.42,10.33A8,8,0,1,1,32.13,16a24.19,24.19,0,0,0-11.39,0A8,8,0,0,1,18.42,10.33Z"
+            <circle
+              className={styles['connecting-compass-shadow-stroke']}
+              cx="26.15"
+              cy="9.86"
+              r="8.47"
             />
             <circle
               className={styles['connecting-compass-circle-1']}
               cx="24.39"
               cy="9.86"
               r="8.47"
+            />
+            <circle
+              className={styles['connecting-compass-shadow']}
+              cx="26.15"
+              cy="39.2"
+              r="24.38"
             />
             <circle
               className={styles['connecting-compass-circle-2']}
@@ -126,6 +134,7 @@ class ConnectingAnimation extends React.Component {
               cy="39.37"
               r="20.1"
             />
+
             <polygon
               id="connectingArrow1"
               className={styles['connecting-compass-arrow-1']}
