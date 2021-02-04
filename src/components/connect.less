@@ -648,7 +648,18 @@ label {
   right: 0;
 
   .connecting-background-gradient {
-    opacity:0.9;
+    opacity: 0.9;
+    animation: opacityFadeIn 0.2s ease-out;
+  }
+}
+
+@keyframes opacityFadeIn {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 0.9;
   }
 }
 
