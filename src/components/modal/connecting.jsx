@@ -13,8 +13,8 @@ import styles from '../connect.less';
  */
 class Connecting extends React.Component {
   static propTypes = {
-    connectingStatus: PropTypes.string.isRequired,
-    isConnecting: PropTypes.bool.isRequired
+    connectingStatusText: PropTypes.string.isRequired,
+    currentConnectionAttempt: PropTypes.object
   };
 
   onCancelConnectionClicked = () => {
@@ -87,21 +87,21 @@ class Connecting extends React.Component {
   render() {
     return (
       <React.Fragment>
-        {this.props.isConnecting && this.renderConnectingBackground()}
+        {!!this.props.currentConnectionAttempt && this.renderConnectingBackground()}
         <Modal
-          show={this.props.isConnecting}
+          show={!!this.props.currentConnectionAttempt}
           backdropClassName={styles['connecting-modal-backdrop']}
         >
           <Modal.Body>
             <div
               className={styles['connecting-modal-content']}
-              id="connectingStatus"
+              id="connectingStatusText"
             >
               <img src={Illustration} alt="Compass connecting illustration" />
               <h2
                 className={styles['connecting-modal-status']}
               >
-                {this.props.connectingStatus}
+                {this.props.connectingStatusText}
               </h2>
               <ConnectingAnimation />
               <Link

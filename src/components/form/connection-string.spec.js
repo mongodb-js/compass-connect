@@ -38,10 +38,10 @@ describe('ConnectionString [Component]', () => {
     expect(component.find('fieldset[disabled=true]')).to.be.not.present();
     expect(component.find('fieldset[disabled=false]')).to.be.present();
   });
-  context('when isConnecting is true', () => {
+  context('when currentConnectionAttempt is not null', () => {
     it('renders the fieldset disabled', () => {
       component.setProps({
-        isConnecting: true
+        currentConnectionAttempt: true
       });
 
       expect(component.find('fieldset[disabled=true]')).to.be.present();

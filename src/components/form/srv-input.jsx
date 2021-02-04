@@ -11,7 +11,7 @@ class SRVInput extends React.PureComponent {
   static displayName = 'SRVInput';
 
   static propTypes = {
-    isConnecting: PropTypes.bool,
+    currentConnectionAttempt: PropTypes.object,
     isSrvRecord: PropTypes.bool.isRequired
   };
 
@@ -30,7 +30,7 @@ class SRVInput extends React.PureComponent {
         <label><span>SRV Record</span></label>
         <div className={classnames(styles['form-item-switch-wrapper'])}>
           <Switch
-            disabled={this.props.isConnecting}
+            disabled={!!this.props.currentConnectionAttempt}
             checked={this.props.isSrvRecord}
             onChange={this.onSRVRecordToggled.bind(this)}
             className={classnames(styles['form-control-switch'])}

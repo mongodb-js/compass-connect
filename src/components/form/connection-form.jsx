@@ -21,7 +21,7 @@ class ConnectionForm extends React.Component {
 
   static propTypes = {
     currentConnection: PropTypes.object.isRequired,
-    isConnecting: PropTypes.bool,
+    currentConnectionAttempt: PropTypes.object,
     isValid: PropTypes.bool.isRequired,
     isHostChanged: PropTypes.bool,
     isPortChanged: PropTypes.bool
@@ -123,7 +123,7 @@ class ConnectionForm extends React.Component {
                   isHostChanged={this.props.isHostChanged} />
                 {this.renderPort()}
                 <SRVInput
-                  isConnecting={this.props.isConnecting}
+                  currentConnectionAttempt={this.props.currentConnectionAttempt}
                   isSrvRecord={this.props.currentConnection.isSrvRecord}
                 />
               </FormGroup>
@@ -163,7 +163,7 @@ class ConnectionForm extends React.Component {
         onChange={this.onConnectionFormChanged.bind(this)}
         className={classnames(styles['connect-form'])}
       >
-        <fieldset disabled={!!this.props.isConnecting}>
+        <fieldset disabled={!!this.props.currentConnectionAttempt}>
           <div className={classnames(styles.tabs)}>
             <div className={classnames(styles['tabs-container'])}>
               {this.renderTabs()}

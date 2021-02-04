@@ -1,23 +1,22 @@
 import { promisify } from 'util';
-
 import createDebug from 'debug';
-const debug = createDebug('mongodb-compass:compass-connect:connection-attempt');
 
+const debug = createDebug('mongodb-compass:compass-connect:connection-attempt');
 
 function isConnectionAttemptTerminatedError(err) {
   return err.name === 'MongoError' && err.message === 'Topology closed';
 }
 
 class ConnectionAttempt {
-  constructor(dataService) {
-    this._dataService = dataService;
-
+  constructor() {
     this._cancelled = new Promise((resolve) => {
       this._cancelConnectionAttempt = () => resolve(null);
     });
   }
 
-  connect() {
+  connect(dataService) {
+    this._dataService = dataService;
+
     return Promise.race([
       this._cancelled,
       this._connect()
@@ -30,6 +29,10 @@ class ConnectionAttempt {
   }
 
   async _connect() {
+    if (this._closed) {
+      return;
+    }
+
     try {
       const runConnect = promisify(
         this._dataService.connect.bind(this._dataService)
@@ -54,6 +57,11 @@ class ConnectionAttempt {
 
     this._closed = true;
 
+    if (!this._dataService) {
+      debug('cancelled connection attempt');
+      return;
+    }
+
     try {
       const runDisconnect = promisify(
         this._dataService.disconnect.bind(this._dataService )
@@ -69,6 +77,6 @@ class ConnectionAttempt {
   }
 }
 
-export function createConnectionAttempt(dataService) {
-  return new ConnectionAttempt(dataService);
+export function createConnectionAttempt() {
+  return new ConnectionAttempt();
 }

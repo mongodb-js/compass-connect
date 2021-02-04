@@ -112,7 +112,7 @@ describe('ConnectionForm [Component]', () => {
       it('disables the form', () => {
         const component = mount(
           <ConnectionForm
-            isConnecting
+            currentConnectionAttempt
             currentConnection={{
               authStrategy: 'MONGODB',
               isSrvRecord: false,

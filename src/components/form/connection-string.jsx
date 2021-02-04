@@ -16,7 +16,7 @@ class ConnectionString extends React.Component {
     customUrl: PropTypes.string,
     isValid: PropTypes.bool,
     isConnected: PropTypes.bool,
-    isConnecting: PropTypes.bool,
+    currentConnectionAttempt: PropTypes.object,
     errorMessage: PropTypes.string,
     syntaxErrorMessage: PropTypes.string,
     hasUnsavedChanges: PropTypes.bool,
@@ -31,7 +31,7 @@ class ConnectionString extends React.Component {
         data-test-id="connect-string"
         className={classnames(styles['connect-string'])}
       >
-        <fieldset disabled={!!this.props.isConnecting}>
+        <fieldset disabled={!!this.props.currentConnectionAttempt}>
           <FormGroup separator>
             <ConnectionStringInput
               customUrl={this.props.customUrl}
@@ -42,7 +42,7 @@ class ConnectionString extends React.Component {
             currentConnection={this.props.currentConnection}
             isValid={this.props.isValid}
             isConnected={this.props.isConnected}
-            isConnecting={this.props.isConnecting}
+            currentConnectionAttempt={this.props.currentConnectionAttempt}
             errorMessage={this.props.errorMessage}
             syntaxErrorMessage={this.props.syntaxErrorMessage}
             hasUnsavedChanges={this.props.hasUnsavedChanges}

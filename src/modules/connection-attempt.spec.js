@@ -7,9 +7,11 @@ describe('connection-attempt', () => {
         connect: (callback) => setTimeout(() => callback(), 25)
       };
 
-      const connectionAttempt = createConnectionAttempt(dataService);
+      const connectionAttempt = createConnectionAttempt();
 
-      const connectionAttemptResult = await connectionAttempt.connect();
+      const connectionAttemptResult = await connectionAttempt.connect(
+        dataService
+      );
 
       expect(connectionAttemptResult).to.deep.equal(dataService);
     });
@@ -22,9 +24,11 @@ describe('connection-attempt', () => {
         })
       };
 
-      const connectionAttempt = createConnectionAttempt(dataService);
+      const connectionAttempt = createConnectionAttempt();
 
-      const connectPromise = connectionAttempt.connect();
+      const connectPromise = connectionAttempt.connect(
+        dataService
+      );
 
       rejectOnConnect(new Error('should have been cancelled'));
       connectionAttempt.cancelConnectionAttempt();
@@ -40,9 +44,13 @@ describe('connection-attempt', () => {
         }
       };
 
-      const connectionAttempt = createConnectionAttempt(dataService);
+      const connectionAttempt = createConnectionAttempt();
 
-      const connectPromise = connectionAttempt.connect().catch(err => err);
+      const connectPromise = connectionAttempt.connect(
+        dataService
+      ).catch(
+        err => err
+      );
 
       rejectOnConnect(new Error('should have been thrown'));
 

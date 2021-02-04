@@ -14,9 +14,9 @@ class FormActions extends React.Component {
 
   static propTypes = {
     currentConnection: PropTypes.object.isRequired,
+    currentConnectionAttempt: PropTypes.object,
     isValid: PropTypes.bool,
     isConnected: PropTypes.bool,
-    isConnecting: PropTypes.bool.isRequired,
     errorMessage: PropTypes.string,
     syntaxErrorMessage: PropTypes.string,
     hasUnsavedChanges: PropTypes.bool,
@@ -252,10 +252,14 @@ class FormActions extends React.Component {
   renderConnectButtons() {
     return (
       <div className={classnames(styles.buttons)}>
-        {!this.props.isConnecting && (this.props.isURIEditable ? this.renderHideURI() : this.renderEditURI())}
+        {!this.props.currentConnectionAttempt && (
+          this.props.isURIEditable
+            ? this.renderHideURI()
+            : this.renderEditURI()
+        )}
         {this.props.isConnected && this.renderDisconnect()}
-        {!this.props.isConnected && !this.props.isConnecting && this.renderConnect()}
-        {!this.props.isConnected && this.props.isConnecting && this.renderConnecting()}
+        {!this.props.isConnected && !this.props.currentConnectionAttempt && this.renderConnect()}
+        {!this.props.isConnected && !!this.props.currentConnectionAttempt && this.renderConnecting()}
       </div>
     );
   }

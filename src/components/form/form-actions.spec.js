@@ -183,7 +183,7 @@ describe('FormActions [Component]', () => {
             component = mount(
               <FormActions
                 currentConnection={{ name: 'myconnection' }}
-                isConnecting
+                currentConnectionAttempt
                 isConnected={false}
                 viewType="connectionString"
                 isURIEditable

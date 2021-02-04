@@ -21,11 +21,11 @@ class Connect extends React.Component {
   static displayName = 'Connect';
 
   static propTypes = {
-    currentConnection: PropTypes.object,
-    connectingStatus: PropTypes.string,
+    connectingStatusText: PropTypes.string,
     connections: PropTypes.object,
+    currentConnection: PropTypes.object,
+    currentConnectionAttempt: PropTypes.object,
     isConnected: PropTypes.bool,
-    isConnecting: PropTypes.bool,
     viewType: PropTypes.string,
     isModalVisible: PropTypes.bool,
     isMessageVisible: PropTypes.bool,
@@ -152,8 +152,8 @@ class Connect extends React.Component {
             <Help {...this.props} />
           </div>
           <Connecting
-            connectingStatus={this.props.connectingStatus}
-            isConnecting={this.props.isConnecting}
+            connectingStatusText={this.props.connectingStatusText}
+            currentConnectionAttempt={this.props.currentConnectionAttempt}
           />
           <ConfirmEditConnectionString
             isEditURIConfirm={this.props.isEditURIConfirm}
