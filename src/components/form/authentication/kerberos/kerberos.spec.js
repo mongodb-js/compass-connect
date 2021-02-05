@@ -20,11 +20,11 @@ describe('<Kerberos />', () => {
       });
 
       it('renders the principal input', () => {
-        expect(component.find('input[name="kerberos-principal"]')).to.have.value('principal');
+        expect(component.find('input[name="kerberos-principal"]')).to.be.present();
       });
 
       it('renders the service name input', () => {
-        expect(component.find('input[name="kerberos-service-name"]')).to.have.value('service');
+        expect(component.find('input[name="kerberos-service-name"]')).to.be.present();
       });
 
       it('renders the service name placeholder', () => {

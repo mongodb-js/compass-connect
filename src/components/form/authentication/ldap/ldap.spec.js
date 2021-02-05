@@ -19,11 +19,11 @@ describe('<LDAP />', () => {
       });
 
       it('renders the username input', () => {
-        expect(component.find('input[name="ldap-username"]')).to.have.value('username');
+        expect(component.find('input[name="ldap-username"]')).to.be.present();
       });
 
       it('renders the password input', () => {
-        expect(component.find('input[name="ldap-password"]')).to.have.value('password');
+        expect(component.find('input[name="ldap-password"]')).to.be.present();
       });
     });
 

@@ -1,7 +1,7 @@
 import { mount } from 'enzyme';
 import React from 'react';
 
-import ScramSha256 from '../../../src/components/form/scram-sha-256';
+import ScramSha256 from '../../../src/components/form/authentication/scram-sha-256/scram-sha-256';
 import styles from '../../../src/components/connect.less';
 
 describe('ScramSha256 [Component]', () => {
