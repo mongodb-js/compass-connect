@@ -14,7 +14,7 @@ describe('<CnameInput />', () => {
       });
 
       it('renders the label', () => {
-        expect(component.find(`.${styles['form-item-label']}`)).to.have.text('Canonicalize Host Name');
+        expect(component.find('label')).to.have.text('Canonicalize Host Name');
       });
 
       it('renders the switch', () => {
@@ -30,7 +30,7 @@ describe('<CnameInput />', () => {
       });
 
       it('renders the label', () => {
-        expect(component.find(`.${styles['form-item-label']}`)).to.have.text('Canonicalize Host Name');
+        expect(component.find('label')).to.have.text('Canonicalize Host Name');
       });
 
       it('enables the switch', () => {

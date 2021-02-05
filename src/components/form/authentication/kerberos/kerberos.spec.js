@@ -2,6 +2,8 @@ import React from 'react';
 import { mount } from 'enzyme';
 
 import Kerberos from './kerberos';
+import FormGroup from '../../form-group';
+import styles from '../../../connect.less';
 
 describe('<Kerberos />', () => {
   describe('#render', () => {
@@ -16,7 +18,7 @@ describe('<Kerberos />', () => {
       );
 
       it('renders the wrapper div', () => {
-        expect(component.find('.form-group')).to.be.present();
+        expect(component.find(FormGroup)).to.be.present();
       });
 
       it('renders the principal input', () => {
@@ -43,17 +45,8 @@ describe('<Kerberos />', () => {
           <Kerberos currentConnection={connection} />
         );
 
-        it('renders the error icon', () => {
-          expect(component.find('.fa-exclamation-circle')).to.be.present();
-        });
-
         it('renders the error class', () => {
-          expect(component.find('.form-item-has-error')).to.be.present();
-        });
-
-        it('renders the error tooltip', () => {
-          expect(component.find('input[name="kerberos-principal"]').prop('data-tip')).
-            to.equal('Principal is required');
+          expect(component.find(`.${styles['form-item-has-error']}`)).to.be.present();
         });
       });
 
@@ -67,17 +60,8 @@ describe('<Kerberos />', () => {
           <Kerberos currentConnection={connection} />
         );
 
-        it('renders the error icon', () => {
-          expect(component.find('.fa-exclamation-circle')).to.be.present();
-        });
-
         it('renders the error class', () => {
-          expect(component.find('.form-item-has-error')).to.be.present();
-        });
-
-        it('renders the error tooltip', () => {
-          expect(component.find('input[name="kerberos-principal"]').prop('data-tip')).
-            to.equal('Principal is required');
+          expect(component.find(`.${styles['form-item-has-error']}`)).to.be.present();
         });
       });
 
@@ -90,17 +74,8 @@ describe('<Kerberos />', () => {
           <Kerberos currentConnection={connection} />
         );
 
-        it('renders the error icon', () => {
-          expect(component.find('.fa-exclamation-circle')).to.be.present();
-        });
-
         it('renders the error class', () => {
-          expect(component.find('.form-item-has-error')).to.be.present();
-        });
-
-        it('renders the error tooltip', () => {
-          expect(component.find('input[name="kerberos-principal"]').prop('data-tip')).
-            to.equal('Principal is required');
+          expect(component.find(`.${styles['form-item-has-error']}`)).to.be.present();
         });
       });
     });

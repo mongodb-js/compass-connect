@@ -2,6 +2,8 @@ import React from 'react';
 import { mount } from 'enzyme';
 
 import LDAP from './ldap';
+import FormGroup from '../../form-group';
+import styles from '../../../connect.less';
 
 describe('<LDAP />', () => {
   describe('#render', () => {
@@ -15,7 +17,7 @@ describe('<LDAP />', () => {
       );
 
       it('renders the wrapper div', () => {
-        expect(component.find('.form-group')).to.be.present();
+        expect(component.find(FormGroup)).to.be.present();
       });
 
       it('renders the username input', () => {
@@ -37,17 +39,8 @@ describe('<LDAP />', () => {
           <LDAP currentConnection={connection} />
         );
 
-        it('renders the error icon', () => {
-          expect(component.find('.fa-exclamation-circle')).to.be.present();
-        });
-
         it('renders the error class', () => {
-          expect(component.find('.form-item-has-error')).to.be.present();
-        });
-
-        it('renders the error tooltip', () => {
-          expect(component.find('input[name="ldap-username"]').prop('data-tip')).
-            to.equal('Username is required');
+          expect(component.find(`.${styles['form-item-has-error']}`)).to.be.present();
         });
       });
 
@@ -60,17 +53,8 @@ describe('<LDAP />', () => {
           <LDAP currentConnection={connection} />
         );
 
-        it('renders the error icon', () => {
-          expect(component.find('.fa-exclamation-circle')).to.be.present();
-        });
-
         it('renders the error class', () => {
-          expect(component.find('.form-item-has-error')).to.be.present();
-        });
-
-        it('renders the error tooltip', () => {
-          expect(component.find('input[name="ldap-username"]').prop('data-tip')).
-            to.equal('Username is required');
+          expect(component.find(`.${styles['form-item-has-error']}`)).to.be.present();
         });
       });
 
@@ -82,17 +66,8 @@ describe('<LDAP />', () => {
           <LDAP currentConnection={connection} />
         );
 
-        it('renders the error icon', () => {
-          expect(component.find('.fa-exclamation-circle')).to.be.present();
-        });
-
         it('renders the error class', () => {
-          expect(component.find('.form-item-has-error')).to.be.present();
-        });
-
-        it('renders the error tooltip', () => {
-          expect(component.find('input[name="ldap-username"]').prop('data-tip')).
-            to.equal('Username is required');
+          expect(component.find(`.${styles['form-item-has-error']}`)).to.be.present();
         });
       });
 
@@ -105,17 +80,8 @@ describe('<LDAP />', () => {
           <LDAP currentConnection={connection} />
         );
 
-        it('renders the error icon', () => {
-          expect(component.find('.fa-exclamation-circle')).to.be.present();
-        });
-
         it('renders the error class', () => {
-          expect(component.find('.form-item-has-error')).to.be.present();
-        });
-
-        it('renders the error tooltip', () => {
-          expect(component.find('input[name="ldap-password"]').prop('data-tip')).
-            to.equal('Password is required');
+          expect(component.find(`.${styles['form-item-has-error']}`)).to.be.present();
         });
       });
 
@@ -128,17 +94,8 @@ describe('<LDAP />', () => {
           <LDAP currentConnection={connection} />
         );
 
-        it('renders the error icon', () => {
-          expect(component.find('.fa-exclamation-circle')).to.be.present();
-        });
-
         it('renders the error class', () => {
-          expect(component.find('.form-item-has-error')).to.be.present();
-        });
-
-        it('renders the error tooltip', () => {
-          expect(component.find('input[name="ldap-password"]').prop('data-tip')).
-            to.equal('Password is required');
+          expect(component.find(`.${styles['form-item-has-error']}`)).to.be.present();
         });
       });
 
@@ -150,17 +107,8 @@ describe('<LDAP />', () => {
           <LDAP currentConnection={connection} />
         );
 
-        it('renders the error icon', () => {
-          expect(component.find('.fa-exclamation-circle')).to.be.present();
-        });
-
         it('renders the error class', () => {
-          expect(component.find('.form-item-has-error')).to.be.present();
-        });
-
-        it('renders the error tooltip', () => {
-          expect(component.find('input[name="ldap-password"]').prop('data-tip')).
-            to.equal('Password is required');
+          expect(component.find(`.${styles['form-item-has-error']}`)).to.be.present();
         });
       });
     });

@@ -20,7 +20,7 @@ class CnameInput extends React.PureComponent {
     return (
       <div className={styles['form-item']}>
         <label>
-          <span className={styles['form-item-label']}>
+          <span>
             Canonicalize Host Name
           </span>
         </label>

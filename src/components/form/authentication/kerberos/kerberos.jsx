@@ -49,15 +49,14 @@ class Kerberos extends React.Component {
   }
 
   /**
-   * Get the error for the required principal field.
+   * Get if there is an error for the required principal field.
    *
-   * @returns {String} The error message.
+   * @returns {Boolean} If there's an error.
    */
-  getPrincipalError() {
-    const connection = this.props.connectionModel;
-    if (!this.props.isValid && isEmpty(connection.kerberosPrincipal)) {
-      return 'Principal is required';
-    }
+  isPrincipalError() {
+    return !this.props.isValid && isEmpty(
+      this.props.connectionModel.kerberosPrincipal
+    );
   }
 
   /**
@@ -71,7 +70,7 @@ class Kerberos extends React.Component {
         <FormInput
           label="Principal"
           name="kerberos-principal"
-          error={this.getPrincipalError()}
+          error={this.isPrincipalError()}
           changeHandler={this.onPrincipalChanged.bind(this)}
           value={this.props.connectionModel.kerberosPrincipal || ''}
           linkHandler={this.onPrincipalHelp.bind(this)}

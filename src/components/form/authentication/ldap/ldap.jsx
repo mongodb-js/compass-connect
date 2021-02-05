@@ -48,27 +48,25 @@ class LDAP extends React.Component {
   }
 
   /**
-   * Get the error for the required username field.
+   * See if there is an error for the required username field.
    *
-   * @returns {String} The error message.
+   * @returns {boolean} The error message.
    */
-  getUsernameError() {
-    const connection = this.props.connectionModel;
-    if (!this.props.isValid && isEmpty(connection.ldapUsername)) {
-      return 'Username is required';
-    }
+  isUsernameError() {
+    return (!this.props.isValid && isEmpty(
+      this.props.connectionModel.ldapUsername
+    ));
   }
 
   /**
-   * Get the error for the required password field.
+   * See if there is an error for the required password field.
    *
-   * @returns {String} The error message.
+   * @returns {boolean}
    */
-  getPasswordError() {
-    const connection = this.props.connectionModel;
-    if (!this.props.isValid && isEmpty(connection.ldapPassword)) {
-      return 'Password is required';
-    }
+  isPasswordError() {
+    return (!this.props.isValid && isEmpty(
+      this.props.connectionModel.ldapPassword
+    ));
   }
 
   /**
@@ -82,7 +80,7 @@ class LDAP extends React.Component {
         <FormInput
           label="Username"
           name="ldap-username"
-          error={this.getUsernameError()}
+          error={this.isUsernameError()}
           changeHandler={this.onUsernameChanged.bind(this)}
           value={this.props.connectionModel.ldapUsername || ''}
           linkHandler={this.onLDAPHelp.bind(this)}
@@ -91,7 +89,7 @@ class LDAP extends React.Component {
           label="Password"
           name="ldap-password"
           type="password"
-          error={this.getPasswordError()}
+          error={this.isPasswordError()}
           changeHandler={this.onPasswordChanged.bind(this)}
           value={this.props.connectionModel.ldapPassword || ''}
         />
