@@ -12,26 +12,9 @@ describe('Authentication [Component]', () => {
   const appRegistry = new AppRegistry();
   let component;
 
-  class AuthStrategyComponent extends React.Component {
-    render() {
-      return (<div id="AuthStrategyComponent" />);
-    }
-  }
-
-  const ROLE = {
-    name: 'MONGODB',
-    component: AuthStrategyComponent,
-    selectOption: { 'MONGODB': 'Username / Password' }
-  };
-
   before(() => {
     global.hadronApp = hadronApp;
     global.hadronApp.appRegistry = appRegistry;
-    global.hadronApp.appRegistry.registerRole('Connect.AuthStrategy', ROLE);
-  });
-
-  after(() => {
-    global.hadronApp.appRegistry.deregisterRole('Connect.AuthStrategy', ROLE);
   });
 
   beforeEach(() => {
