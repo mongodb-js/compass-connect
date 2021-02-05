@@ -2,12 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { isEmpty } from 'lodash';
 import { shell } from 'electron';
-import classnames from 'classnames';
 
 import Actions from '../../../../actions';
 import FormInput from '../../form-input';
-
-import styles from '../../../connect.less';
+import FormGroup from '../../form-group';
 
 class ScramSha256 extends React.Component {
   static displayName = 'ScramSha256';
@@ -81,7 +79,7 @@ class ScramSha256 extends React.Component {
 
   render() {
     return (
-      <div id="scram-sha-256" className={classnames(styles['form-group'])}>
+      <FormGroup id="scram-sha-256">
         <FormInput
           label="Username"
           name="username"
@@ -105,7 +103,7 @@ class ScramSha256 extends React.Component {
           value={this.props.connectionModel.mongodbDatabaseName || ''}
           linkHandler={this.onSourceHelp.bind(this)}
         />
-      </div>
+      </FormGroup>
     );
   }
 }

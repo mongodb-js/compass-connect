@@ -1,8 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import isEmpty from 'lodash.isempty';
-import { FormInput } from 'hadron-react-components';
 
+import FormInput from '../../form-input';
+import FormGroup from '../../form-group';
 import Actions from '../../../../actions';
 import CnameInput from './cname-input';
 
@@ -66,7 +67,7 @@ class Kerberos extends React.Component {
    */
   render() {
     return (
-      <div id="kerberos-authentication" className="form-group">
+      <FormGroup id="kerberos-authentication">
         <FormInput
           label="Principal"
           name="kerberos-principal"
@@ -85,7 +86,7 @@ class Kerberos extends React.Component {
         <CnameInput
           canonicalize_hostname={this.props.connectionModel.kerberosCanonicalizeHostname || false}
         />
-      </div>
+      </FormGroup>
     );
   }
 }

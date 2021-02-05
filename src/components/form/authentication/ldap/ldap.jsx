@@ -1,8 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import isEmpty from 'lodash.isempty';
-import { FormInput } from 'hadron-react-components';
 
+import FormInput from '../../form-input';
+import FormGroup from '../../form-group';
 import Actions from '../../../../actions';
 
 /**
@@ -77,22 +78,24 @@ class LDAP extends React.Component {
    */
   render() {
     return (
-      <div id="ldap-authentication" className="form-group">
+      <FormGroup id="ldap-authentication">
         <FormInput
           label="Username"
           name="ldap-username"
           error={this.getUsernameError()}
           changeHandler={this.onUsernameChanged.bind(this)}
           value={this.props.connectionModel.ldapUsername || ''}
-          linkHandler={this.onLDAPHelp.bind(this)} />
+          linkHandler={this.onLDAPHelp.bind(this)}
+        />
         <FormInput
           label="Password"
           name="ldap-password"
           type="password"
           error={this.getPasswordError()}
           changeHandler={this.onPasswordChanged.bind(this)}
-          value={this.props.connectionModel.ldapPassword || ''} />
-      </div>
+          value={this.props.connectionModel.ldapPassword || ''}
+        />
+      </FormGroup>
     );
   }
 }

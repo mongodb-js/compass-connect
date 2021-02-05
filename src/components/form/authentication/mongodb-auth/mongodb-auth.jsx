@@ -79,7 +79,7 @@ class MongoDBAuthentication extends React.Component {
 
   render() {
     return (
-      <FormGroup id="mongodb-authenticatio">
+      <FormGroup id="mongodb-authentication">
         <FormInput
           label="Username"
           name="username"
