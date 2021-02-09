@@ -64,7 +64,7 @@ const SSH_TUNNEL_FIELDS = [
  */
 const EXTENSION = 'Connect.Extension';
 
-const LOADING_CONNECTION_TEXT = 'Loading connecting';
+const LOADING_CONNECTION_TEXT = 'Loading connection';
 
 /**
  * The store that backs the connect plugin.
@@ -204,8 +204,7 @@ const Store = Reflux.createStore({
     }
 
     try {
-      const buildConnectionModelFromUrl = promisify(Connection.from);
-      await buildConnectionModelFromUrl(customUrl);
+      await Connection.from(customUrl);
 
       this._resetSyntaxErrorMessage();
     } catch (error) {
@@ -1047,8 +1046,7 @@ const Store = Reflux.createStore({
 
     let parsedConnection;
     try {
-      const buildConnectionModelFromUrl = promisify(Connection.from);
-      parsedConnection = await buildConnectionModelFromUrl(url);
+      parsedConnection = await Connection.from(url);
     } catch (error) {
       this._setSyntaxErrorMessage(error.message);
 
@@ -1134,8 +1132,7 @@ const Store = Reflux.createStore({
     this.StatusActions.showIndeterminateProgressBar();
 
     try {
-      const buildConnectionModelFromUrl = promisify(Connection.from);
-      const parsedConnection = await buildConnectionModelFromUrl(url);
+      const parsedConnection = await Connection.from(url);
 
       this.StatusActions.done();
 
@@ -1208,8 +1205,7 @@ const Store = Reflux.createStore({
 
     if (this.state.viewType === CONNECTION_STRING_VIEW) {
       try {
-        const buildConnectionModelFromUrl = promisify(Connection.from);
-        const parsedConnection = await buildConnectionModelFromUrl(url);
+        const parsedConnection = await Connection.from(url);
 
         connectionModel.set(this._getPoorAttributes(parsedConnection));
 
