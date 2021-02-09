@@ -204,7 +204,8 @@ const Store = Reflux.createStore({
     }
 
     try {
-      await Connection.from(customUrl);
+      const buildConnectionModelFromUrl = promisify(Connection.from);
+      await buildConnectionModelFromUrl(customUrl);
 
       this._resetSyntaxErrorMessage();
     } catch (error) {
@@ -1046,7 +1047,8 @@ const Store = Reflux.createStore({
 
     let parsedConnection;
     try {
-      parsedConnection = await Connection.from(url);
+      const buildConnectionModelFromUrl = promisify(Connection.from);
+      parsedConnection = await buildConnectionModelFromUrl(url);
     } catch (error) {
       this._setSyntaxErrorMessage(error.message);
 
@@ -1132,7 +1134,8 @@ const Store = Reflux.createStore({
     this.StatusActions.showIndeterminateProgressBar();
 
     try {
-      const parsedConnection = await Connection.from(url);
+      const buildConnectionModelFromUrl = promisify(Connection.from);
+      const parsedConnection = await buildConnectionModelFromUrl(url);
 
       this.StatusActions.done();
 
@@ -1205,7 +1208,8 @@ const Store = Reflux.createStore({
 
     if (this.state.viewType === CONNECTION_STRING_VIEW) {
       try {
-        const parsedConnection = await Connection.from(url);
+        const buildConnectionModelFromUrl = promisify(Connection.from);
+        const parsedConnection = await buildConnectionModelFromUrl(url);
 
         connectionModel.set(this._getPoorAttributes(parsedConnection));
 

@@ -1,5 +1,5 @@
-import createDebug from 'debug';
 import { promisify } from 'util';
+import createDebug from 'debug';
 
 const debug = createDebug('mongodb-compass:compass-connect:connection-attempt');
 
@@ -34,7 +34,10 @@ class ConnectionAttempt {
     }
 
     try {
-      await this._dataService.connect();
+      const runConnect = promisify(
+        this._dataService.connect.bind(this._dataService)
+      );
+      await runConnect();
       return this._dataService;
     } catch (err) {
       if (isConnectionAttemptTerminatedError(err)) {

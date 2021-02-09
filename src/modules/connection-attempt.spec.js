@@ -4,9 +4,7 @@ describe('connection-attempt', () => {
   describe('connect', () => {
     it('returns the connected data service', async() => {
       const dataService = {
-        connect: () => {
-          return new Promise(resolve => setTimeout(() => resolve(), 25));
-        }
+        connect: (callback) => setTimeout(() => callback(), 25)
       };
 
       const connectionAttempt = createConnectionAttempt();
@@ -41,10 +39,8 @@ describe('connection-attempt', () => {
     it('throws if connecting throws', async() => {
       let rejectOnConnect;
       const dataService = {
-        connect: () => {
-          return new Promise((_, reject) => {
-            rejectOnConnect = reject;
-          });
+        connect: (callback) => {
+          rejectOnConnect = callback;
         }
       };
 
