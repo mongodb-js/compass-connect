@@ -139,6 +139,7 @@ class Connecting extends React.Component {
       <React.Fragment>
         {!!this.props.currentConnectionAttempt && this.renderConnectingBackground()}
         <Modal
+          animation={false}
           show={this.state.showModal && !!this.props.currentConnectionAttempt}
           backdropClassName={styles['connecting-modal-backdrop']}
         >
