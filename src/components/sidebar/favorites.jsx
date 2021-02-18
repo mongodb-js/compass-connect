@@ -111,7 +111,12 @@ class Favorites extends React.Component {
     const favorites = Object.keys(this.props.connections)
       .map(key => this.props.connections[key])
       .filter(connection => connection.isFavorite)
-      .sort((a, b) => b.lastUsed - a.lastUsed);
+      .sort((a, b) => {
+        return (`${b.name}`.toLowerCase() < `${a.name}`.toLowerCase()
+          ? 1
+          : -1
+        );
+      });
 
     return map(favorites, (favorite, i) => {
       const title = `${favorite.hostname}:${favorite.port}`;

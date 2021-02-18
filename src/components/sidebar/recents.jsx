@@ -141,7 +141,13 @@ class Recents extends React.Component {
     const recents = Object.keys(this.props.connections)
       .map(key => this.props.connections[key])
       .filter(connection => !connection.isFavorite)
-      .sort((a, b) => b.lastUsed - a.lastUsed);
+      .sort((a, b) => {
+        // The `lastUsed` value hasn't always existed, so we assign
+        // them a date in 2016 for sorting if it isn't there.
+        const aLastUsed = a.lastUsed ? a.lastUsed : 1463658247465;
+        const bLastUsed = b.lastUsed ? b.lastUsed : 1463658247465;
+        return bLastUsed - aLastUsed;
+      });
 
     const clearAllDiv =
       recents.length > 0 ? (
