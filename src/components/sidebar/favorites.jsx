@@ -143,7 +143,7 @@ class Favorites extends React.Component {
           onDoubleClick={this.onFavoriteDoubleClicked.bind(this, favorite)}
         >
           <div
-            className={classnames(styles['connect-sidebar-list-item-details'])}
+            className={styles['connect-sidebar-list-item-details']}
           >
             <div
               className={styles['connect-sidebar-list-item-last-used']}
