@@ -16,7 +16,6 @@ const getNewRotationVelocity = () => {
 const rotationAcceleration = Math.PI / 90000;
 // Closer to 0 the more friction/slowdown overtime there is (1 is no friction).
 const friction = 0.974;
-const rotationOffset = Math.PI;
 
 /**
  * Animated compass shown when attempting to connect.
@@ -57,7 +56,7 @@ class ConnectingAnimation extends React.Component {
     const deltaTime = Date.now() - this.lastFrame;
 
     const arrow1 = document.getElementById('connectingArrow1');
-    const rotation = (this.currentRotation + rotationOffset) * (180 / Math.PI);
+    const rotation = this.currentRotation * (180 / Math.PI);
     if (arrow1) {
       arrow1.setAttribute(
         'transform',
