@@ -1,0 +1,27 @@
+version: 2
+updates:
+- package-ecosystem: npm
+  directory: "/"
+  schedule:
+    interval: daily
+    time: "08:00"
+    timezone: Australia/Sydney
+  open-pull-requests-limit: 10
+  ignore:
+  - dependency-name: babel-loader
+    versions:
+    - ">= 8.0.a, < 8.1"
+  - dependency-name: mocha
+    versions:
+    - 8.2.1
+    - 8.3.0
+    - 8.3.1
+  - dependency-name: lodash
+    versions:
+    - 4.17.20
+  - dependency-name: webpack-bundle-analyzer
+    versions:
+    - 4.4.0
+  - dependency-name: elliptic
+    versions:
+    - 6.5.3
